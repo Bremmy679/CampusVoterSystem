@@ -1,8 +1,10 @@
-JKUSA Election Web Application
-Overview
+<h2 align="center" style="color:Green">JKUSA Election Web Application</h2>
+
+<h4 align="center">Overview</h4>
+
 The JKUSA Election Web Application is a purpose-built platform for managing and conducting student body elections at Jomo Kenyatta University of Agriculture and Technology (JKUAT). This application has been designed to enhance the democratic process, promote student engagement, and ensure a fair and transparent election for the JKUSA (Jomo Kenyatta University Students' Association).
 
-Features
+<h4> Features</h4>
 1. User Registration and Authentication
 
 JKUAT Student Registration: Students can register with their JKUAT credentials to participate in JKUSA elections.
@@ -50,7 +52,7 @@ Result Declaration: The JKUSA Election Committee declares the results at the end
 Security
 The JKUSA Election Web Application prioritizes the security and privacy of user data. The application employs industry-standard encryption and security measures to protect user accounts and voting data.
 
-Contributors.
+<h4 align="ceneter>Contributors.</h4>
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
 
