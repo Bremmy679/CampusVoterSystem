@@ -38,7 +38,8 @@ Contributors.
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
 
-<div align="center" style="flex">
+<div align="center" >
+
 ![Ogola Sospeter](https://avatars.githubusercontent.)
 
 ![Sandra Lungahi](https://avatars.githubusercontent.)
