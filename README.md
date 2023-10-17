@@ -38,7 +38,7 @@ Contributors.
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
 
-
+<div align="center" style="flex">
 ![Ogola Sospeter](https://avatars.githubusercontent.)
 
 ![Sandra Lungahi](https://avatars.githubusercontent.)
@@ -46,7 +46,8 @@ The team members are:
 ![Jeff Gicharu](https://avatars.githubusercontent.)
 
 ![Vivian Mosomi](https://avatars.githubusercontent.)
-![Brendan Remmy](https://avatars.githubusercontent.)
 
+![Brendan Remmy](https://avatars.githubusercontent.)
+</div>
 License
 This project is licensed under the MIT License.
