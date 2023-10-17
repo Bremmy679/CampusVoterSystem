@@ -58,23 +58,23 @@ The team members are:
   <h2>THE TEAM MEMBERS</h2>
   <div style="display: flex; justify-content: space-around; align-items: center;">
     <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://avatars.githubusercontent.com/" alt="Ogola Sospeter" width="100" height="100">
+      <img src="https://img.freepik.com/free-vector/mission-impossible-concept-illustration_114360-609.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Ogola Sospeter" width="100" height="100">
       <p>Ogola Sospeter</p>
     </div>
     <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://avatars.githubusercontent.com/" alt="Sandra Lungahi" width="100" height="100">
+      <img src="https://img.freepik.com/free-vector/coding-concept-illustration_114360-1155.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Sandra Lungahi" width="100" height="100">
       <p>Sandra Lungahi</p>
     </div>
     <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://avatars.githubusercontent.com/" alt="Jeff Gicharu" width="100" height="100">
+      <img src="https://img.freepik.com/free-vector/professional-cartoon-businessman-background-ecological_1368-271.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Jeff Gicharu" width="100" height="100">
       <p>Jeff Gicharu</p>
     </div>
     <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://avatars.githubusercontent.com/" alt="Vivian Mosomi" width="100" height="100">
+      <img src="https://img.freepik.com/free-vector/programmers-day-banner-design_1308-114298.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Vivian Mosomi" width="100" height="100">
       <p>Vivian Mosomi</p>
     </div>
     <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://avatars.githubusercontent.com/" alt="Brendan Remmy" width="100" height="100">
+      <img src="https://img.freepik.com/free-vector/online-games-addiction-concept-illustration_114360-1994.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Brendan Remmy" width="100" height="100">
       <p>Brendan Remmy</p>
     </div>
   </div>
