@@ -37,10 +37,15 @@ The JKUSA Election Web Application prioritizes the security and privacy of user 
 Contributors.
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
+[![Ogola Sospeter](https://avatars.githubusercontent.)]
 1. Ogola Sospeter.
+[![Sandra Lungahi](https://avatars.githubusercontent.)]
 2. Sandra Lungahi.
+[![Jeff Gicharu](https://avatars.githubusercontent.)]
 3. Jeff Gicharu.
+[![Vivian Mosomi](https://avatars.githubusercontent.)]
 4. Vivian Mosomi.
+[![Brendan Remmy](https://avatars.githubusercontent.)]
 5. Brendan Remmy.
 
 License
