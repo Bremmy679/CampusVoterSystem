@@ -15,7 +15,27 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
+#The user registration
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        session = Session()
+        useremail = request.form['useremail']
+        password = request.form['password']
+        session['useremail'] = useremail
+        if not is_valid_email(useremail):
+            return render_template('register.html', error='Invalid email format.')
+        if not is_valid_password(password):
+            return render_template('register.html', error='Password must be at least 8 characters long.')
 
+        user = get_user(useremail)
+        if user is not None:
+            return render_template('register.html', error='User already exists.')
+        if session.registeruser(useremail, password):
+            return redirect(url_for('home'))
+        else:
+            return render_template('register.html', error='Invalid occurrences in field(s).')
+    return render_template('register.html')
 
 #The login Page handler
 @app.route('/login', methods=['GET', 'POST'])
@@ -33,8 +53,8 @@ def login():
         user = get_user(useremail)
         if user is None:
             return render_template('login.html', error='User does not exist.')
-        if not check_password(password, user):
-            return render_template('login.html', error='Incorrect password.')
+        if not check_password(password, user.password):
+            return render_template('login.html', error='Incorrect email or password.')
         return redirect(url_for('home'))
       
     return render_template('login.html')
@@ -194,6 +214,15 @@ def deletecandidate(reg_no):
 
 
     return render_template('deletecandidate.html')
+
+#Register user function
+def registeruser(email,password):
+    conn = get_db_connection
+    conn.execute('INSERT INTO user (useremail, password) VALUES (?, ?)', (email, hash_password(password)))
+    conn.commit()
+    conn.close()
+    return True
+     
 
 #get user from the database
 def get_user(useremail):
