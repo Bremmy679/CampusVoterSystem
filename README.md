@@ -58,7 +58,7 @@ The team members are:
   <h2>THE TEAM MEMBERS</h2>
   <div style="display: flex; justify-content: space-around; align-items: center;">
     <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/mission-impossible-concept-illustration_114360-609.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Ogola Sospeter" width="100" height="100">
+      <img src="https://img.freepik.com/free-vector/mission-impossible-concept-illustration_114360-609.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Ogola Sospeter" width="100" height="100" style="border:50%">
       <p>Ogola Sospeter</p>
     </div>
     <div style="flex: 1; margin: 10px; text-align: center;">
