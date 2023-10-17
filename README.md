@@ -57,28 +57,29 @@ The team members are:
 <div align="center">
   <h2>THE TEAM MEMBERS</h2>
   <div style="display: flex; justify-content: space-around; align-items: center;">
-    <div style="flex: 1; margin: 10px;">
+    <div style="flex: 1; margin: 10px; text-align: center;">
       <img src="https://avatars.githubusercontent.com/" alt="Ogola Sospeter" width="100" height="100">
       <p>Ogola Sospeter</p>
     </div>
-    <div style="flex: 1; margin: 10px;">
+    <div style="flex: 1; margin: 10px; text-align: center;">
       <img src="https://avatars.githubusercontent.com/" alt="Sandra Lungahi" width="100" height="100">
       <p>Sandra Lungahi</p>
     </div>
-    <div style="flex: 1; margin: 10px;">
+    <div style="flex: 1; margin: 10px; text-align: center;">
       <img src="https://avatars.githubusercontent.com/" alt="Jeff Gicharu" width="100" height="100">
       <p>Jeff Gicharu</p>
     </div>
-    <div style="flex: 1; margin: 10px;">
+    <div style="flex: 1; margin: 10px; text-align: center;">
       <img src="https://avatars.githubusercontent.com/" alt="Vivian Mosomi" width="100" height="100">
       <p>Vivian Mosomi</p>
     </div>
-    <div style="flex: 1; margin: 10px;">
+    <div style="flex: 1; margin: 10px; text-align: center;">
       <img src="https://avatars.githubusercontent.com/" alt="Brendan Remmy" width="100" height="100">
       <p>Brendan Remmy</p>
     </div>
   </div>
 </div>
+
 
 
 ;; <div align="center" style="flex" >
