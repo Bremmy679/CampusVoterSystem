@@ -39,6 +39,7 @@ This project was developed by a team of students from Jomo Kenyatta University o
 The team members are:
 
 <div align="center" >
+THE TEAM MEMBERS
 
 ![Ogola Sospeter](https://avatars.githubusercontent.)
 
