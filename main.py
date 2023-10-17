@@ -14,6 +14,7 @@ def login():
         session = Session()
         useremail = request.form['useremail']
         password = request.form['password']
+        session['useremail'] = useremail
         if not is_valid_email(useremail):
             return render_template('login.html', error='Invalid email format.')
         if not is_valid_password(password):
@@ -24,6 +25,22 @@ def login():
             return render_template('login.html', error='Invalid useremail or password')
     return render_template('login.html')
 
+#logout
+@app.route('/logout')
+def logout():
+    if 'useremail' in session:
+        session['useremail'] = None
+    return redirect(url_for('home'))
+
+
+#The IndexPage
+@app.route('/index','<electiondata>')
+def index(electiondata):
+    if electiondata.isNotEmpty():
+        return render_template('index.html', electiondata=electiondata)
+
+    else:
+        return render_template('index.html', electiondata="No Data Found")
 
 #The landing Page Handler
 @app.route('/')
