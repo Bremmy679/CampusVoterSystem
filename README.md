@@ -54,18 +54,45 @@ Contributors.
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
 
-<div align="center" >
-THE TEAM MEMBERS
-
-![Ogola Sospeter](https://avatars.githubusercontent.)
-
-![Sandra Lungahi](https://avatars.githubusercontent.)
-
-![Jeff Gicharu](https://avatars.githubusercontent.)
-
-![Vivian Mosomi](https://avatars.githubusercontent.)
-
-![Brendan Remmy](https://avatars.githubusercontent.)
+<div align="center">
+  <h2>THE TEAM MEMBERS</h2>
+  <div style="display: flex; justify-content: space-around; align-items: center;">
+    <div style="flex: 1; margin: 10px;">
+      <img src="https://avatars.githubusercontent.com/" alt="Ogola Sospeter" width="100" height="100">
+      <p>Ogola Sospeter</p>
+    </div>
+    <div style="flex: 1; margin: 10px;">
+      <img src="https://avatars.githubusercontent.com/" alt="Sandra Lungahi" width="100" height="100">
+      <p>Sandra Lungahi</p>
+    </div>
+    <div style="flex: 1; margin: 10px;">
+      <img src="https://avatars.githubusercontent.com/" alt="Jeff Gicharu" width="100" height="100">
+      <p>Jeff Gicharu</p>
+    </div>
+    <div style="flex: 1; margin: 10px;">
+      <img src="https://avatars.githubusercontent.com/" alt="Vivian Mosomi" width="100" height="100">
+      <p>Vivian Mosomi</p>
+    </div>
+    <div style="flex: 1; margin: 10px;">
+      <img src="https://avatars.githubusercontent.com/" alt="Brendan Remmy" width="100" height="100">
+      <p>Brendan Remmy</p>
+    </div>
+  </div>
 </div>
+
+
+;; <div align="center" style="flex" >
+;; THE TEAM MEMBERS
+
+;; ![Ogola Sospeter](https://avatars.githubusercontent.)
+
+;; ![Sandra Lungahi](https://avatars.githubusercontent.)
+
+;; ![Jeff Gicharu](https://avatars.githubusercontent.)
+
+;; ![Vivian Mosomi](https://avatars.githubusercontent.)
+
+;; ![Brendan Remmy](https://avatars.githubusercontent.)
+;; </div>
 License
 This project is licensed under the MIT License.
