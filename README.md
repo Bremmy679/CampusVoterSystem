@@ -81,19 +81,5 @@ The team members are:
 </div>
 
 
-
-;; <div align="center" style="flex" >
-;; THE TEAM MEMBERS
-
-;; ![Ogola Sospeter](https://avatars.githubusercontent.)
-
-;; ![Sandra Lungahi](https://avatars.githubusercontent.)
-
-;; ![Jeff Gicharu](https://avatars.githubusercontent.)
-
-;; ![Vivian Mosomi](https://avatars.githubusercontent.)
-
-;; ![Brendan Remmy](https://avatars.githubusercontent.)
-;; </div>
 License
 This project is licensed under the MIT License.
