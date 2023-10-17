@@ -4,21 +4,37 @@ The JKUSA Election Web Application is a purpose-built platform for managing and 
 
 Features
 1. User Registration and Authentication
+
 JKUAT Student Registration: Students can register with their JKUAT credentials to participate in JKUSA elections.
 Secure Authentication: Robust authentication measures ensure the security of student accounts.
+
+
 2. Candidate Nomination
+
 Online Nomination: Aspiring candidates submits their nominations to the deans office, providing details about their candidacy.
 Verification Process: The JKUSA Election Committee verifies and approves candidate nominations, ensuring compliance with election rules.
+
+
 3. Voting System
+
 Secure Voting: Registered students can cast their votes securely through the platform.
 Real-time Results: Instant calculation and display of voting results maintain transparency.
+
+
 4. Candidate Profiles
+
 Detailed Profiles: Each candidate has a detailed profile showcasing their manifesto, photo, and background information.
 Voter Education: Information about candidates to help students make informed decisions.
+
+
 5. Admin Dashboard
+
 Election Management: The JKUSA Election Committee uses the admin dashboard to oversee the entire election process.
 Data Analytics: Insights and analytics tools provide information on voter turnout, candidate popularity, and other relevant metrics.
+
+
 6. Mobile Responsiveness
+
 Accessible Anywhere: The application is designed to be responsive, ensuring access from various devices for increased inclusivity.
 Getting Started
 Prerequisites
