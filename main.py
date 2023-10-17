@@ -64,6 +64,8 @@ def login():
 def logout():
     if 'useremail' in session:
         session['useremail'] = None
+        flash(f"{session['useremail']}  successfully logged Out.")
+
     return redirect(url_for('home'))
 
 
