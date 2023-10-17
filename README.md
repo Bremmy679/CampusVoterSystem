@@ -52,7 +52,7 @@ Result Declaration: The JKUSA Election Committee declares the results at the end
 Security
 The JKUSA Election Web Application prioritizes the security and privacy of user data. The application employs industry-standard encryption and security measures to protect user accounts and voting data.
 
-<h3 align="center>Contributors.</h3>
+<h3 align="center">Contributors.</h3>
 
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
