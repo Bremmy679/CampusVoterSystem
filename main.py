@@ -2,9 +2,19 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 import os
 from session import Session
 import re
+import sqlite3
+from wekzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+
+
+def get_db_connection():
+    conn = sqlite3.connect('electiondb.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
 
 
 #The login Page handler
@@ -19,10 +29,14 @@ def login():
             return render_template('login.html', error='Invalid email format.')
         if not is_valid_password(password):
             return render_template('login.html', error='Password must be at least 8 characters long.')
-        if session.login(username, password):
-            return redirect(url_for('home'))
-        else:
-            return render_template('login.html', error='Invalid useremail or password')
+
+        user = get_user(useremail)
+        if user is None:
+            return render_template('login.html', error='User does not exist.')
+        if not check_password(password, user):
+            return render_template('login.html', error='Incorrect password.')
+        return redirect(url_for('home'))
+      
     return render_template('login.html')
 
 #logout
@@ -58,5 +72,143 @@ def is_valid_password(password):
         return False
     return True
 
+#Add Candidate Page
+@app.route('/newcandidate')
+def newcandidate():
+    return render_template('newcandidate.html')
+
+@app.route('/addcandidate', methods=['GET', 'POST'])
+def addcandidate():
+    if request.method == 'POST':
+        try:
+            session = Session()
+            name = request.form['name']
+            reg_no = request.form['regNo']
+            college = request.form['college']
+            acad_year = request.form['acadYear']
+            position = request.form['position']
+
+            self.get_db_connection()
+            cur = conn.cursor()
+            cur.execute("INSERT INTO candidates (name, reg_no, college, acad_year, position) VALUES (?, ?, ?, ?, ?)", (name, reg_no, college, acad_year, position))
+            conn.commit()
+            msg = "Record successfully added"
+            if session.addcandidate(name, reg_no, college, acad_year, position):
+                return redirect(url_for('home'))
+            else:
+                return render_template('addcandidate.html', error='Invalid occurrences in field(s))')
+        except:
+            conn.rollback()
+            msg = "error in insert operation"
+      
+        finally:
+            return render_template("success.html",msg = msg)
+            con.close()
+
+    return render_template('addcandidate.html')
+
+#Edit a candidate data
+@app.route('/editcandidate/<reg_no:String>', methods=['GET', 'POST'])
+def editcandidate(reg_no):
+    if request.method == 'POST':
+        try:
+            session = Session()
+            name = request.form['name']
+            reg_no = request.form['regNo']
+            college = request.form['college']
+            acad_year = request.form['acadYear']
+            position = request.form['position']
+
+            self.get_db_connection()
+            cur = conn.cursor()
+            cur.execute("UPDATE candidates SET name=?, college=?, acad_year=?, position=? WHERE reg_no=?", (name, college, acad_year, position, reg_no))
+            conn.commit()
+            msg = "Record successfully updated"
+            if session.editcandidate(name, reg_no, college, acad_year, position):
+                return redirect(url_for('home'))
+            else:
+                return render_template('editcandidate.html', error='Invalid occurrences in field(s))')
+        except:
+            conn.rollback()
+            msg = "error in update operation"
+      
+        finally:
+            return render_template("success.html",msg = msg)
+            con.close()
+
+    if request.method == 'GET':
+        try:
+            session = Session()
+            name = request.form['name']
+            reg_no = request.form['regNo']
+            college = request.form['college']
+            acad_year = request.form['acadYear']
+            position = request.form['position']
+
+            self.get_db_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT * FROM candidates WHERE reg_no=?", (reg_no))
+            conn.commit()
+            msg = "Record successfully updated"
+            if session.editcandidate(name, reg_no, college, acad_year, position):
+                return redirect(url_for('home'))
+            else:
+                return render_template('editcandidate.html', error='Invalid occurrences in field(s))')
+        except:
+            conn.rollback()
+            msg = "error in update operation"
+      
+        finally:
+            return render_template("success.html",msg = msg)
+            con.close()
+
+    return render_template('editcandidate.html')
+
+
+
+#Delete a candidate data
+@app.route('/deletecandidate/<reg_no:String>', methods=['GET', 'POST'])
+def deletecandidate(reg_no):
+
+    if request.method == 'POST':
+        try:
+            session = Session()
+            reg_no = request.form['regNo']
+
+            self.get_db_connection()
+            cur = conn.cursor()
+            cur.execute("DELETE FROM candidates WHERE reg_no=?", (reg_no))
+            conn.commit()
+            msg = f"Candidate {reg_no} successfully deleted"
+            if session.deletecandidate(reg_no):
+                return redirect(url_for('home'))
+            else:
+                return render_template('deletecandidate.html', error='The candidate could not be deleted.')
+        except:
+            conn.rollback()
+            msg = "Error in delete operation"
+    
+        finally:
+            return render_template("success.html",msg = msg)
+            con.close()
+
+
+    return render_template('deletecandidate.html')
+
+#get user from the database
+def get_user(useremail):
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM users WHERE useremail = ?', (useremail,)).fetchone()
+    conn.close()
+    return user
+
+#The password hashing function
+def hash_password(password):
+    return generate_password_hash(password)
+
+def check_password(password, user):
+    
+    return check_password_hash(user.password, password)
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True) #debug=True is optional
