@@ -39,14 +39,14 @@ This project was developed by a team of students from Jomo Kenyatta University o
 The team members are:
 
 
-[!Ogola Sospeter(https://avatars.githubusercontent.)]
+![Ogola Sospeter](https://avatars.githubusercontent.)
 
-[!Sandra Lungahi(https://avatars.githubusercontent.)]
+![Sandra Lungahi](https://avatars.githubusercontent.)
 
-[!Jeff Gicharu(https://avatars.githubusercontent.)]
+![Jeff Gicharu](https://avatars.githubusercontent.)
 
-[!Vivian Mosomi(https://avatars.githubusercontent.)]
-[Brendan Remmy(https://avatars.githubusercontent.)]
+![Vivian Mosomi](https://avatars.githubusercontent.)
+![Brendan Remmy](https://avatars.githubusercontent.)
 
 License
 This project is licensed under the MIT License.
