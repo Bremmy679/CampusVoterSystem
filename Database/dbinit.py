@@ -2,7 +2,9 @@ import sqlite3
 import random
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from faker import Faker
 
+fake = Faker()
 
 class Student:
     def __init__(self,name,regNo,email,password,college,school,campus,academicYear):
@@ -17,14 +19,15 @@ class Student:
 
 colleges = ["COPAS", "COHRED", "COETEC", "COANRE"]
 academic_years = [1, 2, 3, 4, 5, 6]
+prefix = random.choice(["SCT", "HRD"])
 
 students = []
 
 for _ in range(30):
-    name = "Student" + str(_ + 1)
-    reg_no = str(random.randint(10000, 99999))
-    email = f"{name.lower()}@example.com"
-    password = "pass123"
+    name = fake.name()
+    reg_no = F'{prefix} {random.randint(100, 999)}-{random.randint(1000, 9999)}/{random.randint(2017, 2022)}'
+    email = fake.email()
+    password = fake.password()
     college = random.choice(colleges)
     school = "Computer Science"  # Assuming a default value
     campus = "Main"  # Assuming a default value
