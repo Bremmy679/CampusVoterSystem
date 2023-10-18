@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script>
+        function updateVoteCounts() {
+            $.getJSON('/vote_counts', function(data) {
+                $.each(data, function(index, row) {
+                    $('#votes-' + row[0]).text(row[1]);
+                });
+            });
+        }
+
+        setInterval(updateVoteCounts, 5000); // Update every 5 seconds
+    </script> -->
+    <title>Document</title>
+</head>
+
+<body>
+    <table border="2">
+        <thead>
+            <tr>
+                <th>Candidate</th>
+                <th>Id</th>
+                <th>Email</th>
+                <th>RegNo</th>
+                <th>Campus</th>
+                <th>School</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for candidate in rows %}
+            <tr>
+                <td>{{ candidate.name }}</td>
+                <td id="email-{{ candidate.id }}">{{ candidate.id }}</td>
+                <td>{{candidate.email}}</td>
+                <td>{{candidate.regNo}}</td>
+                <td>{{candidate.campus}}</td>
+                <td>{{candidate.school}}</td>
+                <td>{{candidate.password}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>
