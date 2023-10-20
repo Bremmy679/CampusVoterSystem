@@ -83,6 +83,9 @@ The team members are:
   </div>
 </div>
 
-
+<div>
+<h3 align="center">Project Design</h3>
+<a href="https://www.figma.com/><img src="https://img.shields.io/badge/Figma-Design-orange" alt="Figma Design" /></a>
+</div>
 License
 This project is licensed under the MIT License.
