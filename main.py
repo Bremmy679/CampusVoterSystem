@@ -245,14 +245,21 @@ def check_password(password, user):
     return check_password_hash(user.password, password)
 
 
+# @app.route('/vote_counts')
+# def vote_counts():
+#     cursor = get_db_connection().cursor()
+#     cursor.execute('SELECT name, id FROM candidates')
+#     rows = cursor.fetchone()
+   
+#     return  rows
+
+
 @app.route('/vote_counts')
 def vote_counts():
-    cursor = get_db_connection().cursor()
-    cursor.execute('SELECT name, id FROM candidates')
-    rows = cursor.fetchone()
-   
-    return  rows
-
+    cursor = get_db().cursor()
+    cursor.execute('SELECT name, votes FROM candidates')
+    rows = cursor.fetchall()
+    return jsonify(rows)
 
 
 
