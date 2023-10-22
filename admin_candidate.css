@@ -1,136 +1,151 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-  height: 100%;
-  background-color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
+    overflow-y: hidden;
+    height: 100%;
+    background-color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .container {
-  display: flex;
-  height: 100%;
+    display: flex;
+    height: 100%;
 }
 
 .buttons {
-  gap: 1.5em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 3.5em;
+    gap: 1.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3.5em;
 }
 
 .buttons button {
-  box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.21);
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  border-color: #36b99a;
-  color: #FFFFFF;
-  font-weight: 600;
-  padding: 11px 18px;
-  width: 7em;
-  border-radius: 10px;
-  background: var(--Sea-Green, #32A287);
+    box-shadow: 0px 4px 30px 0px rgba(0, 0, 0, 0.21);
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    border-color: #36b99a;
+    color: #FFFFFF;
+    font-weight: 600;
+    padding: 11px 18px;
+    width: 7em;
+    border-radius: 10px;
+    background: var(--Sea-Green, #32A287);
 }
 
 .left {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2em;
-  flex: 0 1 0;
-  background-color: #32A287;
-  border-radius: 0% 50% 50% 0%/0% 80% 80% 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+    flex: 0 1 0;
+    border-radius: 0% 50% 50% 0%/0% 80% 80% 0%;
+}
+
+.left::before {
+    content: "";
+    position: absolute;
+    width: 17vw;
+    height: 75vh;
+    background: #32A287;
+    border-radius: 80%;
+    transform-origin: left;
+    transform: translateX(-100%) scale(2);
 }
 
 img {
-  width: 126.117px;
-  height: auto;
+    width: 126.117px;
+    height: auto;
+    z-index: 1;
 }
 
 .right {
-  flex: 4 1 0;
-  padding: 1em;
-  width: 100%;
+    flex: 4 1 0;
+    padding: 1em;
+    width: 100%;
 }
 
 form {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1;
 }
 
 .top {
-  padding: 1em 2em;
-  margin-top: 7em;
-  max-height: 20em;
-  min-width: 0px;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 2em;
+    padding: 1em 2em;
+    margin-top: 7em;
+    max-height: 20em;
+    min-width: 0px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 2em;
 }
 
 .bottom {
-  display: flex;
-  justify-content: space-between;
-  padding-right: 7em;
+    display: flex;
+    justify-content: space-between;
+    padding-right: 7em;
 }
 
 label {
-  color: var(--Sea-Green, #32A287);
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  width: 8em;
+    color: var(--Sea-Green, #52c2a8);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    width: 8em;
+    z-index: 1;
 }
 
 .inputs {
-  display: flex;
-  max-width: 25em;
-  justify-content: space-between;
-  gap: 1em;
+    display: flex;
+    max-width: 25em;
+    justify-content: space-between;
+    gap: 1em;
+    z-index: 1;
 }
 
 .top input,
 select {
-  padding: 5px 8px;
-  width: 17em;
-  border-radius: 10px;
-  border: 1px solid var(--Sea-Green, #32A287);
-  background: var(--Cream-Green, #F1FFE7);
+    padding: 5px 8px;
+    width: 17em;
+    border-radius: 10px;
+    border: 1px solid var(--Sea-Green, #32A287);
+    background: var(--Cream-Green, #F1FFE7);
 }
 
 .bottom button,
 #submit {
-  background-color: #32A287;
-  color: #F1FFE7;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  border-radius: 10px;
-  padding: 8px 6px;
+    background-color: #32A287;
+    color: #F1FFE7;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 6px;
 }
 
 .bottom button:active {
-  transform: scale(0.95);
+    transform: scale(0.95);
 }
 
 button:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 #submit:active {
-  transform: scale(0.95);
+    transform: scale(0.95);
 }
 
 #submit:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
