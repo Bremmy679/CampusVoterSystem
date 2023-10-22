@@ -77,6 +77,15 @@ a {
     color: #fff;
 }
 
+#forgot-password:hover{
+    color: #d4d4d4;
+}
+
+#forgot-password:active{
+    transform: scale(0.95);
+    color: #6A3CA4;
+}
+
 button {
     background-color: #32A287;
     width: 265px;
@@ -117,6 +126,16 @@ p {
     font-style: normal;
     font-weight: 600;
     line-height: normal;
+}
+
+#create-account:hover{
+    color: azure;
+}
+
+#create-account:active{
+    transform: scale(0.95);
+    cursor: pointer;
+    color: #6A3CA4;
 }
 
 .right {
