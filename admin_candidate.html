@@ -5,10 +5,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Candidate</title>
+  <link rel="stylesheet" href="admin_candidate.css">
 </head>
 
 <body>
 
 </body>
+<div class="container">
+  <div class="left">
+    <img src="images/Layer 1.png" alt="JKUAT Logo">
+    <div class="buttons">
+      <button>ADD</button>
+      <button>DELETE</button>
+      <button>RECORD</button>
+    </div>
+  </div>
+  <div class="right">
+    <form action="#">
+      <div class="top">
+        <div class="inputs registration">
+          <label for="Registration-No">Registration No:</label>
+          <input type="text" id="reg-no">
+        </div>
+        <div class="inputs first_name">
+          <label for="first-name">First Name:</label>
+          <input type="text">
+        </div>
+        <div class="inputs last_name">
+          <label for="last-name">Last Name:</label>
+          <input type="text">
+        </div>
+        <div class="inputs id-num">
+          <label for="id-no">ID No:</label>
+          <input type="number" name="id-no" id="id_no">
+        </div>
+        <div class="inputs colleges">
+          <label for="college">College:</label>
+          <input type="text" id="college">
+        </div>
+        <div class="inputs schools">
+          <label for="school">School:</label>
+          <input type="text" id="school">
+        </div>
+        <div class="inputs courses">
+          <label for="course">Course:</label>
+          <input type="text" id="course">
+        </div>
+        <div class="inputs year">
+          <label for="year-of-study">Year of Study:</label>
+          <input type="number">
+        </div>
+        <div class="inputs seats">
+          <label for="seat">Seat:</label>
+          <select name="seat" id="seat">
+            <option value="">-- Select Seat --</option>
+            <option value="Chairperson">Chairperson</option>
+            <option value="Vice-Chairperson">Vice Chairperson</option>
+            <option value="Treasurer">Treasurer</option>
+            <option value="Secretary-General">Secretary General</option>
+            <option value="Halls">Halls of Residence Representative</option>
+            <option value="" id="school-rep"></option>
+          </select>
+        </div>
+      </div>
+      <div class="bottom">
+        <button>Back to Dashboard</button>
+        <input type="submit" value="Submit" id="submit">
+      </div>
+    </form>
+  </div>
+</div>
 
 </html>
