@@ -12,7 +12,7 @@ CREATE TABLE candidates (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     name TEXT NOT NULL,
-    regNo TEXT NOT NULL,
+    regNo TEXT NOT NULL UNIQUE,  -- Assuming regNo uniquely identifies a candidate
     email TEXT NOT NULL,
     password TEXT NOT NULL,
     college TEXT NOT NULL,
@@ -21,13 +21,14 @@ CREATE TABLE candidates (
     academicYear INTEGER NOT NULL,
     electedPost_id INTEGER,
     votes INTEGER,
-    FOREIGN KEY (electedPost_id) REFERENCES posts(id)
+    FOREIGN KEY (electedPost_id) REFERENCES posts(id),
+    FOREIGN KEY (regNo) REFERENCES voters(regNo)  -- Reference the regNo field in voters
 );
 
 CREATE TABLE voters (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    regNo TEXT NOT NULL,
+    regNo TEXT NOT NULL UNIQUE,  -- Assuming regNo uniquely identifies a voter
     email TEXT NOT NULL,
     password TEXT NOT NULL,
     college TEXT NOT NULL,
@@ -36,6 +37,7 @@ CREATE TABLE voters (
     academicYear INTEGER NOT NULL,
     FOREIGN KEY (campus) REFERENCES campuses(name)
 );
+
 
 CREATE TABLE campuses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -54,7 +56,6 @@ INSERT INTO campuses (name) VALUES
 ('Kitale CBD Campus'), 
 ('Nakuru CBD Campus'), 
 ('Mombasa CBD Campus');
-
 
 
 
@@ -77,5 +78,4 @@ INSERT INTO campuses (name) VALUES
 --     electedPost TEXT,
 --     votes INTEGER
 -- );
-    
     
