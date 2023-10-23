@@ -1,0 +1,159 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    background-color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+}
+
+.left {
+    border-radius: 0% 70% 70% 0%/0% 100% 100% 0%;
+    background-color: #32A287;
+    flex: 1.5 1 0;
+    display: flex;
+}
+
+form {
+    height: 100%;
+    margin-left: 6em;
+    display: flex;
+    gap: 1.5em;
+    align-items: baseline;
+    flex: 0 1 0;
+    flex-direction: column;
+}
+
+form h2 {
+    margin-top: 2em;
+    color: #F1FFE7;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+label {
+    color: #F1FFE7;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.username {
+    margin-bottom: 2em;
+}
+
+.password {
+    margin-bottom: 1em;
+}
+
+input {
+    font-size: 16px;
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 5px;
+    border-style: solid;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+a {
+    text-decoration: none;
+}
+
+#forgot-password {
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    color: #fff;
+}
+
+#forgot-password:hover{
+    color: #d4d4d4;
+}
+
+#forgot-password:active{
+    transform: scale(0.95);
+    color: #6A3CA4;
+}
+
+button {
+    background-color: #32A287;
+    width: 265px;
+    align-self: center;
+    height: 39px;
+    fill: none;
+    border: 1px solid #F1FFE7;
+    border-radius: 30px;
+    color: #F1FFE7;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+p {
+    color: #F1FFE7;
+    align-self: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#create-account {
+    align-self: center;
+    color: #6A3CA4;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+#create-account:hover{
+    color: azure;
+}
+
+#create-account:active{
+    transform: scale(0.95);
+    cursor: pointer;
+    color: #6A3CA4;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    align-items: center;
+    flex: 1 1 0;
+}
+
+.right h2 {
+    width: max-content;
+    margin-top: 2em;
+    color: #32A287;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+img {
+    width: 330px;
+    height: auto;
+}
