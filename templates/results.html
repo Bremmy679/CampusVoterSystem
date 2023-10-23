@@ -1,9 +1,6 @@
-{% extends base.html}
-<h3>{% block title%} Results Page {% endblock%}
-    {% block header%}
-    <link rel="stylesheet" href="results.css">{%endblock%}
-    {% block content%}
-
+{% extends 'base.html'}
+<h3>{% block title%} Results Page {% endblock%} {% block header%}
+    <link rel="stylesheet" type="text/css" href="../static/styles/results.css?{{ cache_id }}"> {%endblock%} {% block content%}
     <section>
         <nav>
             <div class="nav-bar profile">
@@ -34,5 +31,4 @@
             <h3>Delegates</h3>
         </div>
     </div>
-{%endblock%}
-{%endblock%}
+    {%endblock%} {%endblock%}

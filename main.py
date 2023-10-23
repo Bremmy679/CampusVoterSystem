@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SECRET_KEY'] = 'secret'
 
 
 def get_db_connection():
@@ -18,7 +18,6 @@ def get_db_connection():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        session = Session()
         useremail = request.form['useremail']
         password = request.form['password']
         userRegNo = request.form['userRegNo']
@@ -56,26 +55,56 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
     return True
 
 #The login Page handler
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session = Session()
         useremail = request.form['useremail']
         password = request.form['password']
-        session['useremail'] = useremail
+
+        # Check if useremail and password are provided
+        if not useremail or not password:
+            return render_template('login.html', error='Please provide both email and password.')
+
+
+        # Check email format
         if not is_valid_email(useremail):
             return render_template('login.html', error='Invalid email format.')
+
+        # Check password length
         if not is_valid_password(password):
             return render_template('login.html', error='Password must be at least 8 characters long.')
 
         user = get_user(useremail)
+
+        # Check if user exists
         if user is None:
             return render_template('login.html', error='User does not exist.')
+
+        # Check password
         if not check_password(password, user.password):
             return render_template('login.html', error='Incorrect email or password.')
+
+        # Set user email in session
+        session['useremail'] = useremail
+
         return redirect(url_for('home'))
-      
+
     return render_template('login.html')
+
+#get user from the database
+def get_user(useremail):
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM voters WHERE email = ?', (useremail,)).fetchone()
+    conn.close()
+    return user
+
+#The password hashing function
+def hash_password(password):
+    return generate_password_hash(password)
+
+def check_password(password, user):
+    return check_password_hash(user.password, password)
+
 
 #logout
 @app.route('/logout')
@@ -97,7 +126,7 @@ def index(electiondata):
         return render_template('index.html', electiondata="No Data Found")
 
 #The landing Page Handler
-@app.route('/')
+@app.route('/home')
 def home():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT name, id,email,campus,school,regNo,password FROM candidates')
@@ -107,11 +136,12 @@ def home():
 
 #Email Validation
 def is_valid_email(email):
-    re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email)
+    return re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email)
+    
 
 #Password Validation
 def is_valid_password(password):
-    if password.length < 8:
+    if len(password) < 8:
         return False
     return True
 
@@ -242,20 +272,7 @@ def deletecandidate(regno):
 
      
 
-#get user from the database
-def get_user(useremail):
-    conn = get_db_connection()
-    user = conn.execute('SELECT * FROM users WHERE useremail = ?', (useremail,)).fetchone()
-    conn.close()
-    return jsonify(user)
 
-#The password hashing function
-def hash_password(password):
-    return generate_password_hash(password)
-
-def check_password(password, user):
-    
-    return check_password_hash(user.password, password)
 
 
 # @app.route('/vote_counts')
