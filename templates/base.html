@@ -12,12 +12,14 @@
     <!--
         Document title
     -->
-    {{% block title%}} {{% endblock %}}
+    <title>{% block title%} {% endblock %}</title>
+
 
     <!--
         The header for each page
     -->
-    {{% block header%}} {{% endblock %}}
+    <header>{% block header%} {% endblock %}</header>
+
 
 </head>
 
@@ -25,12 +27,13 @@
     <!--
         The main body for each page content
     -->
-    {{% block content%}} {{% endblock %}}
+    {% block content%} {% endblock %}
 
     <!--
         The footer for each page
     -->
-    {{% block footer%}} {{% endblock %}}
+    <footer>{% block footer%} {% endblock %}</footer>
+
 
 </body>
 
