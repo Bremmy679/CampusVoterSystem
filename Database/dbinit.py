@@ -53,7 +53,7 @@ def init_db():
 
     cursor = connection.cursor()
     for student in students:
-        cursor.execute(f"INSERT INTO candidates (name,regNo,email,password,college,school,campus,academicYear) VALUES (?,?,?,?,?,?,?,?)",
+        cursor.execute(f"INSERT INTO voters (name,regNo,email,password,college,school,campus,academicYear) VALUES (?,?,?,?,?,?,?,?)",
         (student.name,student.regNo,student.email,generate_password_hash(student.password),student.college,student.school,student.campus,student.academicYear))
 
     cursor.close()

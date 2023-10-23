@@ -21,6 +21,17 @@ def register():
         session = Session()
         useremail = request.form['useremail']
         password = request.form['password']
+        userRegNo = request.form['userRegNo']
+        firstName = request.form['firstName']
+        lastName = request.form['lastName']
+        college = request.form['college']
+        school = request.form['School']
+        course = request.form['course']
+        userIdNo = request.form['userIdNo']
+        campus = request.form['campus']
+        academicyear = request.form['academicyear']
+        userName = firstName + " " + lastName
+
         session['useremail'] = useremail
         if not is_valid_email(useremail):
             return render_template('register.html', error='Invalid email format.')
@@ -30,11 +41,19 @@ def register():
         user = get_user(useremail)
         if user is not None:
             return render_template('register.html', error='User already exists.')
-        if session.registeruser(useremail, password):
+        if session.registeruser(useremail, password,userName,userRegNo,college,course,school,campus,academicyear,userIdNo):
             return redirect(url_for('home'))
         else:
             return render_template('register.html', error='Invalid occurrences in field(s).')
     return render_template('register.html')
+
+#Register user function
+def registeruser(email, password,name,regNo,college,course,school,campus,academicyear,userIdNo):
+    conn = get_db_connection
+    conn.execute('INSERT INTO voters (email, password,name,regNo,college,course,school,campus,academicYear) VALUES (?, ?,?,?,?,?,?,?,?)', (email, hash_password(password),name,regNo,college,course,school,campus,academicyear,userIdNo))
+    conn.commit()
+    conn.close()
+    return True
 
 #The login Page handler
 @app.route('/login', methods=['GET', 'POST'])
@@ -220,13 +239,7 @@ def deletecandidate(regno):
 
     return render_template('deletecandidate.html')
 
-#Register user function
-def registeruser(email,password):
-    conn = get_db_connection
-    conn.execute('INSERT INTO user (useremail, password) VALUES (?, ?)', (email, hash_password(password)))
-    conn.commit()
-    conn.close()
-    return True
+
      
 
 #get user from the database
