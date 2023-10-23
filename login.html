@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends base.html}
+<h3>{% block title%} Login Page {% endblock%}
+   {% block header%}<link rel="stylesheet" href="login.css">{%endblock%}
+{% block content%}
 
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Login Page</title>
-   <link rel="stylesheet" href="login.css">
-</head>
-
-<body>
    <div class="container">
       <div class="left">
          <form action="#">
@@ -32,6 +26,5 @@
          <img src="images/University Voting System.png" alt="">
       </div>
    </div>
-</body>
-
-</html>
+{%endblock%}
+{%endblock%}
