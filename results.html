@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends base.html}
+<h3>{% block title%} Results Page {% endblock%}
+    {% block header%}
+    <link rel="stylesheet" href="results.css">{%endblock%}
+    {% block content%}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="results.css">
-  <title>Results</title>
-</head>
-
-<body>
     <section>
         <nav>
             <div class="nav-bar profile">
@@ -39,6 +34,5 @@
             <h3>Delegates</h3>
         </div>
     </div>
-</body>
-
-</html>
+{%endblock%}
+{%endblock%}

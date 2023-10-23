@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends base.html}
+<h3>{% block title%} Admin Candidate Page {% endblock%}
+    {% block header%}
+    <link rel="stylesheet" href="admin_candidate.css">{%endblock%}
+    {% block content%}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Candidate</title>
-  <link rel="stylesheet" href="admin_candidate.css">
-</head>
-
-<body>
-
-</body>
 <div class="container">
   <div class="left">
     <img src="images/Layer 1.png" alt="JKUAT Logo">
@@ -75,5 +68,5 @@
     </form>
   </div>
 </div>
-
-</html>
+{%endblock%}
+{%endblock%}
