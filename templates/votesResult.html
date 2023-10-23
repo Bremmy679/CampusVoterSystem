@@ -1,50 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %} {% block title %}Votes Result{% endblock %} {% block header %}
+<h2 style="color: green; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-weight: 600; text-transform: capitalize; text-align: center;">
+    The Voters Page
+</h2>
+{% endblock %} {% block content %}
+<table border="1" style="border-style: groove;border-spacing: 10%;">
+    <thead>
+        <tr>
+            <th>Candidate</th>
+            <th>Id</th>
+            <th>Email</th>
+            <th>RegNo</th>
+            <th>Campus</th>
+            <th>School</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for candidate in rows %}
+        <tr>
+            <td>{{ candidate.name }}</td>
+            <td id="email-{{ candidate.id }}">{{ candidate.id }}</td>
+            <td>{{candidate.email}}</td>
+            <td>{{candidate.regNo}}</td>
+            <td>{{candidate.campus}}</td>
+            <td>{{candidate.school}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %} {% block footer %}
+<h2 style="color: green; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-weight: 600;">
+    The Voters Page
+</h2>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <script>
-        function updateVoteCounts() {
-            $.getJSON('/vote_counts', function(data) {
-                $.each(data, function(index, row) {
-                    $('#votes-' + row[0]).text(row[1]);
-                });
-            });
-        }
-
-        setInterval(updateVoteCounts, 5000); // Update every 5 seconds
-    </script> -->
-    <title>Document</title>
-</head>
-
-<body>
-    <table border="2">
-        <thead>
-            <tr>
-                <th>Candidate</th>
-                <th>Id</th>
-                <th>Email</th>
-                <th>RegNo</th>
-                <th>Campus</th>
-                <th>School</th>
-                <th>Password</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for candidate in rows %}
-            <tr>
-                <td>{{ candidate.name }}</td>
-                <td id="email-{{ candidate.id }}">{{ candidate.id }}</td>
-                <td>{{candidate.email}}</td>
-                <td>{{candidate.regNo}}</td>
-                <td>{{candidate.campus}}</td>
-                <td>{{candidate.school}}</td>
-                <td>{{candidate.password}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-
-</html>
+{% endblock %}
