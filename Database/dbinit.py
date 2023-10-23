@@ -3,6 +3,7 @@ import random
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from faker import Faker
+from flask import jsonify
 
 fake = Faker()
 
@@ -19,22 +20,26 @@ class Student:
 
 colleges = ["COPAS", "COHRED", "COETEC", "COANRE"]
 academic_years = [1, 2, 3, 4, 5, 6]
-prefix = random.choice(["SCT", "HRD"])
+prefix = ["SCT", "HRD","HDE"]
+#The JKUAT campuses
 
+campuses = ["Main Campus-Juja", "Karen Campus", "Kisii CBD Campus", "Nairobi CBD Campus", "Kakamega CBD Campus"]
+schools = ['Computing','Engineering','Agriculture']
 students = []
 
 for _ in range(30):
     name = fake.name()
-    reg_no = F'{prefix} {random.randint(100, 999)}-{random.randint(1000, 9999)}/{random.randint(2017, 2022)}'
+    reg_no = F'{random.choice(prefix)} {random.randint(100, 999)}-{random.randint(1000, 9999)}/{random.randint(2017, 2022)}'
     email = fake.email()
     password = fake.password()
     college = random.choice(colleges)
-    school = "Computer Science"  # Assuming a default value
-    campus = "Main"  # Assuming a default value
+    school = random.choice(schools)  # Assuming a default value
+    campus = random.choice(campuses)  # Assuming a default value
     academic_year = random.choice(academic_years)
 
     student_instance = Student(name, reg_no, email, password, college, school, campus, academic_year)
     students.append(student_instance)
+    
 
 def init_db():
     script_dir = os.path.dirname(os.path.abspath(__file__))
