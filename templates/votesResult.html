@@ -1,5 +1,9 @@
-{% extends "base.html" %} {% block title %}Votes Result{% endblock %} {% block content %}
-<table border="2">
+{% extends "base.html" %} {% block title %}Votes Result{% endblock %} {% block header %}
+<h2 style="color: green; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-weight: 600; text-transform: capitalize; text-align: center;">
+    The Voters Page
+</h2>
+{% endblock %} {% block content %}
+<table border="1" style="border-style: groove;border-spacing: 10%;">
     <thead>
         <tr>
             <th>Candidate</th>
@@ -8,7 +12,6 @@
             <th>RegNo</th>
             <th>Campus</th>
             <th>School</th>
-            <th>Password</th>
         </tr>
     </thead>
     <tbody>
@@ -20,9 +23,13 @@
             <td>{{candidate.regNo}}</td>
             <td>{{candidate.campus}}</td>
             <td>{{candidate.school}}</td>
-            <td>{{candidate.password}}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% endblock %} {% block footer %}
+<h2 style="color: green; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-weight: 600;">
+    The Voters Page
+</h2>
+
 {% endblock %}
