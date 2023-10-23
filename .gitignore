@@ -2,3 +2,7 @@
 *.jpeg
 *.png
 *.gif
+
+#Add the AppSecrets file to the .gitignore file
+
+../.venv/AppSecrets.py

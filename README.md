@@ -1,8 +1,10 @@
-JKUSA Election Web Application
-Overview
+<h2 align="center" style="color:Green">JKUSA Election Web Application</h2>
+
+<h4 align="center">Overview</h4>
+
 The JKUSA Election Web Application is a purpose-built platform for managing and conducting student body elections at Jomo Kenyatta University of Agriculture and Technology (JKUAT). This application has been designed to enhance the democratic process, promote student engagement, and ensure a fair and transparent election for the JKUSA (Jomo Kenyatta University Students' Association).
 
-Features
+<h3> Features</h3>
 1. User Registration and Authentication
 
 JKUAT Student Registration: Students can register with their JKUAT credentials to participate in JKUSA elections.
@@ -50,36 +52,41 @@ Result Declaration: The JKUSA Election Committee declares the results at the end
 Security
 The JKUSA Election Web Application prioritizes the security and privacy of user data. The application employs industry-standard encryption and security measures to protect user accounts and voting data.
 
-Contributors.
+<h3 align="center">Contributors.</h3>
+
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
 
+### The Team Members
 <div align="center">
-  <h2>THE TEAM MEMBERS</h2>
-  <div style="display: flex; justify-content: space-around; align-items: center;">
-    <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/mission-impossible-concept-illustration_114360-609.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Ogola Sospeter" width="100" height="100" style="border:50%">
+  <h4>THE TEAM MEMBERS</h4>
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center;">
+    <div style="margin: 10px; text-align: center;">
+      <img src="https://img.freepik.com/free-vector/mission-impossible-concept-illustration_114360-609.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Ogola Sospeter" width="200" height="200" style="border-radius: 50%">
       <p>Ogola Sospeter</p>
     </div>
-    <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/coding-concept-illustration_114360-1155.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Sandra Lungahi" width="100" height="100">
+    <div style="margin: 10px; text-align: center;">
+      <img src="https://img.freepik.com/free-vector/coding-concept-illustration_114360-1155.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Sandra Lungahi" width="200" height="200" style="border-radius: 50%">
       <p>Sandra Lungahi</p>
     </div>
-    <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/professional-cartoon-businessman-background-ecological_1368-271.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Jeff Gicharu" width="100" height="100">
+    <div  style="margin: 10px; text-align: center;">
+      <img src="https://img.freepik.com/free-vector/professional-cartoon-businessman-background-ecological_1368-271.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Jeff Gicharu" width="200" height="200" style="border-radius: 50%">
       <p>Jeff Gicharu</p>
     </div>
-    <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/programmers-day-banner-design_1308-114298.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Vivian Mosomi" width="100" height="100">
+    <div style="margin: 10px; text-align: center;">
+      <img src="https://img.freepik.com/free-vector/programmers-day-banner-design_1308-114298.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Vivian Mosomi" width="200" height="200" style="border-radius: 50%">
       <p>Vivian Mosomi</p>
     </div>
-    <div style="flex: 1; margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/online-games-addiction-concept-illustration_114360-1994.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Brendan Remmy" width="100" height="100">
+    <div style="margin: 10px; text-align: center; size:150px">
+      <img src="https://img.freepik.com/free-vector/online-games-addiction-concept-illustration_114360-1994.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Brendan Remmy" width="200" height="200" style="border-radius: 50%">
       <p>Brendan Remmy</p>
     </div>
   </div>
 </div>
 
+
+<h3>Project Design</h3>
+<a href="https://www.figma.com><img src="https://img.shields.io/badge/Figma-Design-orange" alt="Figma Design" /></a>
 
 License
 This project is licensed under the MIT License.

@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, flash, jsonify
 import os
-from session import Session
 import re
 import sqlite3
-from wekzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -70,7 +69,7 @@ def logout():
 
 
 #The IndexPage
-@app.route('/index','<electiondata>')
+@app.route('/index/<electiondata>')
 def index(electiondata):
     if electiondata.isNotEmpty():
         return render_template('index.html', electiondata=electiondata)
@@ -81,8 +80,11 @@ def index(electiondata):
 #The landing Page Handler
 @app.route('/')
 def home():
-    return render_template('home.html')
-
+    cursor = get_db_connection().cursor()
+    cursor.execute('SELECT name, id,email,campus,school,regNo,password FROM candidates')
+    rows = cursor.fetchall()
+   
+    return render_template('votesResult.html', rows=rows)
 
 #Email Validation
 def is_valid_email(email):
@@ -130,8 +132,8 @@ def addcandidate():
     return render_template('addcandidate.html')
 
 #Edit a candidate data
-@app.route('/editcandidate/<reg_no:String>', methods=['GET', 'POST'])
-def editcandidate(reg_no):
+@app.route('/editcandidate/<reg_no>', methods=['GET', 'POST'])
+def editcandidate(regno):
     if request.method == 'POST':
         try:
             session = Session()
@@ -143,10 +145,10 @@ def editcandidate(reg_no):
 
             self.get_db_connection()
             cur = conn.cursor()
-            cur.execute("UPDATE candidates SET name=?, college=?, acad_year=?, position=? WHERE reg_no=?", (name, college, acad_year, position, reg_no))
+            cur.execute("UPDATE candidates SET name=?, college=?, academicyear=?, position=? WHERE regNo=?", (name, college, acad_year, position, regno))
             conn.commit()
             msg = "Record successfully updated"
-            if session.editcandidate(name, reg_no, college, acad_year, position):
+            if session.editcandidate(name, regno, college, acad_year, position):
                 return redirect(url_for('home'))
             else:
                 return render_template('editcandidate.html', error='Invalid occurrences in field(s))')
@@ -186,11 +188,12 @@ def editcandidate(reg_no):
 
     return render_template('editcandidate.html')
 
+    
 
 
 #Delete a candidate data
-@app.route('/deletecandidate/<reg_no:String>', methods=['GET', 'POST'])
-def deletecandidate(reg_no):
+@app.route('/deletecandidate/<regno>', methods=['GET', 'POST'])
+def deletecandidate(regno):
 
     if request.method == 'POST':
         try:
@@ -199,7 +202,7 @@ def deletecandidate(reg_no):
 
             self.get_db_connection()
             cur = conn.cursor()
-            cur.execute("DELETE FROM candidates WHERE reg_no=?", (reg_no))
+            cur.execute("DELETE FROM candidates WHERE regNo=?", (regno))
             conn.commit()
             msg = f"Candidate {reg_no} successfully deleted"
             if session.deletecandidate(reg_no):
@@ -231,7 +234,7 @@ def get_user(useremail):
     conn = get_db_connection()
     user = conn.execute('SELECT * FROM users WHERE useremail = ?', (useremail,)).fetchone()
     conn.close()
-    return user
+    return jsonify(user)
 
 #The password hashing function
 def hash_password(password):
@@ -240,6 +243,28 @@ def hash_password(password):
 def check_password(password, user):
     
     return check_password_hash(user.password, password)
+
+
+# @app.route('/vote_counts')
+# def vote_counts():
+#     cursor = get_db_connection().cursor()
+#     cursor.execute('SELECT name, id FROM candidates')
+#     rows = cursor.fetchone()
+   
+#     return  rows
+
+
+@app.route('/vote_counts')
+def vote_counts():
+    cursor = get_db().cursor()
+    cursor.execute('SELECT name, votes FROM candidates')
+    rows = cursor.fetchall()
+    return jsonify(rows)
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True) #debug=True is optional
