@@ -1,0 +1,40 @@
+<!--
+    The base model class where all other templates will extend from.
+-->
+
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+        Document title
+    -->
+    <title>{% block title%} {% endblock %}</title>
+
+
+    <!--
+        The header for each page
+    -->
+    <header>{% block header%} {% endblock %}</header>
+
+
+</head>
+
+<body>
+    <!--
+        The main body for each page content
+    -->
+    {% block content%} {% endblock %}
+
+    <!--
+        The footer for each page
+    -->
+    <footer>{% block footer%} {% endblock %}</footer>
+
+
+</body>
+
+</html>
