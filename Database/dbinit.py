@@ -8,13 +8,15 @@ from flask import jsonify
 fake = Faker()
 
 class Student:
-    def __init__(self,name,regNo,email,password,college,school,campus,academicYear):
+    def __init__(self,idNo,name,regNo,email,password,college,school,course,campus,academicYear):
+        self.idNo = idNo
         self.name = name
         self.regNo = regNo
         self.email = email
         self.password = password
         self.college = college
         self.school = school
+        self.course = course
         self.campus = campus
         self.academicYear = academicYear
 
@@ -28,6 +30,7 @@ schools = ['Computing','Engineering','Agriculture']
 students = []
 
 for _ in range(30):
+    idno = random.randint(10000000, 99999999)
     name = fake.name()
     reg_no = F'{random.choice(prefix)} {random.randint(100, 999)}-{random.randint(1000, 9999)}/{random.randint(2017, 2022)}'
     email = fake.email()
@@ -35,9 +38,10 @@ for _ in range(30):
     college = random.choice(colleges)
     school = random.choice(schools)  # Assuming a default value
     campus = random.choice(campuses)  # Assuming a default value
+    course = fake.job()
     academic_year = random.choice(academic_years)
 
-    student_instance = Student(name, reg_no, email, password, college, school, campus, academic_year)
+    student_instance = Student(idno,name, reg_no, email, password, college, school,course, campus, academic_year)
     students.append(student_instance)
     
 
@@ -53,8 +57,8 @@ def init_db():
 
     cursor = connection.cursor()
     for student in students:
-        cursor.execute(f"INSERT INTO voters (name,regNo,email,password,college,school,campus,academicYear) VALUES (?,?,?,?,?,?,?,?)",
-        (student.name,student.regNo,student.email,generate_password_hash(student.password),student.college,student.school,student.campus,student.academicYear))
+        cursor.execute(f"INSERT INTO voters (idNo,name,regNo,email,password,college,school,campus,academicYear,course) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        (student.idNo,student.name,student.regNo,student.email,generate_password_hash(student.password),student.college,student.school,student.campus,student.academicYear,student.course))
 
     cursor.close()
 
@@ -63,7 +67,6 @@ def init_db():
 
 
 init_db()
-
 
 
 # #define the students data
