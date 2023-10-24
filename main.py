@@ -269,8 +269,33 @@ def deletecandidate(regno):
 
     return render_template('deletecandidate.html')
 
+#The electionvotes
+def electionvotes():
+    cursor = get_db_connection().cursor()
+    cursor.execute('SELECT * FROM candidates')
+    rows = cursor.fetchone()
+   
+    return  rows
 
+#The results Page
+@app.route('/results/<electedcandidates>')
+def results(electedcandidates):
+    electedcandidates = electionvotes()
+    if electedcandidates.isNotEmpty():
+        return render_template('results.html', electedcandidates=electedcandidates)
+
+    else:
+        return render_template('results.html', electedcandidates="No Data Found")
      
+
+
+@app.route('/vote_counts')
+def vote_counts():
+    cursor = get_db().cursor()
+    cursor.execute('SELECT name, votes FROM candidates')
+    rows = cursor.fetchall()
+    return jsonify(rows)
+
 
 
 
@@ -282,15 +307,6 @@ def deletecandidate(regno):
 #     rows = cursor.fetchone()
    
 #     return  rows
-
-
-@app.route('/vote_counts')
-def vote_counts():
-    cursor = get_db().cursor()
-    cursor.execute('SELECT name, votes FROM candidates')
-    rows = cursor.fetchall()
-    return jsonify(rows)
-
 
 
 
