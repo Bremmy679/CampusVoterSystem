@@ -15,9 +15,15 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-#The user registration
+
+# The user registration
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    campuses = getCampuses()
+    colleges = getColleges()
+    error = None
+    msg = None
+
     if request.method == 'POST':
         useremail = request.form['useremail']
         password = request.form['password']
@@ -25,43 +31,93 @@ def register():
         firstName = request.form['firstName']
         lastName = request.form['lastName']
         college = request.form['college']
-        school = request.form['School']
+        school = request.form['school']
         course = request.form['course']
         userIdNo = request.form['userIdNo']
         campus = request.form['campus']
         academicyear = request.form['academicyear']
         userName = firstName + " " + lastName
 
-        session['useremail'] = useremail
         if not is_valid_email(useremail):
-            return render_template('register.html', error='Invalid email format.')
+            error = 'Invalid email format.'
         if not is_valid_password(password):
-            return render_template('register.html', error='Password must be at least 8 characters long.')
-
+            error = 'Password must be at least 8 characters long.'
+        
         user = get_user(useremail)
         if user is not None:
-            return render_template('register.html', error='User already exists.')
-        if session.registeruser(useremail, password,userName,userRegNo,college,course,school,campus,academicyear,userIdNo):
-            return redirect(url_for('home'))
+            error = 'User already exists.'
         else:
-            return render_template('register.html', error='Invalid occurrences in field(s).')
-    return render_template('register.html')
+            registeruser(useremail, password, userName, userRegNo, college, course, school, campus, academicyear,
+                             userIdNo)
+            msg = "Record successfully added"
+            return redirect(url_for('home'))
+
+    return render_template('register.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
+
+
+# @app.route('/renderegister', methods=['GET', 'POST'])
+# def renderegister():
+#     campuses = getCampuses()
+#     colleges = getColleges()
+#     return render_template('register.html', campuses=campuses, colleges=colleges)
+#     if method == 'POST':
+#         return redirect(url_for('register'))
+
+# #The user registration
+# @app.route('/register/<campuses>/<colleges>', methods=['GET', 'POST'])
+# def register():
+#     campuses = getCampuses()
+#     colleges = getColleges()
+#     error = None
+#     if request.method == 'POST':
+#         useremail = request.form['useremail']
+#         password = request.form['password']
+#         userRegNo = request.form['userRegNo']
+#         firstName = request.form['firstName']
+#         lastName = request.form['lastName']
+#         college = request.form['college']
+#         school = request.form['school']
+#         course = request.form['course']
+#         userIdNo = request.form['userIdNo']
+#         campus = request.form['campus']
+#         academicyear = request.form['academicyear']
+#         userName = firstName + " " + lastName
+#         if not useremail or not password or not college or not school or not course:
+#             return render_template('register.html', error='Missing required fields.')
+#         useremail = session['useremail']
+#         if not is_valid_email(useremail):
+#             return render_template('register.html', error='Invalid email format.')
+#         if not is_valid_password(password):
+#             return render_template('register.html', error='Password must be at least 8 characters long.')
+
+#         user = get_user(useremail)
+#         if user is not None:
+#             return render_template('register.html', error='User already exists.')
+#         else:
+#             registeruser(useremail, password,userName,userRegNo,college,course,school,campus,academicyear,userIdNo)
+#             return redirect(render_template('votesResult.html'))
+        
+#     return render_template('register.html',error=error, campuses=campuses, colleges=colleges)
 
 #Register user function
 def registeruser(email, password,name,regNo,college,course,school,campus,academicyear,userIdNo):
-    conn = get_db_connection
-    conn.execute('INSERT INTO voters (email, password,name,regNo,college,course,school,campus,academicYear) VALUES (?, ?,?,?,?,?,?,?,?)', (email, hash_password(password),name,regNo,college,course,school,campus,academicyear,userIdNo))
+    conn = get_db_connection()
+    conn.execute('INSERT INTO voters (email, password,name,regNo,college,course,school,campus,academicyear,idNo) VALUES (?,?,?,?,?,?,?,?,?,?)', (email, hash_password(password),name,regNo,college,course,school,campus,academicyear,userIdNo))
     conn.commit()
     conn.close()
     return True
 
 #The login Page handler
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         useremail = request.form['useremail']
         password = request.form['password']
+        user = get_user(useremail)
 
+        # Check if user exists
+        if user is None:
+            return render_template('login.html', error='User does not exist.')
         # Check if useremail and password are provided
         if not useremail or not password:
             return render_template('login.html', error='Please provide both email and password.')
@@ -75,14 +131,10 @@ def login():
         if not is_valid_password(password):
             return render_template('login.html', error='Password must be at least 8 characters long.')
 
-        user = get_user(useremail)
-
-        # Check if user exists
-        if user is None:
-            return render_template('login.html', error='User does not exist.')
+        
 
         # Check password
-        if not check_password(password, user.password):
+        if not check_password(password, user['password']):
             return render_template('login.html', error='Incorrect email or password.')
 
         # Set user email in session
@@ -92,19 +144,28 @@ def login():
 
     return render_template('login.html')
 
-#get user from the database
 def get_user(useremail):
     conn = get_db_connection()
     user = conn.execute('SELECT * FROM voters WHERE email = ?', (useremail,)).fetchone()
     conn.close()
-    return user
+    return dict(user) if user else None
+
+
+# #get user from the database
+# def get_user(useremail):
+#     conn = get_db_connection()
+#     user = conn.execute('SELECT * FROM voters WHERE email = ?', (useremail,)).fetchone()
+#     conn.close()
+#     return user
 
 #The password hashing function
 def hash_password(password):
     return generate_password_hash(password)
 
-def check_password(password, user):
-    return check_password_hash(user.password, password)
+
+def check_password(password, hashed_password):
+    return check_password_hash(hashed_password, password)
+
 
 
 #logout
@@ -127,7 +188,7 @@ def index(electiondata):
         return render_template('index.html', electiondata="No Data Found")
 
 #The landing Page Handler
-@app.route('/')
+@app.route('/home')
 def home():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT DISTINCT name, id,email,campus,school,regNo,password FROM candidates')
@@ -237,21 +298,35 @@ def getCampuses():
 
 def getColleges():
     conn = get_db_connection()
-    colleges = conn.execute('SELECT college FROM courseGrouped').fetchall()
+    colleges = conn.execute('SELECT DISTINCT college FROM courseGrouped').fetchall()
     conn.close()
     return colleges
 
 def getSchools(college):
     conn = get_db_connection()
-    schools = conn.execute('SELECT school FROM courseGrouped WHERE college = ?',college).fetchall()
+    schools = conn.execute('SELECT DISTINCT  school FROM courseGrouped WHERE college = ?',(college,)).fetchall()
     conn.close()
     return schools
 
 def getCourses(school):
     conn = get_db_connection()
-    courses = conn.execute('SELECT course FROM courseGrouped WHERE school = ?',school).fetchall()
+    courses = conn.execute('SELECT DISTINCT course FROM courseGrouped WHERE school = ?',(school,)).fetchall()
     conn.close()
     return courses
+
+# In your /get_schools route
+@app.route('/get_schools', methods=['GET'])
+def get_schools():
+    selected_college = request.args.get('college')
+    schools = getSchools(selected_college)
+    return jsonify(schools=[{'school': school['school']} for school in schools])
+
+
+@app.route('/get_courses', methods=['GET'])
+def get_courses():
+    selected_school = request.args.get('school')
+    courses = getCourses(selected_school)
+    return jsonify(courses=[{'course':course['course']}for course in courses])
 
 
 #Edit a candidate data
