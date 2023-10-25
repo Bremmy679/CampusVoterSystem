@@ -1,0 +1,82 @@
+# @app.route('/renderegister', methods=['GET', 'POST'])
+# def renderegister():
+#     campuses = getCampuses()
+#     colleges = getColleges()
+#     return render_template('register.html', campuses=campuses, colleges=colleges)
+#     if method == 'POST':
+#         return redirect(url_for('register'))
+
+# #The user registration
+# @app.route('/register/<campuses>/<colleges>', methods=['GET', 'POST'])
+# def register():
+#     campuses = getCampuses()
+#     colleges = getColleges()
+#     error = None
+#     if request.method == 'POST':
+#         useremail = request.form['useremail']
+#         password = request.form['password']
+#         userRegNo = request.form['userRegNo']
+#         firstName = request.form['firstName']
+#         lastName = request.form['lastName']
+#         college = request.form['college']
+#         school = request.form['school']
+#         course = request.form['course']
+#         userIdNo = request.form['userIdNo']
+#         campus = request.form['campus']
+#         academicyear = request.form['academicyear']
+#         userName = firstName + " " + lastName
+#         if not useremail or not password or not college or not school or not course:
+#             return render_template('register.html', error='Missing required fields.')
+#         useremail = session['useremail']
+#         if not is_valid_email(useremail):
+#             return render_template('register.html', error='Invalid email format.')
+#         if not is_valid_password(password):
+#             return render_template('register.html', error='Password must be at least 8 characters long.')
+
+#         user = get_user(useremail)
+#         if user is not None:
+#             return render_template('register.html', error='User already exists.')
+#         else:
+#             registeruser(useremail, password,userName,userRegNo,college,course,school,campus,academicyear,userIdNo)
+#             return redirect(render_template('votesResult.html'))
+        
+#     return render_template('register.html',error=error, campuses=campuses, colleges=colleges)
+
+
+
+
+# #get user from the database
+# def get_user(useremail):
+#     conn = get_db_connection()
+#     user = conn.execute('SELECT * FROM voters WHERE email = ?', (useremail,)).fetchone()
+#     conn.close()
+#     return user
+
+
+  # cursor.execute('select college FROM courseGrouped')
+    # colleges = cursor.fetchall()
+
+    # cursor.execute('select name FROM campuses')
+    # campuses = cursor.fetchall()
+
+    # cursor.execute('select school FROM courseGrouped')
+    # schools = cursor.fetchall()
+
+    # cursor.execute('select course FROM courseGrouped')
+    # courses = cursor.fetchall()
+
+    
+
+
+
+# @app.route('/vote_counts')
+# def vote_counts():
+#     cursor = get_db_connection().cursor()`    `
+#     cursor.execute('SELECT name, id FROM candidates')
+#     rows = cursor.fetchone()
+   
+#     return  rows
+
+
+
+
