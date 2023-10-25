@@ -3,6 +3,7 @@ import os
 import re
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
+from time import time
 
 
 app = Flask(__name__)
@@ -55,7 +56,7 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
     return True
 
 #The login Page handler
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         useremail = request.form['useremail']
@@ -126,13 +127,38 @@ def index(electiondata):
         return render_template('index.html', electiondata="No Data Found")
 
 #The landing Page Handler
-@app.route('/home')
+@app.route('/')
 def home():
     cursor = get_db_connection().cursor()
-    cursor.execute('SELECT name, id,email,campus,school,regNo,password FROM candidates')
+    cursor.execute('SELECT DISTINCT name, id,email,campus,school,regNo,password FROM candidates')
     rows = cursor.fetchall()
+
+     # Fetch campuses, colleges, schools, and courses data
+    cursor.execute('SELECT DISTINCT name FROM campuses')
+    campuses = [row['name'] for row in cursor.fetchall()]
+
+    cursor.execute('select DISTINCT college FROM courseGrouped')
+    colleges = [row['college'] for row in cursor.fetchall()]
+
+    cursor.execute('select DISTINCT school FROM courseGrouped')
+    schools = [row['school'] for row in cursor.fetchall()]
+
+    cursor.execute('select DISTINCT course FROM courseGrouped')
+    courses = [row['course'] for row in cursor.fetchall()]
+
+    # cursor.execute('select college FROM courseGrouped')
+    # colleges = cursor.fetchall()
+
+    # cursor.execute('select name FROM campuses')
+    # campuses = cursor.fetchall()
+
+    # cursor.execute('select school FROM courseGrouped')
+    # schools = cursor.fetchall()
+
+    # cursor.execute('select course FROM courseGrouped')
+    # courses = cursor.fetchall()
    
-    return render_template('votesResult.html', rows=rows)
+    return render_template('votesResult.html', rows=rows,colleges=colleges,campuses=campuses,schools=schools,courses=courses)
 
 #Email Validation
 def is_valid_email(email):
@@ -154,16 +180,31 @@ def newcandidate():
 def addcandidate():
     if request.method == 'POST':
         try:
-            session = Session()
-            name = request.form['name']
             reg_no = request.form['regNo']
-            college = request.form['college']
-            acad_year = request.form['acadYear']
             position = request.form['position']
+
+            connection = self.get_db_connection()
+            cursor = connection.cursor()
+            user = cursor.execute("SELECT * FROM voters WHERE regNo=?", (reg_no))
+            connection.commit()
+            msg = "Record successfully fetched."
+
+            created= time().time()
+            name = user.name
+            regNo = user.regNo
+            email=  user.email
+            password= user.password
+            college = user.college
+            school= user.school
+            course= user.course
+            campus= user.campus
+            academicYear= user.academicYear
+            userIdNo= user.userIdNo
+
 
             self.get_db_connection()
             cur = conn.cursor()
-            cur.execute("INSERT INTO candidates (name, reg_no, college, acad_year, position) VALUES (?, ?, ?, ?, ?)", (name, reg_no, college, acad_year, position))
+            cur.execute("INSERT INTO candidates (name, reg_no, college, acad_year, position,                                                                                                                                                                                                                                                                                           ) VALUES (?, ?, ?, ?, ?)", (name, reg_no, college, acad_year, position))
             conn.commit()
             msg = "Record successfully added"
             if session.addcandidate(name, reg_no, college, acad_year, position):
@@ -179,6 +220,39 @@ def addcandidate():
             con.close()
 
     return render_template('addcandidate.html')
+
+
+#Get the candidate data based on regNo
+def getcandidatefromvoters(regno):
+    conn = get_db_connection()
+    candidate = conn.execute('SELECT * FROM voters WHERE regNo = ?', (regno,)).fetchone()
+    conn.close()
+    return candidate
+
+def getCampuses():
+    conn = get_db_connection()
+    campuses = conn.execute('SELECT * FROM campuses').fetchall()
+    conn.close()
+    return campuses
+
+def getColleges():
+    conn = get_db_connection()
+    colleges = conn.execute('SELECT college FROM courseGrouped').fetchall()
+    conn.close()
+    return colleges
+
+def getSchools(college):
+    conn = get_db_connection()
+    schools = conn.execute('SELECT school FROM courseGrouped WHERE college = ?',college).fetchall()
+    conn.close()
+    return schools
+
+def getCourses(school):
+    conn = get_db_connection()
+    courses = conn.execute('SELECT course FROM courseGrouped WHERE school = ?',school).fetchall()
+    conn.close()
+    return courses
+
 
 #Edit a candidate data
 @app.route('/editcandidate/<reg_no>', methods=['GET', 'POST'])
@@ -302,7 +376,7 @@ def vote_counts():
 
 # @app.route('/vote_counts')
 # def vote_counts():
-#     cursor = get_db_connection().cursor()
+#     cursor = get_db_connection().cursor()`    `
 #     cursor.execute('SELECT name, id FROM candidates')
 #     rows = cursor.fetchone()
    
