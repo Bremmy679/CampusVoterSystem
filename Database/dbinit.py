@@ -29,7 +29,7 @@ campuses = ["Main Campus-Juja", "Karen Campus", "Kisii CBD Campus", "Nairobi CBD
 schools = ['Computing','Engineering','Agriculture']
 students = []
 
-for _ in range(30):
+for _ in range(2):
     idno = random.randint(10000000, 99999999)
     name = fake.name()
     reg_no = F'{random.choice(prefix)} {random.randint(100, 999)}-{random.randint(1000, 9999)}/{random.randint(2017, 2022)}'

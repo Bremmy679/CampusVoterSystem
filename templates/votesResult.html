@@ -27,6 +27,46 @@
         {% endfor %}
     </tbody>
 </table>
+
+
+<h2 style="color: green; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-weight: 600;">
+    The Campuses
+</h2>
+<ul>
+    {% for campus in campuses %}
+    <li>{{ campus }}</li>
+    {% endfor %}
+</ul>
+
+<h3>
+    Colleges
+</h3>
+<ul>
+    {% for college in colleges %}
+    <li>{{ college }}</li>
+    {% endfor %}
+</ul>
+
+<h3>
+    Schools
+
+</h3>
+<ul>
+    {% for school in schools %}
+    <li>{{ school }}</li>
+    {% endfor %}
+</ul>
+
+<h3>
+    Courses
+</h3>
+<ul>
+    {% for course in courses %}
+    <li>{{ course }}</li>
+    {% endfor %}
+</ul>
+
+
 {% endblock %} {% block footer %}
 <h2 style="color: green; font-size: medium; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-weight: 600;">
     The Voters Page
