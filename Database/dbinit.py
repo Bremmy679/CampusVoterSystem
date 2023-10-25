@@ -68,7 +68,6 @@ def init_db():
 
 init_db()
 
-
 # #define the students data
 
 
