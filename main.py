@@ -4,16 +4,22 @@ import re
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from time import time
+from cryptography.fernet import Fernet
+import base64
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret'
+cipher_suite = Fernet(SECRET_KEY)
+
 
 
 def get_db_connection():
     conn = sqlite3.connect('electiondb.db')
     conn.row_factory = sqlite3.Row
     return conn
+
+    
 
 
 # The user registration
@@ -55,54 +61,12 @@ def register():
     return render_template('register.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
 
 
-# @app.route('/renderegister', methods=['GET', 'POST'])
-# def renderegister():
-#     campuses = getCampuses()
-#     colleges = getColleges()
-#     return render_template('register.html', campuses=campuses, colleges=colleges)
-#     if method == 'POST':
-#         return redirect(url_for('register'))
 
-# #The user registration
-# @app.route('/register/<campuses>/<colleges>', methods=['GET', 'POST'])
-# def register():
-#     campuses = getCampuses()
-#     colleges = getColleges()
-#     error = None
-#     if request.method == 'POST':
-#         useremail = request.form['useremail']
-#         password = request.form['password']
-#         userRegNo = request.form['userRegNo']
-#         firstName = request.form['firstName']
-#         lastName = request.form['lastName']
-#         college = request.form['college']
-#         school = request.form['school']
-#         course = request.form['course']
-#         userIdNo = request.form['userIdNo']
-#         campus = request.form['campus']
-#         academicyear = request.form['academicyear']
-#         userName = firstName + " " + lastName
-#         if not useremail or not password or not college or not school or not course:
-#             return render_template('register.html', error='Missing required fields.')
-#         useremail = session['useremail']
-#         if not is_valid_email(useremail):
-#             return render_template('register.html', error='Invalid email format.')
-#         if not is_valid_password(password):
-#             return render_template('register.html', error='Password must be at least 8 characters long.')
-
-#         user = get_user(useremail)
-#         if user is not None:
-#             return render_template('register.html', error='User already exists.')
-#         else:
-#             registeruser(useremail, password,userName,userRegNo,college,course,school,campus,academicyear,userIdNo)
-#             return redirect(render_template('votesResult.html'))
-        
-#     return render_template('register.html',error=error, campuses=campuses, colleges=colleges)
 
 #Register user function
 def registeruser(email, password,name,regNo,college,course,school,campus,academicyear,userIdNo):
     conn = get_db_connection()
-    conn.execute('INSERT INTO voters (email, password,name,regNo,college,course,school,campus,academicyear,idNo) VALUES (?,?,?,?,?,?,?,?,?,?)', (email, hash_password(password),name,regNo,college,course,school,campus,academicyear,userIdNo))
+    conn.execute('INSERT INTO voters (email, password,name,regNo,college,course,school,campus,academicyear,idNo) VALUES (?,?,?,?,?,?,?,?,?,?)', (encrypt_data(email), hash_password(password),encrypt_data(name),encrypt_data(regNo),encrypt_data(college),course),school),encrypt_data(campus),encrypt_data(academicyear),encrypt_data(userIdNo)
     conn.commit()
     conn.close()
     return True
@@ -146,17 +110,10 @@ def login():
 
 def get_user(useremail):
     conn = get_db_connection()
-    user = conn.execute('SELECT * FROM voters WHERE email = ?', (useremail,)).fetchone()
+    user = conn.execute('SELECT * FROM voters WHERE email = ?', (encrypt_data(useremail),)).fetchone()
     conn.close()
     return dict(user) if user else None
 
-
-# #get user from the database
-# def get_user(useremail):
-#     conn = get_db_connection()
-#     user = conn.execute('SELECT * FROM voters WHERE email = ?', (useremail,)).fetchone()
-#     conn.close()
-#     return user
 
 #The password hashing function
 def hash_password(password):
@@ -207,17 +164,7 @@ def home():
     cursor.execute('select DISTINCT course FROM courseGrouped')
     courses = [row['course'] for row in cursor.fetchall()]
 
-    # cursor.execute('select college FROM courseGrouped')
-    # colleges = cursor.fetchall()
-
-    # cursor.execute('select name FROM campuses')
-    # campuses = cursor.fetchall()
-
-    # cursor.execute('select school FROM courseGrouped')
-    # schools = cursor.fetchall()
-
-    # cursor.execute('select course FROM courseGrouped')
-    # courses = cursor.fetchall()
+  
    
     return render_template('votesResult.html', rows=rows,colleges=colleges,campuses=campuses,schools=schools,courses=courses)
 
@@ -244,9 +191,12 @@ def addcandidate():
             reg_no = request.form['regNo']
             position = request.form['position']
 
+            
+
             connection = self.get_db_connection()
             cursor = connection.cursor()
-            user = cursor.execute("SELECT * FROM voters WHERE regNo=?", (reg_no))
+            user = getcandidatefromvoters(reg_no)
+            positionId = getpostid(position)
             connection.commit()
             msg = "Record successfully fetched."
 
@@ -262,16 +212,15 @@ def addcandidate():
             academicYear= user.academicYear
             userIdNo= user.userIdNo
 
-
-            self.get_db_connection()
+            conn = self.get_db_connection()
             cur = conn.cursor()
-            cur.execute("INSERT INTO candidates (name, reg_no, college, acad_year, position,                                                                                                                                                                                                                                                                                           ) VALUES (?, ?, ?, ?, ?)", (name, reg_no, college, acad_year, position))
+            cur.execute("INSERT INTO candidates (name, reg_no, college, acad_year, electedPost_id,idNo) VALUES (?, ?, ?, ?, ?,?)", (encrypt_data(name), encrypt_data(reg_no), encrypt_data(college), encrypt_data(acad_year), encrypt_data(positionId),encrypt_data(userIdNo)))
             conn.commit()
             msg = "Record successfully added"
             if session.addcandidate(name, reg_no, college, acad_year, position):
                 return redirect(url_for('home'))
             else:
-                return render_template('addcandidate.html', error='Invalid occurrences in field(s))')
+                return render_template('addcandidate.html', error='Invalid occurrences in field(s)')
         except:
             conn.rollback()
             msg = "error in insert operation"
@@ -290,6 +239,10 @@ def getcandidatefromvoters(regno):
     conn.close()
     return candidate
 
+def getpostid(name):
+    conn = get_db_connection()
+    postid = conn.execute('SELECT id FROM posts WHERE name = ?', (encrypt_data(name),)).fetchone()
+
 def getCampuses():
     conn = get_db_connection()
     campuses = conn.execute('SELECT * FROM campuses').fetchall()
@@ -304,13 +257,13 @@ def getColleges():
 
 def getSchools(college):
     conn = get_db_connection()
-    schools = conn.execute('SELECT DISTINCT  school FROM courseGrouped WHERE college = ?',(college,)).fetchall()
+    schools = conn.execute('SELECT DISTINCT  school FROM courseGrouped WHERE college = ?',(encrypt_data(college),)).fetchall()
     conn.close()
     return schools
 
 def getCourses(school):
     conn = get_db_connection()
-    courses = conn.execute('SELECT DISTINCT course FROM courseGrouped WHERE school = ?',(school,)).fetchall()
+    courses = conn.execute('SELECT DISTINCT course FROM courseGrouped WHERE school = ?',(encrypt_data(school),)).fetchall()
     conn.close()
     return courses
 
@@ -343,10 +296,10 @@ def editcandidate(regno):
 
             self.get_db_connection()
             cur = conn.cursor()
-            cur.execute("UPDATE candidates SET name=?, college=?, academicyear=?, position=? WHERE regNo=?", (name, college, acad_year, position, regno))
+            cur.execute("UPDATE candidates SET name=?, college=?, academicyear=?, position=? WHERE regNo=?", (encrypt_data(name), encrypt_data(college), encrypt_data(acad_year), encrypt_data(position), encrypt_data(regno)))
             conn.commit()
             msg = "Record successfully updated"
-            if session.editcandidate(name, regno, college, acad_year, position):
+            if session.editcandidate(encrypt_data(name), encrypt_data(regno), encrypt_data(college), encrypt_data(acad_year), encrypt_data(position)):
                 return redirect(url_for('home'))
             else:
                 return render_template('editcandidate.html', error='Invalid occurrences in field(s))')
@@ -369,10 +322,10 @@ def editcandidate(regno):
 
             self.get_db_connection()
             cur = conn.cursor()
-            cur.execute("SELECT * FROM candidates WHERE reg_no=?", (reg_no))
+            cur.execute("SELECT * FROM candidates WHERE reg_no=?", (encrypt_data(reg_no)))
             conn.commit()
             msg = "Record successfully updated"
-            if session.editcandidate(name, reg_no, college, acad_year, position):
+            if session.editcandidate(encrypt_data(name), encrypt_data(reg_no), encrypt_data(college),encrypt_data(acad_year),encrypt_data(position)):
                 return redirect(url_for('home'))
             else:
                 return render_template('editcandidate.html', error='Invalid occurrences in field(s))')
@@ -400,9 +353,9 @@ def deletecandidate(regno):
 
             self.get_db_connection()
             cur = conn.cursor()
-            cur.execute("DELETE FROM candidates WHERE regNo=?", (regno))
+            cur.execute("DELETE FROM candidates WHERE regNo=?", (encrypt_data(regno)))
             conn.commit()
-            msg = f"Candidate {reg_no} successfully deleted"
+            msg = f"Candidate {decrypt_data(reg_no)} successfully deleted"
             if session.deletecandidate(reg_no):
                 return redirect(url_for('home'))
             else:
@@ -445,20 +398,15 @@ def vote_counts():
     rows = cursor.fetchall()
     return jsonify(rows)
 
+#Data Security functions
+def encrypt_data(data):
+    encrypted_data = cipher_suite.encrypt(data.encode())
+    return base64.urlsafe_b64encode(encrypted_data).decode()
 
-
-
-
-# @app.route('/vote_counts')
-# def vote_counts():
-#     cursor = get_db_connection().cursor()`    `
-#     cursor.execute('SELECT name, id FROM candidates')
-#     rows = cursor.fetchone()
-   
-#     return  rows
-
-
-
+def decrypt_data(encrypted_data):
+    decoded_data = base64.urlsafe_b64decode(encrypted_data.encode())
+    decrypted_data = cipher_suite.decrypt(decoded_data).decode()
+    return decrypted_data
 
 
 if __name__ == '__main__':
