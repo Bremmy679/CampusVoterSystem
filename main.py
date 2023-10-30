@@ -44,7 +44,7 @@ def register():
             return redirect(url_for('home'))
         else:
             return render_template('register.html', error='Invalid occurrences in field(s).')
-    return render_template('register.html')
+    return render_template('registration_page.html')
 
 #Register user function
 def registeruser(email, password,name,regNo,college,course,school,campus,academicyear,userIdNo):
@@ -55,7 +55,7 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
     return True
 
 #The login Page handler
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         useremail = request.form['useremail']
@@ -90,6 +90,15 @@ def login():
         return redirect(url_for('home'))
 
     return render_template('login.html')
+
+#dashboard page
+@app.route("/")
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route("/admin")
+def create_admin():
+    return render_template('create_admin_account.html')
 
 #get user from the database
 def get_user(useremail):
@@ -273,15 +282,15 @@ def deletecandidate(regno):
 def electionvotes():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT * FROM candidates')
-    rows = cursor.fetchone()
+    rows = cursor.fetchall()
    
     return  rows
 
 #The results Page
-@app.route('/results/<electedcandidates>')
-def results(electedcandidates):
+@app.route('/results')
+def results():
     electedcandidates = electionvotes()
-    if electedcandidates.isNotEmpty():
+    if len(electedcandidates) > 1:
         return render_template('results.html', electedcandidates=electedcandidates)
 
     else:
