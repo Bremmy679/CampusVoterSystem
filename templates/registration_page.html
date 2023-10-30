@@ -20,7 +20,7 @@
                         <div class="row">
                             <label for="fullName" class="first-column-label col-sm-4 col-form-label">FULL NAME:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="fullName">
+                                <input type="text" class="form-control" id="username" name="username" required>
                             </div>
                         </div>
                     </div>
@@ -28,10 +28,11 @@
                         <div class="row">
                             <label for="academicYear" class="col-sm-4 col-form-label">ACADEMIC YEAR:</label>
                             <div class="col-sm-8">
-                                <select class="form-select" id="academicYear"></select>
+                                <input type="number" class="form-control" id="academicyear" name="academicyear" required min="1" max="6">
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <!-- Second row of details -->
@@ -41,7 +42,7 @@
                         <div class="row">
                             <label for="registrationNo" class="col-sm-4 col-form-label">REGISTRATION NO:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="registrationNo">
+                                <input type="text" class="form-control" id="registrationNo" name="registrationNo" required>
                             </div>
                         </div>
                     </div>
@@ -49,7 +50,7 @@
                         <div class="row">
                             <label for="idNo" class="col-sm-4 col-form-label">ID NO:</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="idNo">
+                                <input type="text" class="form-control" id="idNo" required>
                             </div>
                         </div>
                     </div>
@@ -62,7 +63,7 @@
                         <div class="row">
                             <label for="email" class="first-column-label col-sm-4 col-form-label">EMAIL:</label>
                             <div class="col-sm-8">
-                                <input type="email" class="form-control" id="email">
+                                <input type="email" class="form-control" id="useremail" name="useremail" required>
                             </div>
                         </div>
                     </div>
@@ -70,7 +71,7 @@
                         <div class="row">
                             <label for="password" class="second-column-label col-sm-4 col-form-label">PASSWORD:</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control" id="password">
+                                <input type="password" class="form-control" id="password" name="password" required>
                             </div>
                         </div>
                     </div>
@@ -81,9 +82,23 @@
                 <div class="row mb-5">
                     <div class="first-column col-md-5">
                         <div class="row">
+                            <label for="campus" class="col-sm-4 col-form-label">CAMPUS:</label>
+                            <div class="col-sm-8">
+                                <select class="form-select" id="campus" name="campus" required>
+                            <option value="">-- Select Campus --</option>
+                            {% for campus in campuses %}
+                            <option value="{{ campus.name }}">{{ campus.name }}</option>
+                            {% endfor %}
+                        </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="second-column col-md-5">
+                        <div class="row">
                             <label for="college" class="col-sm-4 col-form-label">COLLEGE:</label>
                             <div class="col-sm-8">
-                                <select class="form-select" name="college" onchange="updateSchools()" required>
+                                <select class="form-select" id="college" name="college" onchange="updateSchools()" required>
                                     <option value="">-- Select College --</option>
                                     {% for college in colleges %}                   
                                     <option value="{{ college.college }}">{{ college.college }}</option>
@@ -91,18 +106,7 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="second-column col-md-5">
-                        <div class="row">
-                            <label for="school" class="col-sm-4 col-form-label">SCHOOL:</label>
-                            <div class="col-sm-8">
-                                <select id="school" name="school" class="form-select" onchange="updateCourses()" required>
-                                   <option value=""> -- select school--</option>
-                            <!-- This will be dynamically populated based on the selected college -->
-                                </select>
-                            </div>
 
-                        </div>
                     </div>
                 </div>
                 <!-- Fifth row of details-->
@@ -110,25 +114,25 @@
                     <div class="row mb-5">
                         <div class="first-column col-md-5">
                             <div class="row">
+                                <label for="school" class="col-sm-4 col-form-label">SCHOOL:</label>
+                                <div class="col-sm-8">
+                                    <select id="school" name="school" class="form-select" onchange="updateCourses()" required>
+                                       <option value=""> -- select school--</option>
+                                <!-- This will be dynamically populated based on the selected college -->
+                                    </select>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="second-column col-md-5">
+                            <div class="row">
                                 <label for="course" class="col-sm-4 col-form-label">COURSE:</label>
                                 <div class="col-sm-8">
                                     <select class="form-select" id="course" name="course" required>
                                     <option value=""> -- select course--</option>
                             <!-- This will be dynamically populated based on the selected school -->
                                 </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="second-column col-md-5">
-                            <div class="row">
-                                <label for="campus" class="col-sm-4 col-form-label">CAMPUS:</label>
-                                <div class="col-sm-8">
-                                    <select class="form-select" id="campus" name="campus" required>
-                                <option value="">-- Select Campus --</option>
-                                {% for campus in campuses %}
-                                <option value="{{ campus.name }}">{{ campus.name }}</option>
-                                {% endfor %}
-                            </select>
                                 </div>
                             </div>
                         </div>
