@@ -69,24 +69,26 @@ def init_db():
         (encrypt_data(str(student.idNo)),encrypt_data(student.name),encrypt_data(student.regNo),encrypt_data(student.email),generate_password_hash(student.password),encrypt_data(student.college),encrypt_data(student.school),encrypt_data(student.campus),student.academicYear,student.course))
 
     post_names = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Academic Secretary', 'Accommodation Secretary']
-    encrypted_posts = [encrypt_data(name) for name in post_names]
+    # encrypted_posts = [encrypt_data(name) for name in post_names]
+    
     # Use placeholders for the values
     placeholders = ', '.join(['?' for _ in post_names])
 
     # Execute the query with placeholders and encrypted values
-    cursor.executemany("INSERT INTO posts (name) VALUES (?)", [(post,) for post in encrypted_posts])
+    cursor.executemany("INSERT INTO posts (name) VALUES (?)", [(post,) for post in post_names])
 
 
     # Example for campuses table
     campus_names = ['Main Campus', 'Karen Campus', 'Westlands Campus', 'Kisii CBD Campus', 'Kisumu CBD Campus', 'Kitale CBD Campus', 'Nakuru CBD Campus', 'Mombasa CBD Campus']
+    cursor.executemany("INSERT INTO campuses (name) VALUES (?)", [(campus,) for campus in campus_names])
         # Encrypt the campus names
-    encrypted_campuses = [encrypt_data(name) for name in campus_names]
+    # encrypted_campuses = [encrypt_data(name) for name in campus_names]
 
-    # Use placeholders for the values
-    placeholders = ', '.join(['?' for _ in campus_names])
+    # # Use placeholders for the values
+    # placeholders = ', '.join(['?' for _ in campus_names])
 
     # Execute the query with placeholders and encrypted values
-    cursor.executemany("INSERT INTO campuses (name) VALUES (?)", [(campus,) for campus in encrypted_campuses])
+    # cursor.executemany("INSERT INTO campuses (name) VALUES (?)", [(campus,) for campus in encrypted_campuses])
 
 
     # cursor.execute("INSERT INTO posts (name) VALUES ('President'), ('Vice President'), ('Secretary'), ('Treasurer'), ('Academic Secretary'), ('Accomodation Secretary')")
@@ -114,14 +116,15 @@ def init_db():
     ('COHRED', 'School of Entrepreneurship', 'Bachelor of Purchasing and Supplies Management')
     ]
 
-    # Encrypt the data
-    encrypted_course_data = [(encrypt_data(college), encrypt_data(school), encrypt_data(course)) for college, school, course in course_data]
+    # # Encrypt the data
+    # encrypted_course_data = [(encrypt_data(college), encrypt_data(school), encrypt_data(course)) for college, school, course in course_data]
 
-    # Prepare the SQL query
+    # # Prepare the SQL query
     placeholders = ', '.join(['?' for _ in course_data[0]])
 
-    # Execute the query with placeholders and encrypted values
-    cursor.executemany(f"INSERT INTO courseGrouped (college, school, course) VALUES ({placeholders})", encrypted_course_data)
+    # # Execute the query with placeholders and encrypted values
+    # cursor.executemany(f"INSERT INTO courseGrouped (college, school, course) VALUES ({placeholders})", encrypted_course_data)
+    cursor.executemany(f"INSERT INTO courseGrouped(college,school,course) VALUES ({placeholders})", course_data)
 
     cursor.close()
 

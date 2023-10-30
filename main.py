@@ -76,7 +76,7 @@ def register():
             msg = "Record successfully added"
             return redirect(url_for('home'))
 
-    return render_template('register.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
+    return render_template('registration_page.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
 
 
 
@@ -265,34 +265,42 @@ def getCampuses():
     conn = get_db_connection()
     encrypted_campuses = conn.execute('SELECT name FROM campuses').fetchall()
     conn.close()
-    decrypted_campuses = [decrypt_data(campus['name']) for campus in encrypted_campuses]
+    campuses = [campus['name'] for campus in encrypted_campuses]
+    # decrypted_campuses = [decrypt_data(campus['name']) for campus in encrypted_campuses]
     
-    print("Encrypted Campuses:", encrypted_campuses)
-    print("Decrypted Campuses:", decrypted_campuses)
+    # print("Encrypted Campuses:", encrypted_campuses)
+    # print("Decrypted Campuses:", decrypted_campuses)
     
-    return decrypted_campuses
+    return campuses
 
 
 def getColleges():
     conn = get_db_connection()
     encrypted_colleges = conn.execute('SELECT DISTINCT college FROM courseGrouped').fetchall()
     conn.close()
-    decrypted_colleges = [decrypt_data(college['college']) for college in encrypted_colleges]
-    return decrypted_colleges
+    colleges = [college['college'] for college in encrypted_colleges]
+    return colleges
+    # decrypted_colleges = [decrypt_data(college['college']) for college in encrypted_colleges]
+    # return decrypted_colleges
 
 def getSchools(college):
     conn = get_db_connection()
-    encrypted_schools = conn.execute('SELECT DISTINCT  school FROM courseGrouped WHERE college = ?',(encrypt_data(college),)).fetchall()
+    schools = conn.execute('SELECT DISTINCT  school FROM courseGrouped WHERE college = ?',(college,)).fetchall()
     conn.close()
-    decrypted_schools = [decrypt_data(school['school']) for school in encrypted_schools]
-    return decrypted_schools
+    return schools
+
+    # encrypted_schools = conn.execute('SELECT DISTINCT  school FROM courseGrouped WHERE college = ?',(encrypt_data(college),)).fetchall()
+    # conn.close()
+    # decrypted_schools = [decrypt_data(school['school']) for school in encrypted_schools]
+    # return decrypted_schools
 
 def getCourses(school):
     conn = get_db_connection()
-    courses = conn.execute('SELECT DISTINCT course FROM courseGrouped WHERE school = ?',(encrypt_data(school),)).fetchall()
+    courses = conn.execute('SELECT DISTINCT course FROM courseGrouped WHERE school = ?',(school),).fetchall()
     conn.close()
-    decrypted_courses = [decrypt_data(course['course']) for course in courses]
-    return decrypted_courses
+    return courses
+    # decrypted_courses = [decrypt_data(course['course']) for course in courses]
+    # return decrypted_courses
 
 # In your /get_schools route
 @app.route('/get_schools', methods=['GET'])
