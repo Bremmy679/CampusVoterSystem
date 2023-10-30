@@ -93,7 +93,7 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
 
 
 # The login Page handler
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         useremail = request.form['useremail']
@@ -112,9 +112,7 @@ def login():
             return render_template('login.html', error='Password must be at least 8 characters long.')
 
         user = get_user(useremail)
-        print(user)
         passwords  = get_passwords()
-        print(passwords)
 
         # Check if user exists
         if user is None:
@@ -256,15 +254,17 @@ def is_valid_password(password):
 def newcandidate():
     return render_template('newcandidate.html')
 
-@app.route('/addcandidate', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def addcandidate():
+    posts = get_posts()
+    msg = None
+    error = None
     if request.method == 'POST':
         try:
             reg_no = request.form['regNo']
             position = request.form['position']
 
             
-
             connection = self.get_db_connection()
             cursor = connection.cursor()
             user = getcandidatefromvoters(reg_no)
@@ -292,16 +292,16 @@ def addcandidate():
             if session.addcandidate(name, reg_no, college, acad_year, position):
                 return redirect(url_for('home'))
             else:
-                return render_template('addcandidate.html', error='Invalid occurrences in field(s)')
+                return render_template('admin_candidate.html', error='Invalid occurrences in field(s)')
         except:
             conn.rollback()
             msg = "error in insert operation"
       
         finally:
-            return render_template("success.html",msg = msg)
+            return render_template("admin_candidate.html",msg = msg)
             con.close()
 
-    return render_template('addcandidate.html')
+    return render_template('admin_candidate.html', posts=posts)
 
 
 #Edit a candidate data
@@ -426,6 +426,12 @@ def vote_counts():
 #Getting data from the databases
 
 #Get the candidate data based on regNo
+def get_posts():
+    conn = get_db_connection()
+    posts = conn.execute('SELECT * FROM posts').fetchall()
+    conn.close()
+    return posts
+
 def getcandidatefromvoters(regno):
     conn = get_db_connection()
     candidate = conn.execute('SELECT * FROM voters WHERE regNo = ?', (regno,)).fetchone()
@@ -434,7 +440,7 @@ def getcandidatefromvoters(regno):
 
 def getpostid(name):
     conn = get_db_connection()
-    postid = conn.execute('SELECT id FROM posts WHERE name = ?', (encrypt_data(name),)).fetchone()
+    postid = conn.execute('SELECT id FROM posts WHERE name = ?', (name,)).fetchone()
 
 def getCampuses():
     conn = get_db_connection()
@@ -489,6 +495,15 @@ def get_courses():
     courses = getCourses(selected_school)
     return jsonify(courses=[{'course':course['course']}for course in courses])
 
+@app.route('/get_candidate_data', methods=['GET'])
+def get_candidate_data():
+    reg_no = request.args.get('regNo')
+    candidate_data = getcandidatefromvoters(reg_no)
+
+    # Convert Row object to dictionary
+    candidate_dict = dict(candidate_data)
+
+    return jsonify(candidate_dict)
 
 
 #Data Security functions
@@ -509,6 +524,31 @@ def decrypt_data(encrypted_data):
         print(f"An unexpected error occurred: {e}")
     return None
 
+def get_last_registration_number(school):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Assuming you have a table named 'registrations' with a column 'registration_number'
+    query = 'SELECT registration_number FROM registrations WHERE school = ? ORDER BY registration_number DESC LIMIT 1'
+    result = cursor.execute(query, (school,)).fetchone()
+
+    conn.close()
+
+    # Return the last registration number or None if not found
+    return result[0] if result else None
+
+def get_next_registration_number(school):
+    last_registration_number = get_last_registration_number(school)
+
+    if last_registration_number:
+        match = re.search(r'(\d+)', last_registration_number)
+        if match:
+            numeric_part = int(match.group(1))
+            new_numeric_part = numeric_part + 1
+            new_registration_number = re.sub(r'\d+', str(new_numeric_part), last_registration_number)
+            return new_registration_number
+
+    return f"{school}-001/2023"
 
 
 
