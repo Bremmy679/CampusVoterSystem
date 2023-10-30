@@ -370,14 +370,13 @@ def deletecandidate(regno):
 
     if request.method == 'POST':
         try:
-            session = Session()
             reg_no = request.form['regNo']
 
             self.get_db_connection()
             cur = conn.cursor()
-            cur.execute("DELETE FROM candidates WHERE regNo=?", (encrypt_data(regno)))
+            cur.execute("DELETE FROM candidates WHERE regNo=?", (regno))
             conn.commit()
-            msg = f"Candidate {decrypt_data(reg_no)} successfully deleted"
+            msg = f"Candidate {reg_no} successfully deleted"
             if session.deletecandidate(reg_no):
                 return redirect(url_for('home'))
             else:
