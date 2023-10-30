@@ -66,7 +66,7 @@ def init_db():
     cursor = connection.cursor()
     for student in students:
         cursor.execute(f"INSERT INTO voters (idNo,name,regNo,email,password,college,school,campus,academicYear,course) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        (encrypt_data(str(student.idNo)),encrypt_data(student.name),encrypt_data(student.regNo),encrypt_data(student.email),generate_password_hash(student.password),encrypt_data(student.college),encrypt_data(student.school),encrypt_data(student.campus),student.academicYear,student.course))
+        (student.idNo),student.name,student.regNo,student.email,generate_password_hash(student.password),student.college,student.school,student.campus,student.academicYear,student.course)
 
     post_names = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Academic Secretary', 'Accommodation Secretary']
     # encrypted_posts = [encrypt_data(name) for name in post_names]

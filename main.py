@@ -55,7 +55,7 @@ def register():
         college = request.form['college']
         school = request.form['school']
         course = request.form['course']
-        userIdNo = request.form['userIdNo']
+        userIdNo = request.form['idNo']
         campus = request.form['campus']
         academicyear = request.form['academicyear']
         userName = request.form['username']
@@ -68,11 +68,15 @@ def register():
         if user is not None:
             error = 'User already exists.'
         else:
+            passwords  = get_passwords()
+            if password in passwords:
+                return render_template('login.html',error = "Password already exists. Try a different password.")
+
             password = hash_password(password)
             registeruser(useremail,  password, userName, userRegNo, college, course, school, campus, academicyear,
                              userIdNo)
             msg = "Record successfully added"
-            return redirect(url_for('home'))
+            return redirect(url_for('login'))
 
     return render_template('registration_page.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
 
@@ -109,7 +113,7 @@ def login():
 
         user = get_user(useremail)
         print(user)
-        passwords  = get_passwords
+        passwords  = get_passwords()
         print(passwords)
 
         # Check if user exists
@@ -119,9 +123,6 @@ def login():
         # Check password
         if not check_password(password, user['password']):
             return render_template('login.html', error='Incorrect email or password.')
-
-        if password in passwords['password']:
-            return render_template('login.html',error = "Password already exists. Try a different password.")
 
         # Set user email in session
         session['useremail'] = useremail
@@ -135,12 +136,17 @@ def get_user(useremail):
     conn = get_db_connection()
     user = conn.execute('SELECT * FROM voters WHERE email = ?', (useremail,)).fetchone()
     conn.close()
-    return jsonify(user)
+    return dict(user) if user else None
 def get_passwords():
+    conn = get_db_connection()
     passw = conn.execute('SELECT password FROM voters').fetchall()
-    conn.close()
     decrypted_passw = [passwd['password'] for passwd in passw]
-    return jsonify(decrypted_passw)
+        # decrypted_passw = [decrypt_data(passwd['password']) for passwd in passw]
+
+    conn.close()
+    return decrypted_passw
+        # decrypted_password = [decrypt_data(password['password']) for password in passw]
+
 #The login Page handler
 # @app.route('/', methods=['GET', 'POST'])
 # def login():
@@ -214,7 +220,7 @@ def index(electiondata):
 @app.route('/home')
 def home():
     cursor = get_db_connection().cursor()
-    cursor.execute('SELECT DISTINCT name, id,email,campus,school,regNo,password FROM candidates')
+    cursor.execute('SELECT DISTINCT name, id,email,campus,school,regNo FROM candidates')
     rows = cursor.fetchall()
 
      # Fetch campuses, colleges, schools, and courses data
