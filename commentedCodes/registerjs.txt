@@ -1,0 +1,69 @@
+       // Fetch schools based on the selected college
+        // fetch(`/get_schools?college=${selectedCollege}`)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log("Data received:", data);
+
+        //         // Ensure that data.schools is an array before iterating
+        //         if (Array.isArray(data.schools)) {
+        //             data.schools.forEach(school => {
+        //                 var option = document.createElement("option");
+        //                 option.value = school;
+        //                 option.text = school;
+        //                 schoolsDropdown.add(option);
+        //             });
+        //         } else {
+        //             console.error("Invalid data format. Expected an array.");
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error("Error fetching schools:", error);
+        //     });
+    
+
+    // function updateSchools() {
+    //     var selectedCollege = document.getElementById("college").value;
+    //     console.log("Selected College:", selectedCollege);
+
+    //     var schoolsDropdown = document.getElementById("school");
+
+    //     // Clear previous options
+    //     schoolsDropdown.innerHTML = "";
+
+    //     // Fetch schools based on the selected college
+    //     fetch(`/get_schools?college=${selectedCollege}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log("Data received:", data);
+
+    //             data.forEach(school => {
+    //                 var option = document.createElement("option");
+    //                 option.value = school.school;
+    //                 option.text = school.school;
+    //                 schoolsDropdown.add(option);
+    //             });
+    //         })
+    //         .catch(error => {
+    //             console.error("Error fetching schools:", error);
+    //         });
+    // }
+
+    // function updateSchools() {
+    //     var selectedCollege = document.getElementById("college").value;
+    //     var schoolsDropdown = document.getElementById("school");
+
+    //     // Clear previous options
+    //     schoolsDropdown.innerHTML = "";
+
+    //     // Fetch schools based on the selected college
+    //     fetch(`/get_schools?college=${selectedCollege}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             data.forEach(school => {
+    //                 var option = document.createElement("option");
+    //                 option.value = school.school;
+    //                 option.text = school.school;
+    //                 schoolsDropdown.add(option);
+    //             });
+    //         });
+    // }

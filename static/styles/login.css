@@ -21,6 +21,7 @@ body {
     background-color: #32A287;
     flex: 1.5 1 0;
     display: flex;
+    height: 100%;
 }
 
 form {
@@ -77,11 +78,11 @@ a {
     color: #fff;
 }
 
-#forgot-password:hover{
+#forgot-password:hover {
     color: #d4d4d4;
 }
 
-#forgot-password:active{
+#forgot-password:active {
     transform: scale(0.95);
     color: #6A3CA4;
 }
@@ -128,11 +129,11 @@ p {
     line-height: normal;
 }
 
-#create-account:hover{
+#create-account:hover {
     color: azure;
 }
 
-#create-account:active{
+#create-account:active {
     transform: scale(0.95);
     cursor: pointer;
     color: #6A3CA4;

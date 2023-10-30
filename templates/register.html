@@ -1,0 +1,170 @@
+ {% extends "base.html" %} {% block title %} Register {% endblock %} {% block content %}
+<section style="background-color: burlywood;">
+    <form method="POST">
+        <label for="useremail">Email:</label>
+        <input type="email" id="useremail" name="useremail" required>
+
+        <label for="idNo">ID NO:</label>
+        <input type="text" id="userIdNo" name="userIdNo" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="userRegNo">Registration Number:</label>
+        <input type="text" id="userRegNo" name="userRegNo" required>
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" required>
+
+        <label for="campus">Campus:</label>
+        <select id="campus" name="campus" required>
+            <option value="">-- Select Campus --</option>
+            {% for campus in campuses %}
+            <option value="{{ campus.name }}">{{ campus.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="college">College:</label>
+        <select id="college" name="college" onchange="updateSchools()" required>
+            <option value="">-- Select College --</option>
+            {% for college in colleges %}                   
+            <option value="{{ college.college }}">{{ college.college }}</option>
+            {% endfor %}
+        </select>
+
+
+
+        <label for="school">School:</label>
+        <select id="school" name="school" onchange="updateCourses()" required>
+            <option value=""> -- select school--</option>
+    <!-- This will be dynamically populated based on the selected college -->
+        </select>
+        <label for="course">Course:</label>
+        <select id="course" name="course" required>
+            <option value=""> -- select course--</option>
+    <!-- This will be dynamically populated based on the selected school -->
+        </select>
+
+
+
+        <label for="academicyear">Academic Year:</label>
+        <input type="number" id="academicyear" name="academicyear" required min="1" max="6">
+
+        <!--Display the error here-->
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!--The submit button-->
+        <button type="submit">Register</button>
+    </form>
+</section>
+
+<script>
+    function updateSchools() {
+        var selectedCollege = document.getElementById("college").value;
+        console.log("Selected College:", selectedCollege);
+
+        var schoolsDropdown = document.getElementById("school");
+
+        // Clear previous options
+        schoolsDropdown.innerHTML = "";
+
+        fetch(`/get_schools?college=${selectedCollege}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Data received:", data);
+
+                // Assuming the structure is data.schools
+                if (data.schools) {
+                    data.schools.forEach(school => {
+                        var option = document.createElement("option");
+                        option.value = school.school;
+                        option.text = school.school;
+                        schoolsDropdown.add(option);
+                    });
+                } else {
+                    console.error("Unexpected data structure:", data);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching schools:", error);
+            });
+
+    }
+
+    function updateCourses() {
+        var selectedSchool = document.getElementById("school").value;
+        console.log("Selected School:", selectedSchool);
+        var coursesDropdown = document.getElementById("course");
+
+        // Clear previous options
+        coursesDropdown.innerHTML = "";
+
+        // Fetch courses based on the selected school
+        fetch(`/get_courses?school=${selectedSchool}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Data received:", data);
+
+                if (data.courses) {
+                    data.courses.forEach(course => { // Corrected this line
+                        var option = document.createElement("option");
+                        option.value = course.course;
+                        option.text = course.course;
+                        coursesDropdown.add(option);
+                    });
+                } else {
+                    console.error("Unexpected data structure:", data);
+                }
+
+            })
+            .catch(error => {
+                console.error("Error fetching courses:", error);
+            });
+    }
+
+
+    // function updateCourses() {
+    //     var selectedSchool = document.getElementById("school").value;
+    //     console.log("Selected School:", selectedSchool);
+    //     var coursesDropdown = document.getElementById("course");
+
+    //     // Clear previous options
+    //     coursesDropdown.innerHTML = "";
+
+    //     // Fetch courses based on the selected school
+    //     fetch(`/get_courses?school=${selectedSchool}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log("Data received:", data);
+
+    //             if (data.courses) {
+    //                 data.courses.forEach(course => {
+    //                     var option = document.createElement("option");
+    //                     option.value = course.course;
+    //                     option.text = course.course;
+    //                     coursesDropdown.add(option);
+    //                 });
+    //             } else {
+    //                 console.error("Unexpected data structure:", data);
+    //             }
+
+    //         })
+    //         .catch(error => {
+    //             console.error("Error fetching courses:", error);
+    //         });
+    // }
+</script>
+{% endblock %} {% block footer %}
+<footer>
+    <p>JKUAT E-Voting System</p>
+</footer>
+
+
+{% endblock %}
