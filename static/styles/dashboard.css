@@ -71,22 +71,6 @@ section .content-header p{
     color: white !important;
     border: 1px solid black;
 }
-/* Profile sector
-.profile-content{
-    position: absolute;
-    display: flex;
-    align-items: center;
-    top: 7px;
-    margin-right: 100px;
-    right: 30em;
-}
-
-.profile-image{
-    width: 50px;
-    height: 50px;
-    border-radius: 75%;
-}
-*/
 .cards-position{
     display: flex;
     justify-content: center;

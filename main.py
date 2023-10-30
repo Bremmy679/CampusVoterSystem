@@ -68,20 +68,12 @@ def register():
         if user is not None:
             error = 'User already exists.'
         else:
-            passwords  = get_passwords()
-            if password in passwords:
-                return render_template('login.html',error = "Password already exists. Try a different password.")
-
-            password = hash_password(password)
-            registeruser(useremail,  password, userName, userRegNo, college, course, school, campus, academicyear,
+            registeruser(useremail, password, userName, userRegNo, college, course, school, campus, academicyear,
                              userIdNo)
             msg = "Record successfully added"
             return redirect(url_for('login'))
 
     return render_template('registration_page.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
-
-
-
 
 #Register user function
 def registeruser(email, password,name,regNo,college,course,school,campus,academicyear,userIdNo):
@@ -91,8 +83,7 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
     conn.close()
     return True
 
-
-# The login Page handler
+#The login Page handler
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -128,8 +119,16 @@ def login():
         return redirect(url_for('home'))
 
     return render_template('login.html')
+#dashboard page
+@app.route("/")
+def dashboard():
+    return render_template('dashboard.html')
 
+@app.route("/admin")
+def create_admin():
+    return render_template('create_admin_account.html')
 
+#get user from the database
 def get_user(useremail):
     conn = get_db_connection()
     user = conn.execute('SELECT * FROM voters WHERE email = ?', (useremail,)).fetchone()
@@ -396,7 +395,8 @@ def deletecandidate(regno):
 def electionvotes():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT * FROM candidates')
-    rows = cursor.fetchone()
+    rows = cursor.fetchall()
+   
     return  rows
 
 @app.route('/')
@@ -404,10 +404,10 @@ def voting():
     return render_template('voting_page.html')
 
 #The results Page
-@app.route('/results/<electedcandidates>')
-def results(electedcandidates):
+@app.route('/results')
+def results():
     electedcandidates = electionvotes()
-    if electedcandidates.isNotEmpty():
+    if len(electedcandidates) > 1:
         return render_template('results.html', electedcandidates=electedcandidates)
 
     else:
