@@ -24,10 +24,10 @@ CREATE TABLE candidates (
     course TEXT NOT NULL,
     campus TEXT NOT NULL,
     academicYear INTEGER NOT NULL,
-    electedPost_id INTEGER,
+    electedPost INTEGER,
     votes INTEGER,
     idNo INTEGER NOT NULL UNIQUE,
-    FOREIGN KEY (electedPost_id) REFERENCES posts(id),
+    FOREIGN KEY (electedPost) REFERENCES posts(name),
     FOREIGN KEY (regNo) REFERENCES voters(regNo)  -- Reference the regNo field in voters
     FOREIGN KEY (campus) REFERENCES campuses(name)
     FOREIGN KEY (college) REFERENCES colleges(name)
