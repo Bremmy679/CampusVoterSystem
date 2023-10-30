@@ -19,7 +19,6 @@ CREATE TABLE candidates (
     name TEXT NOT NULL,
     regNo TEXT NOT NULL UNIQUE,  -- Assuming regNo uniquely identifies a candidate
     email TEXT NOT NULL,
-    password TEXT NOT NULL,
     college TEXT NOT NULL,
     school TEXT NOT NULL,
     course TEXT NOT NULL,
@@ -27,6 +26,7 @@ CREATE TABLE candidates (
     academicYear INTEGER NOT NULL,
     electedPost_id INTEGER,
     votes INTEGER,
+    idNo INTEGER NOT NULL UNIQUE,
     FOREIGN KEY (electedPost_id) REFERENCES posts(id),
     FOREIGN KEY (regNo) REFERENCES voters(regNo)  -- Reference the regNo field in voters
     FOREIGN KEY (campus) REFERENCES campuses(name)
@@ -87,22 +87,7 @@ CREATE TABLE courseGrouped (
 The various contested posts
 */
 
-INSERT INTO posts (name) VALUES 
-('President'), ('Vice President'), ('Secretary'), ('Treasurer'), ('Academic Secretary'), ('Accomodation Secretary');
 
-
-/*
-JKUAT Campuses
-*/
-INSERT INTO campuses (name) VALUES 
-('Main Campus'), 
-('Karen Campus'), 
-('Westlands Campus'), 
-('Kisii CBD Campus'), 
-('Kisumu CBD Campus'), 
-('Kitale CBD Campus'), 
-('Nakuru CBD Campus'), 
-('Mombasa CBD Campus');
 
 -- /*
 -- JKUAT Colleges
@@ -201,37 +186,37 @@ INSERT INTO campuses (name) VALUES
 -- ('Bachelor of Science in Food Science and Nutrition');
 
 
-INSERT INTO courseGrouped(college,school,course) VALUES
--- College of Agriculture and Natural Resources Management (CANREM)
+-- INSERT INTO courseGrouped(college,school,course) VALUES
+-- -- College of Agriculture and Natural Resources Management (CANREM)
 
-('CANRE','School of Agriculture and Food Security', 'Bachelor of Science in Agricultural Economics and Rural Development'),
-('CANRE', 'School of Agriculture and Food Security', 'Bachelor of Science in Agribusiness Management'),
-('CANRE', 'School of Bioprocessing and Food Technology', 'Bachelor of Science in Food Science and Nutrition'),
--- College of Engineering and Technology (COETEC)
+-- ('CANRE','School of Agriculture and Food Security', 'Bachelor of Science in Agricultural Economics and Rural Development'),
+-- ('CANRE', 'School of Agriculture and Food Security', 'Bachelor of Science in Agribusiness Management'),
+-- ('CANRE', 'School of Bioprocessing and Food Technology', 'Bachelor of Science in Food Science and Nutrition'),
+-- -- College of Engineering and Technology (COETEC)
 
-('COETEC', 'School of Civil, Environmental and Geospatial Engineering', 'Bachelor of Science in Civil Engineering'),
-('COETEC', 'School of Electrical, Electronic and Information Engineering', 'Bachelor of Science in Electrical and Electronic Engineering'),
-('COETEC', 'School of Mechanical, Manufacturing and Materials Engineering', 'Bachelor of Science in Mechanical Engineering'),
+-- ('COETEC', 'School of Civil, Environmental and Geospatial Engineering', 'Bachelor of Science in Civil Engineering'),
+-- ('COETEC', 'School of Electrical, Electronic and Information Engineering', 'Bachelor of Science in Electrical and Electronic Engineering'),
+-- ('COETEC', 'School of Mechanical, Manufacturing and Materials Engineering', 'Bachelor of Science in Mechanical Engineering'),
 
--- College of Pure and Applied Sciences (COPAS)
+-- -- College of Pure and Applied Sciences (COPAS)
 
-('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Science'),
-('COPAS', 'School of Biological Sciences', 'Bachelor of Science in Biotechnology'),
-('COPAS', 'School of Mathematical Sciences', 'Bachelor of Science in Actuarial Science'),
-('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Science'),
-('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Information Technology'),
-('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Information Technology (Evening)'),
-('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Technology'),
--- College of Health Sciences (COHES)
+-- ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Science'),
+-- ('COPAS', 'School of Biological Sciences', 'Bachelor of Science in Biotechnology'),
+-- ('COPAS', 'School of Mathematical Sciences', 'Bachelor of Science in Actuarial Science'),
+-- ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Science'),
+-- ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Information Technology'),
+-- ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Information Technology (Evening)'),
+-- ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Technology'),
+-- -- College of Health Sciences (COHES)
 
-('COHES', 'School of Pharmacy', 'Bachelor of Pharmacy'),
-('COHES', 'School of Public Health', 'Bachelor of Science in Public Health'),
-('COHES', 'School of Nursing', 'Bachelor of Science in Nursing'),
--- College of Human Resource Development (COHRD)
+-- ('COHES', 'School of Pharmacy', 'Bachelor of Pharmacy'),
+-- ('COHES', 'School of Public Health', 'Bachelor of Science in Public Health'),
+-- ('COHES', 'School of Nursing', 'Bachelor of Science in Nursing'),
+-- -- College of Human Resource Development (COHRD)
 
-('COHRED', 'School of Business', 'Bachelor of Commerce'),
-('COHRED', 'School of Human Resource Development', 'Bachelor of Science in Human Resource Management'),
-('COHRED', 'School of Entrepreneurship', 'Bachelor of Purchasing and Supplies Management');
+-- ('COHRED', 'School of Business', 'Bachelor of Commerce'),
+-- ('COHRED', 'School of Human Resource Development', 'Bachelor of Science in Human Resource Management'),
+-- ('COHRED', 'School of Entrepreneurship', 'Bachelor of Purchasing and Supplies Management');
 
 
 /*The database schema*/
