@@ -30,45 +30,8 @@ class Student:
 
 colleges = ["COANRE", "COHES", "COETEC", "COHRED", "COPAS"]
 academic_years = [1, 2, 3, 4, 5, 6]
-pref = [
-    ("SCHOOL OF AGRICULTURE AND ENVIRONMENTAL SCIENCES","AGA"),
-    ("SCHOOL OF FOOD SCIENCE AND NUTRITIONAL SCIENCES","AGF"),
-    ("SCHOOL OF NATURAL RESOURCES AND ANIMAL SCIENCES","AGN"),
-    ("SCHOOL OF BIOMEDICAL SCIENCES","HSB"),
-    ("SCHOOL OF MEDICINE","HSM"),
-    ("SCHOOL OF PUBLIC HEALTH","HSH"),
-    ("SCHOOL OF NURSING","HSN"),
-    ("SCHOOL OF PHARMACY","HSP"),
-    ("SCHOOL OF ELECTRICAL, ELECTRONIC AND INFORMATION ENGINEERING","ENE"),
-    ("SCHOOL OF CIVIL, ENVIRONMENTAL AND GEOSPATIAL ENGINEERING","ENC"),
-    ("SCHOOL OF MECHANICAL, MANUFACTURING AND MATERIALS ENGINEERING","ENM"),
-    ("SCHOOL OF BIOSYSTEMS AND ENVIRONMENTAL ENGINEERING","ENB"),
-    ("SCHOOL OF ARCHITECTURE AND BUILDING SCIENCES","ABS"),
-    ("SCHOOL OF BUSINESS AND ENTREPRENEURSHIP","HDE"),
-    ("SCHOOL OF COMMUNICATION AND DEVELOPMENT STUDIES","HDC"),
-    ("SCHOOL OF BIOLOGICAL SCIENCES","SCB"),
-    ("SCHOOL OF MATHEMATICS AND PHYSICAL SCIENCES","SCP"),
-    ("SCHOOL OF COMPUTING AND INFORMATION TECHNOLOGY","SCT"),
-]
+
 #The JKUAT campuses
-
-students = []
-
-for _ in range(2):
-    idno = random.randint(10000000, 99999999)
-    name = fake.name()
-    reg_no = F'{random.choice(prefix)} {random.randint(100, 999)}-{random.randint(1000, 9999)}/{random.randint(2017, 2022)}'
-    email = fake.email()
-    password = fake.password()
-    college = random.choice(colleges)
-    school = random.choice(schools)  # Assuming a default value
-    campus = random.choice(campuses)  # Assuming a default value
-    course = fake.job()
-    academic_year = random.choice(academic_years)
-
-    student_instance = Student(idno,name, reg_no, email, password, college, school,course, campus, academic_year)
-    students.append(student_instance)
-    
 
 def init_db():
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -81,9 +44,9 @@ def init_db():
         connection.executescript(f.read())
 
     cursor = connection.cursor()
-    for student in students:
-        cursor.execute(f"INSERT INTO voters (idNo,name,regNo,email,password,college,school,campus,academicYear,course) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        (student.idNo),student.name,student.regNo,student.email,generate_password_hash(student.password),student.college,student.school,student.campus,student.academicYear,student.course)
+    # for student in students:
+    #     cursor.execute(f"INSERT INTO voters (idNo,name,regNo,email,password,college,school,campus,academicYear,course) VALUES (?,?,?,?,?,?,?,?,?,?)",
+    #     (student.idNo),student.name,student.regNo,student.email,generate_password_hash(student.password),student.college,student.school,student.campus,student.academicYear,student.course)
 
     post_names = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Academic Secretary', 'Accommodation Secretary']
     # encrypted_posts = [encrypt_data(name) for name in post_names]
@@ -110,6 +73,30 @@ def init_db():
 
     # cursor.execute("INSERT INTO posts (name) VALUES ('President'), ('Vice President'), ('Secretary'), ('Treasurer'), ('Academic Secretary'), ('Accomodation Secretary')")
     # cursor.execute("INSERT INTO campuses (name) VALUES ('Main Campus'), ('Karen Campus'), ('Westlands Campus'), ('Kisii CBD Campus'), ('Kisumu CBD Campus'), ('Kitale CBD Campus'), ('Nakuru CBD Campus'), ('Mombasa CBD Campus')")
+
+    pref = [
+    ("SCHOOL OF AGRICULTURE AND ENVIRONMENTAL SCIENCES","AGA"),
+    ("SCHOOL OF FOOD SCIENCE AND NUTRITIONAL SCIENCES","AGF"),
+    ("SCHOOL OF NATURAL RESOURCES AND ANIMAL SCIENCES","AGN"),
+    ("SCHOOL OF BIOMEDICAL SCIENCES","HSB"),
+    ("SCHOOL OF MEDICINE","HSM"),
+    ("SCHOOL OF PUBLIC HEALTH","HSH"),
+    ("SCHOOL OF NURSING","HSN"),
+    ("SCHOOL OF PHARMACY","HSP"),
+    ("SCHOOL OF ELECTRICAL, ELECTRONIC AND INFORMATION ENGINEERING","ENE"),
+    ("SCHOOL OF CIVIL, ENVIRONMENTAL AND GEOSPATIAL ENGINEERING","ENC"),
+    ("SCHOOL OF MECHANICAL, MANUFACTURING AND MATERIALS ENGINEERING","ENM"),
+    ("SCHOOL OF BIOSYSTEMS AND ENVIRONMENTAL ENGINEERING","ENB"),
+    ("SCHOOL OF ARCHITECTURE AND BUILDING SCIENCES","ABS"),
+    ("SCHOOL OF BUSINESS AND ENTREPRENEURSHIP","HDE"),
+    ("SCHOOL OF COMMUNICATION AND DEVELOPMENT STUDIES","HDC"),
+    ("SCHOOL OF BIOLOGICAL SCIENCES","SCB"),
+    ("SCHOOL OF MATHEMATICS AND PHYSICAL SCIENCES","SCP"),
+    ("SCHOOL OF COMPUTING AND INFORMATION TECHNOLOGY","SCT"),
+]
+
+    placeholders = ', '.join(['?' for _ in pref[0]])
+    cursor.executemany(f"INSERT INTO schools (name, initials) VALUES ({placeholders})", pref)
 
     course_data = [
     ('COANRE', 'SCHOOL OF AGRICULTURE AND ENVIRONMENTAL SCIENCES', 'Bachelor of Science in Agriculture'),

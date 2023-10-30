@@ -11,7 +11,7 @@
         <input type="password" id="password" name="password" required>
 
         <label for="userRegNo">Registration Number:</label>
-        <input type="text" id="userRegNo" name="userRegNo" required>
+        <input type="text" id="userRegNo" name="userRegNo" value="{{ next_registration_number }}" required readonly disabled="true">
 
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="firstName" required>
@@ -66,6 +66,56 @@
 </section>
 
 <script>
+    // function fillRegistrationNumber() {
+    //     var userIdNo = document.getElementById("userIdNo").value;
+
+    //     // Fetch data using AJAX
+    //     fetch(`/get_registration_number?idNo=${userIdNo}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             console.log("Registration Number Data:", data);
+
+    //             // Assuming the structure is data.registration_number
+    //             if (data.registration_number) {
+    //                 document.getElementById("userRegNo").value = data.registration_number;
+    //             } else {
+    //                 console.error("Unexpected data structure:", data);
+    //             }
+    //         })
+    //         .catch(error => {
+    //             console.error("Error fetching registration number:", error);
+    //         });
+    // }
+    function fillRegistrationNumber() {
+        // Assuming you have a function to get the selected school from the form
+        var selectedSchool = getSelectedSchool();
+
+        // Fetch data using AJAX
+        fetch(`/get_registration_number?school=${selectedSchool}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Registration Number Data:", data);
+
+                // Assuming the structure is data.registration_number
+                if (data.registration_number) {
+                    document.getElementById("userRegNo").value = data.registration_number;
+                } else {
+                    console.error("Unexpected data structure:", data);
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching registration number:", error);
+            });
+    }
+
+    // Replace this with the actual logic to get the selected school from the form
+    function getSelectedSchool() {
+        // Implement the logic to extract the selected school from the form
+        // For example, if the school is selected from a dropdown with id "school"
+        return document.getElementById('school').value;
+    }
+
+
     function updateSchools() {
         var selectedCollege = document.getElementById("college").value;
         console.log("Selected College:", selectedCollege);
