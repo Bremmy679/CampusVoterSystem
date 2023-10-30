@@ -254,7 +254,7 @@ def is_valid_password(password):
 def newcandidate():
     return render_template('newcandidate.html')
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/addcandidate', methods=['GET', 'POST'])
 def addcandidate():
     posts = get_posts()
     msg = None
@@ -397,8 +397,11 @@ def electionvotes():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT * FROM candidates')
     rows = cursor.fetchone()
-   
     return  rows
+
+@app.route('/')
+def voting():
+    return render_template('voting_page.html')
 
 #The results Page
 @app.route('/results/<electedcandidates>')
