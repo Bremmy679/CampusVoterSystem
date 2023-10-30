@@ -71,6 +71,10 @@ def register():
         if user is not None:
             error = 'User already exists.'
         else:
+<<<<<<< HEAD
+            return render_template('register.html', error='Invalid occurrences in field(s).')
+    return render_template('registration_page.html')
+=======
             registeruser(useremail, password, userName, userRegNo, college, course, school, campus, academicyear,
                              userIdNo)
             msg = "Record successfully added"
@@ -80,6 +84,7 @@ def register():
 
 
 
+>>>>>>> 16b626cc26395232d0045890202486c588d1cab2
 
 #Register user function
 def registeruser(email, password,name,regNo,college,course,school,campus,academicyear,userIdNo):
@@ -90,7 +95,7 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
     return True
 
 #The login Page handler
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         useremail = request.form['useremail']
@@ -126,6 +131,19 @@ def login():
 
     return render_template('login.html')
 
+<<<<<<< HEAD
+#dashboard page
+@app.route("/")
+def dashboard():
+    return render_template('dashboard.html')
+
+@app.route("/admin")
+def create_admin():
+    return render_template('create_admin_account.html')
+
+#get user from the database
+=======
+>>>>>>> 16b626cc26395232d0045890202486c588d1cab2
 def get_user(useremail):
     conn = get_db_connection()
     user = conn.execute('SELECT * FROM voters WHERE email = ?', (encrypt_data(useremail),)).fetchone()
@@ -402,15 +420,15 @@ def deletecandidate(regno):
 def electionvotes():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT * FROM candidates')
-    rows = cursor.fetchone()
+    rows = cursor.fetchall()
    
     return  rows
 
 #The results Page
-@app.route('/results/<electedcandidates>')
-def results(electedcandidates):
+@app.route('/results')
+def results():
     electedcandidates = electionvotes()
-    if electedcandidates.isNotEmpty():
+    if len(electedcandidates) > 1:
         return render_template('results.html', electedcandidates=electedcandidates)
 
     else:
