@@ -5,13 +5,27 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from time import time
 from cryptography.fernet import Fernet
+from cryptography.fernet import InvalidToken
+
 import base64
+from flask_mail import Mail, Message
+import binascii
+
 
 
 app = Flask(__name__)
+SECRET_KEY = Fernet.generate_key()
 app.config['SECRET_KEY'] = 'secret'
 cipher_suite = Fernet(SECRET_KEY)
+mail= Mail(app)
 
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = ''
+app.config['MAIL_PASSWORD'] = '*******'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
 
 
 def get_db_connection():
@@ -20,7 +34,11 @@ def get_db_connection():
     return conn
 
     
-
+def sendMail():
+    msg = Message('Hello', sender = 'ogolasospeter62@gmail.com', recipients = ['captainsos483@gmail.com'])
+    msg.body = "Hello Flask message sent from Flask-Mail"
+    mail.send(msg)
+    return "Sent"
 
 # The user registration
 @app.route('/register', methods=['GET', 'POST'])
@@ -245,27 +263,36 @@ def getpostid(name):
 
 def getCampuses():
     conn = get_db_connection()
-    campuses = conn.execute('SELECT * FROM campuses').fetchall()
+    encrypted_campuses = conn.execute('SELECT name FROM campuses').fetchall()
     conn.close()
-    return campuses
+    decrypted_campuses = [decrypt_data(campus['name']) for campus in encrypted_campuses]
+    
+    print("Encrypted Campuses:", encrypted_campuses)
+    print("Decrypted Campuses:", decrypted_campuses)
+    
+    return decrypted_campuses
+
 
 def getColleges():
     conn = get_db_connection()
-    colleges = conn.execute('SELECT DISTINCT college FROM courseGrouped').fetchall()
+    encrypted_colleges = conn.execute('SELECT DISTINCT college FROM courseGrouped').fetchall()
     conn.close()
-    return colleges
+    decrypted_colleges = [decrypt_data(college['college']) for college in encrypted_colleges]
+    return decrypted_colleges
 
 def getSchools(college):
     conn = get_db_connection()
-    schools = conn.execute('SELECT DISTINCT  school FROM courseGrouped WHERE college = ?',(encrypt_data(college),)).fetchall()
+    encrypted_schools = conn.execute('SELECT DISTINCT  school FROM courseGrouped WHERE college = ?',(encrypt_data(college),)).fetchall()
     conn.close()
-    return schools
+    decrypted_schools = [decrypt_data(school['school']) for school in encrypted_schools]
+    return decrypted_schools
 
 def getCourses(school):
     conn = get_db_connection()
     courses = conn.execute('SELECT DISTINCT course FROM courseGrouped WHERE school = ?',(encrypt_data(school),)).fetchall()
     conn.close()
-    return courses
+    decrypted_courses = [decrypt_data(course['course']) for course in courses]
+    return decrypted_courses
 
 # In your /get_schools route
 @app.route('/get_schools', methods=['GET'])
@@ -404,9 +431,19 @@ def encrypt_data(data):
     return base64.urlsafe_b64encode(encrypted_data).decode()
 
 def decrypt_data(encrypted_data):
-    decoded_data = base64.urlsafe_b64decode(encrypted_data.encode())
-    decrypted_data = cipher_suite.decrypt(decoded_data).decode()
-    return decrypted_data
+    try:
+        decoded_data = base64.urlsafe_b64decode(encrypted_data)
+        decrypted_data = cipher_suite.decrypt(decoded_data).decode()
+        return decrypted_data
+    except binascii.Error as e:
+        print(f"Error decoding base64: {e}")
+    except InvalidToken:
+        print("Invalid Fernet token. Data may have been tampered with.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+    return None
+
+
 
 
 if __name__ == '__main__':
