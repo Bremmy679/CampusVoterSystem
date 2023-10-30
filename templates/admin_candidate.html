@@ -1,56 +1,63 @@
 {% extends base.html}
-<h3>{% block title%} Admin Candidate Page {% endblock%}
-    {% block header%}
-    <link rel="stylesheet" href="admin_candidate.css">{%endblock%}
-    {% block content%}
+<h3>{% block title%} Admin Candidate Page {% endblock%} {% block header%}
+    <link rel="stylesheet" href="admin_candidate.css">{%endblock%} {% block content%}
 
-<div class="container">
-  <div class="left">
-    <img src="images/Layer 1.png" alt="JKUAT Logo">
-    <div class="buttons">
-      <button>ADD</button>
-      <button>DELETE</button>
-      <button>RECORD</button>
-    </div>
-  </div>
-  <div class="right">
-    <form action="#">
-      <div class="top">
-        <div class="inputs registration">
-          <label for="Registration-No">Registration No:</label>
-          <input type="text" id="reg-no">
+    <div class="container">
+        <div class="left">
+            <img src="images/Layer 1.png" alt="JKUAT Logo">
+            <div class="buttons">
+                <button>ADD</button>
+                <button>DELETE</button>
+                <button>RECORD</button>
+            </div>
         </div>
-        <div class="inputs first_name">
-          <label for="first-name">First Name:</label>
-          <input type="text">
-        </div>
-        <div class="inputs last_name">
-          <label for="last-name">Last Name:</label>
-          <input type="text">
-        </div>
-        <div class="inputs id-num">
-          <label for="id-no">ID No:</label>
-          <input type="number" name="id-no" id="id_no">
-        </div>
-        <div class="inputs colleges">
-          <label for="college">College:</label>
-          <input type="text" id="college">
-        </div>
-        <div class="inputs schools">
-          <label for="school">School:</label>
-          <input type="text" id="school">
-        </div>
-        <div class="inputs courses">
-          <label for="course">Course:</label>
-          <input type="text" id="course">
-        </div>
-        <div class="inputs year">
-          <label for="year-of-study">Year of Study:</label>
-          <input type="number">
-        </div>
-        <div class="inputs seats">
-          <label for="seat">Seat:</label>
-          <select name="seat" id="seat">
+        <div class="right">
+            <form action="#">
+                name = user.name regNo = user.regNo email = user.email college = user.college school= user.school course= user.course campus= user.campus academicYear= user.academicYear userIdNo= user.userIdNo
+                <div class="top">
+                    <div class="inputs registration">
+                        <label for="Registration-No">Registration No:</label>
+                        <input type="text" id="reg-no" value="" disabled="false">
+                    </div>
+                    <div class="inputs first_name">
+                        <label for="name">Name:</label>
+                        <input type="text" value="" disabled="true">
+                    </div>
+                    <div class="inputs id-num">
+                        <label for="id-no">ID No:</label>
+                        <input type="number" name="id-no" id="id_no">
+                    </div>
+                    <div class="inputs email">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" value="" disabled="true">
+                    </div>
+                    <div class="inputs campus">
+                        <label for="campus">Campus:</label>
+                        <select name="campus" id="campus">
+                        <option value="">-- Select Campus --</option>
+                        <option value="Main">Main</option>
+                        </select>
+                    </div>
+
+                    <div class="inputs colleges">
+                        <label for="college">College:</label>
+                        <input type="text" id="college">
+                    </div>
+                    <div class="inputs schools">
+                        <label for="school">School:</label>
+                        <input type="text" id="school">
+                    </div>
+                    <div class="inputs courses">
+                        <label for="course">Course:</label>
+                        <input type="text" id="course">
+                    </div>
+                    <div class="inputs year">
+                        <label for="year-of-study">Year of Study:</label>
+                        <input type="number">
+                    </div>
+                    <div class="inputs seats">
+                        <label for="seat">Seat:</label>
+                        <select name="seat" id="seat">
             <option value="">-- Select Seat --</option>
             <option value="Chairperson">Chairperson</option>
             <option value="Vice-Chairperson">Vice Chairperson</option>
@@ -59,14 +66,13 @@
             <option value="Halls">Halls of Residence Representative</option>
             <option value="" id="school-rep"></option>
           </select>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <button>Back to Dashboard</button>
+                    <input type="submit" value="Submit" id="submit">
+                </div>
+            </form>
         </div>
-      </div>
-      <div class="bottom">
-        <button>Back to Dashboard</button>
-        <input type="submit" value="Submit" id="submit">
-      </div>
-    </form>
-  </div>
-</div>
-{%endblock%}
-{%endblock%}
+    </div>
+    {%endblock%} {%endblock%}

@@ -57,32 +57,6 @@ The JKUSA Election Web Application prioritizes the security and privacy of user 
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
 
-### The Team Members
-<div align="center">
-  <h4>THE TEAM MEMBERS</h4>
-  <div style="display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center;">
-    <div style="margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/mission-impossible-concept-illustration_114360-609.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Ogola Sospeter" width="200" height="200" style="border-radius: 50%">
-      <p>Ogola Sospeter</p>
-    </div>
-    <div style="margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/coding-concept-illustration_114360-1155.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Sandra Lungahi" width="200" height="200" style="border-radius: 50%">
-      <p>Sandra Lungahi</p>
-    </div>
-    <div  style="margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/professional-cartoon-businessman-background-ecological_1368-271.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Jeff Gicharu" width="200" height="200" style="border-radius: 50%">
-      <p>Jeff Gicharu</p>
-    </div>
-    <div style="margin: 10px; text-align: center;">
-      <img src="https://img.freepik.com/free-vector/programmers-day-banner-design_1308-114298.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Vivian Mosomi" width="200" height="200" style="border-radius: 50%">
-      <p>Vivian Mosomi</p>
-    </div>
-    <div style="margin: 10px; text-align: center; size:150px">
-      <img src="https://img.freepik.com/free-vector/online-games-addiction-concept-illustration_114360-1994.jpg?size=626&ext=jpg&uid=R68194178&ga=GA1.1.490597256.1696316941&semt=ais/" alt="Brendan Remmy" width="200" height="200" style="border-radius: 50%">
-      <p>Brendan Remmy</p>
-    </div>
-  </div>
-</div>
 
 
 <h3>Project Design</h3>

@@ -4,8 +4,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from faker import Faker
 from flask import jsonify
+from cryptography.fernet import Fernet
 
 fake = Faker()
+key = Fernet.generate_key()
+cipher_suite = Fernet(key)
+
+
+def encrypt_data(data):
+    encrypted_data = cipher_suite.encrypt(data.encode('utf-8'))
+    return encrypted_data
 
 class Student:
     def __init__(self,idNo,name,regNo,email,password,college,school,course,campus,academicYear):
@@ -29,7 +37,7 @@ campuses = ["Main Campus-Juja", "Karen Campus", "Kisii CBD Campus", "Nairobi CBD
 schools = ['Computing','Engineering','Agriculture']
 students = []
 
-for _ in range(30):
+for _ in range(2):
     idno = random.randint(10000000, 99999999)
     name = fake.name()
     reg_no = F'{random.choice(prefix)} {random.randint(100, 999)}-{random.randint(1000, 9999)}/{random.randint(2017, 2022)}'
@@ -58,7 +66,62 @@ def init_db():
     cursor = connection.cursor()
     for student in students:
         cursor.execute(f"INSERT INTO voters (idNo,name,regNo,email,password,college,school,campus,academicYear,course) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        (student.idNo,student.name,student.regNo,student.email,generate_password_hash(student.password),student.college,student.school,student.campus,student.academicYear,student.course))
+        (encrypt_data(str(student.idNo)),encrypt_data(student.name),encrypt_data(student.regNo),encrypt_data(student.email),generate_password_hash(student.password),encrypt_data(student.college),encrypt_data(student.school),encrypt_data(student.campus),student.academicYear,student.course))
+
+    post_names = ['President', 'Vice President', 'Secretary', 'Treasurer', 'Academic Secretary', 'Accommodation Secretary']
+    encrypted_posts = [encrypt_data(name) for name in post_names]
+    # Use placeholders for the values
+    placeholders = ', '.join(['?' for _ in post_names])
+
+    # Execute the query with placeholders and encrypted values
+    cursor.executemany("INSERT INTO posts (name) VALUES (?)", [(post,) for post in encrypted_posts])
+
+
+    # Example for campuses table
+    campus_names = ['Main Campus', 'Karen Campus', 'Westlands Campus', 'Kisii CBD Campus', 'Kisumu CBD Campus', 'Kitale CBD Campus', 'Nakuru CBD Campus', 'Mombasa CBD Campus']
+        # Encrypt the campus names
+    encrypted_campuses = [encrypt_data(name) for name in campus_names]
+
+    # Use placeholders for the values
+    placeholders = ', '.join(['?' for _ in campus_names])
+
+    # Execute the query with placeholders and encrypted values
+    cursor.executemany("INSERT INTO campuses (name) VALUES (?)", [(campus,) for campus in encrypted_campuses])
+
+
+    # cursor.execute("INSERT INTO posts (name) VALUES ('President'), ('Vice President'), ('Secretary'), ('Treasurer'), ('Academic Secretary'), ('Accomodation Secretary')")
+    # cursor.execute("INSERT INTO campuses (name) VALUES ('Main Campus'), ('Karen Campus'), ('Westlands Campus'), ('Kisii CBD Campus'), ('Kisumu CBD Campus'), ('Kitale CBD Campus'), ('Nakuru CBD Campus'), ('Mombasa CBD Campus')")
+
+    course_data = [
+    ('CANRE', 'School of Agriculture and Food Security', 'Bachelor of Science in Agricultural Economics and Rural Development'),
+    ('CANRE', 'School of Agriculture and Food Security', 'Bachelor of Science in Agribusiness Management'),
+    ('CANRE', 'School of Bioprocessing and Food Technology', 'Bachelor of Science in Food Science and Nutrition'),
+    ('COETEC', 'School of Civil, Environmental and Geospatial Engineering', 'Bachelor of Science in Civil Engineering'),
+    ('COETEC', 'School of Electrical, Electronic and Information Engineering', 'Bachelor of Science in Electrical and Electronic Engineering'),
+    ('COETEC', 'School of Mechanical, Manufacturing and Materials Engineering', 'Bachelor of Science in Mechanical Engineering'),
+    ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Science'),
+    ('COPAS', 'School of Biological Sciences', 'Bachelor of Science in Biotechnology'),
+    ('COPAS', 'School of Mathematical Sciences', 'Bachelor of Science in Actuarial Science'),
+    ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Science'),
+    ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Information Technology'),
+    ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Information Technology (Evening)'),
+    ('COPAS', 'School of Computing and Information Technology', 'Bachelor of Science in Computer Technology'),
+    ('COHES', 'School of Pharmacy', 'Bachelor of Pharmacy'),
+    ('COHES', 'School of Public Health', 'Bachelor of Science in Public Health'),
+    ('COHES', 'School of Nursing', 'Bachelor of Science in Nursing'),
+    ('COHRED', 'School of Business', 'Bachelor of Commerce'),
+    ('COHRED', 'School of Human Resource Development', 'Bachelor of Science in Human Resource Management'),
+    ('COHRED', 'School of Entrepreneurship', 'Bachelor of Purchasing and Supplies Management')
+    ]
+
+    # Encrypt the data
+    encrypted_course_data = [(encrypt_data(college), encrypt_data(school), encrypt_data(course)) for college, school, course in course_data]
+
+    # Prepare the SQL query
+    placeholders = ', '.join(['?' for _ in course_data[0]])
+
+    # Execute the query with placeholders and encrypted values
+    cursor.executemany(f"INSERT INTO courseGrouped (college, school, course) VALUES ({placeholders})", encrypted_course_data)
 
     cursor.close()
 
@@ -67,6 +130,10 @@ def init_db():
 
 
 init_db()
+
+
+#Data encrypter
+
 
 
 # #define the students data
