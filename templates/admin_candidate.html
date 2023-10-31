@@ -16,11 +16,11 @@
                 <div class="top">
                     <div class="inputs registration">
                         <label for="Registration-No">Reg. No:</label>
-                        <input type="text" id="reg-no" value="" onblur="fillForm()">
+                        <input type="text" id="reg-no" value="" name="regNo" onblur="fillForm()">
                     </div>
                     <div class="inputs first_name">
                         <label for="name">Name:</label>
-                        <input type="text" value="" disabled="true">
+                        <input type="text" value="" name="name" disabled="true">
                     </div>
                     <div class="inputs id-num">
                         <label for="id-no">ID No:</label>
@@ -37,28 +37,28 @@
 
                     <div class="inputs colleges">
                         <label for="college">College:</label>
-                        <input type="text" id="college" disabled="true">
+                        <input type="text" id="college" name="college" disabled="true">
                     </div>
                     <div class="inputs schools">
                         <label for="school">School:</label>
-                        <input type="text" id="school" disabled="true">
+                        <input type="text" id="school" name="school" disabled="true">
                     </div>
                     <div class="inputs courses">
                         <label for="course">Course:</label>
-                        <input type="text" id="course" disabled="true">
+                        <input type="text" id="course" name="course" disabled="true">
                     </div>
                     <div class="inputs seats">
                         <label for="seat">Seat:</label>
-                        <select name="seat" id="seat">
+                        <select name="position" id="seat">
                             <option value="">-- Select Seat --</option>
                             {% for seat in posts %}
-                            <option value="{{seat.name}}">{{seat.name}}</option>
+                            <option value="{{seat.name}}" name="position">{{seat.name}}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="inputs year">
                         <label for="year-of-study">Year of Study:</label>
-                        <input type="number" disabled="true">
+                        <input type="number" name="academicYear" disabled="true">
                     </div>
 
                 </div>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, session, flash, jsonify, current_app
 import os
 import re
 import sqlite3
@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from time import time
 from cryptography.fernet import Fernet
 from cryptography.fernet import InvalidToken
+import logging
 
 import base64
 from flask_mail import Mail, Message
@@ -259,46 +260,57 @@ def addcandidate():
     msg = None
     error = None
     if request.method == 'POST':
+        conn = get_db_connection()
         try:
             reg_no = request.form['regNo']
-            position = request.form['position']
-
+            position = request.form['position']            
             
-            connection = self.get_db_connection()
-            cursor = connection.cursor()
-            user = getcandidatefromvoters(reg_no)
-            positionId = getpostid(position)
-            connection.commit()
-            msg = "Record successfully fetched."
+            user = getvoter(reg_no)
+            
+            if user:
+                positionId = getpostid(position)
+                msg = "Record successfully fetched."
 
-            created= time().time()
-            name = user.name
-            regNo = user.regNo
-            email=  user.email
-            password= user.password
-            college = user.college
-            school= user.school
-            course= user.course
-            campus= user.campus
-            academicYear= user.academicYear
-            userIdNo= user.userIdNo
+                # name = user.name
+                # regNo = user.regNo
+                # email=  user.email
+                # password= user.password
+                # college = user.college
+                # school= user.school
+                # course= user.course
+                # campus= user.campus
+                # academicYear= user.academicYear
+                # userIdNo= user.userIdNo
+                name = user['name']
+                regNo = user['regNo']
+                email=  user['email']
+                password= user['password']
+                college = user['college']
+                school= user['school']
+                course= user['course']
+                campus= user['campus']
+                academicyear= user['academicYear']
+                userIdNo= user['idNo']
 
-            conn = self.get_db_connection()
-            cur = conn.cursor()
-            cur.execute("INSERT INTO candidates (name, reg_no, college, acad_year, electedPost_id,idNo) VALUES (?, ?, ?, ?, ?,?)", (encrypt_data(name), encrypt_data(reg_no), encrypt_data(college), encrypt_data(acad_year), encrypt_data(positionId),encrypt_data(userIdNo)))
-            conn.commit()
-            msg = "Record successfully added"
-            if session.addcandidate(name, reg_no, college, acad_year, position):
-                return redirect(url_for('home'))
+                
+                cur = conn.cursor()
+                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost_id,idNo,email) VALUES (?, ?, ?, ?, ?,?,?)", (name, reg_no, college, academicyear, positionId,userIdNo,email))
+                conn.commit()
+                msg = "Record successfully added"
+                flash(message=msg, category='success')
+
             else:
-                return render_template('admin_candidate.html', error='Invalid occurrences in field(s)')
-        except:
+                error = "Voter not found with the given registration number."
+                flash(message=error, category='error')
+                current_app.logger.error(error)
+            return redirect(url_for('home'))
+        except Exception as e:
             conn.rollback()
-            msg = "error in insert operation"
-      
+            error = f"Error in insert operation: {str(e)}"
+            flash(message=error, category='error')
+            current_app.logger.error(error, exc_info=True)
         finally:
-            return render_template("admin_candidate.html",msg = msg)
-            con.close()
+            conn.close()
 
     return render_template('admin_candidate.html', posts=posts)
 
@@ -308,11 +320,10 @@ def addcandidate():
 def editcandidate(regno):
     if request.method == 'POST':
         try:
-            session = Session()
             name = request.form['name']
             reg_no = request.form['regNo']
             college = request.form['college']
-            acad_year = request.form['acadYear']
+            acad_year = request.form['academicYear']
             position = request.form['position']
 
             self.get_db_connection()
@@ -440,6 +451,12 @@ def getcandidatefromvoters(regno):
     conn.close()
     return candidate
 
+def getvoter(regno):
+    conn = get_db_connection()
+    voter = conn.execute('SELECT * FROM voters WHERE regNo = ?', (regno,)).fetchone()
+    conn.close()
+    return dict(voter) if voter else None
+
 def getpostid(name):
     conn = get_db_connection()
     postid = conn.execute('SELECT id FROM posts WHERE name = ?', (name,)).fetchone()
@@ -526,12 +543,26 @@ def decrypt_data(encrypted_data):
         print(f"An unexpected error occurred: {e}")
     return None
 
+def get_school_initials(school):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT initials FROM schools WHERE name = ?', (school,))
+    result = cursor.fetchone()
+    conn.close()
+
+    # Print the result to debug
+    print("Result:", result)
+
+    # Check if result is not None before accessing its elements
+    return result[0] if result is not None else None
+
+
 def get_last_registration_number(school):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Assuming you have a table named 'registrations' with a column 'registration_number'
-    query = 'SELECT registration_number FROM registrations WHERE school = ? ORDER BY registration_number DESC LIMIT 1'
+    query = 'SELECT regNo FROM voters WHERE school = ? ORDER BY regNo DESC LIMIT 1'
     result = cursor.execute(query, (school,)).fetchone()
 
     conn.close()
@@ -541,16 +572,81 @@ def get_last_registration_number(school):
 
 def get_next_registration_number(school):
     last_registration_number = get_last_registration_number(school)
+    schoolinit = get_school_initials(school)
+
 
     if last_registration_number:
-        match = re.search(r'(\d+)', last_registration_number)
+        match = re.search(r'(\d+/\d+)', last_registration_number)
         if match:
-            numeric_part = int(match.group(1))
+            numeric_part = int(match.group(1).split('/')[0])
             new_numeric_part = numeric_part + 1
-            new_registration_number = re.sub(r'\d+', str(new_numeric_part), last_registration_number)
+            new_registration_number = re.sub(r'\d+/\d+', f'{new_numeric_part:04d}/{school[-4:]}', last_registration_number)
             return new_registration_number
 
-    return f"{school}-001/2023"
+    return f"{schoolinit}000-001/2023"
+
+@app.route('/get_registration_number')
+def get_registration_number():
+    # Assuming you have a function to get the selected school from the form
+    selected_school = request.args.get('school')
+
+    # Get the next registration number based on the last registration number of the selected school
+    next_registration_number = get_next_registration_number(selected_school)
+
+    return jsonify({'registration_number': next_registration_number})
+
+# Replace this with the actual logic to get the selected school from the form
+def get_selected_school():
+    # Implement the logic to extract the selected school from the form
+    # For example, if the school is selected from a dropdown with id "school"
+    return request.args.get('school')
+# @app.route('/get_registration_number')
+# def get_registration_number():
+#     id_no = request.args.get('idNo')
+
+#     # Assuming you have a function to get the selected school from the form
+#     selected_school = get_selected_school()
+
+#     # Get the next registration number based on the last registration number of the selected school
+#     next_registration_number = get_next_registration_number(selected_school)
+
+#     return jsonify({'registration_number': next_registration_number})
+
+# # Replace this with the actual logic to get the selected school from the form
+# def get_selected_school():
+#     # Implement the logic to extract the selected school from the form
+#     # For example, if the school is selected from a dropdown with id "school"
+#     return request.args.get('school')
+
+# Example usage:
+school = "SCT234"
+next_registration_number = get_next_registration_number(school)
+print(next_registration_number)
+# def get_last_registration_number(school):
+#     conn = get_db_connection()
+#     cursor = conn.cursor()
+
+#     # Assuming you have a table named 'registrations' with a column 'registration_number'
+#     query = 'SELECT registration_number FROM registrations WHERE school = ? ORDER BY registration_number DESC LIMIT 1'
+#     result = cursor.execute(query, (school,)).fetchone()
+
+#     conn.close()
+
+#     # Return the last registration number or None if not found
+#     return result[0] if result else None
+
+# def get_next_registration_number(school):
+#     last_registration_number = get_last_registration_number(school)
+
+#     if last_registration_number:
+#         match = re.search(r'(\d+)', last_registration_number)
+#         if match:
+#             numeric_part = int(match.group(1))
+#             new_numeric_part = numeric_part + 1
+#             new_registration_number = re.sub(r'\d+', str(new_numeric_part), last_registration_number)
+#             return new_registration_number
+
+#     return f"{school}-001/2023"
 
 
 
