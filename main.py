@@ -554,7 +554,7 @@ def get_school_initials(school):
     print("Result:", result)
 
     # Check if result is not None before accessing its elements
-    return result[0] if result is not None else None
+    return result if result is not None else None
 
 
 def get_last_registration_number(school):
@@ -579,8 +579,9 @@ def get_next_registration_number(school):
         match = re.search(r'(\d+/\d+)', last_registration_number)
         if match:
             numeric_part = int(match.group(1).split('/')[0])
+            yr = last_registration_number[-4:]
             new_numeric_part = numeric_part + 1
-            new_registration_number = re.sub(r'\d+/\d+', f'{new_numeric_part:04d}/{school[-4:]}', last_registration_number)
+            new_registration_number = re.sub(r'\d+/\d+', f'{new_numeric_part:04d}/{yr}', last_registration_number)
             return new_registration_number
 
     return f"{schoolinit}000-001/2023"
