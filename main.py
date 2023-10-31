@@ -43,7 +43,7 @@ def sendMail():
     return "Sent"
 
 # The user registration
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/Register Student', methods=['GET', 'POST'])
 def register():
     campuses = getCampuses()
     colleges = getColleges()
@@ -108,7 +108,7 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
     # return True
 
 #The login Page handler
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/Student Login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         useremail = request.form['useremail']
@@ -147,7 +147,7 @@ def login():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route("/admin")
+@app.route("/Register Admin")
 def create_admin():
     return render_template('create_admin_account.html')
 
@@ -171,46 +171,6 @@ def get_idNos():
     id = [idNo['idNo'] for idNo in idNos]
     print(id)
     return id
-
-
-#The login Page handler
-# @app.route('/', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'POST':
-#         useremail = request.form['useremail']
-#         password = request.form['password']
-#         user = get_user(useremail)
-
-#         # Check if user exists
-#         if user is None:
-#             return render_template('login.html', error='User does not exist.')
-#         # Check if useremail and password are provided
-#         if not useremail or not password:
-#             return render_template('login.html', error='Please provide both email and password.')
-
-
-#         # Check email format
-#         if not is_valid_email(useremail):
-#             return render_template('login.html', error='Invalid email format.')
-
-#         # Check password length
-#         if not is_valid_password(password):
-#             return render_template('login.html', error='Password must be at least 8 characters long.')
-
-        
-
-#         # Check password
-#         if not check_password(password, user['password']):
-#             return render_template('login.html', error='Incorrect email or password.')
-
-#         # Set user email in session
-#         session['useremail'] = useremail
-
-#         return redirect(url_for('home'))
-
-#     return render_template('login.html')
-
-
 
 
 #The password hashing function
@@ -243,7 +203,7 @@ def index(electiondata):
         return render_template('index.html', electiondata="No Data Found")
 
 #The landing Page Handler
-@app.route('/home')
+@app.route('/HomePage')
 def home():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT DISTINCT name, id,email,campus,school,regNo FROM candidates')
@@ -479,6 +439,12 @@ def getcandidatefromvoters(regno):
     conn.close()
     return candidate
 
+def getcandidate(idNo):
+    conn = get_db_connection()
+    candidate = conn.execute('SELECT * FROM voters WHERE idNo = ?', (idNo,)).fetchone()
+    conn.close()
+    return candidate
+
 def getvoter(regno):
     conn = get_db_connection()
     voter = conn.execute('SELECT * FROM voters WHERE regNo = ?', (regno,)).fetchone()
@@ -544,8 +510,8 @@ def get_courses():
 
 @app.route('/get_candidate_data', methods=['GET'])
 def get_candidate_data():
-    reg_no = request.args.get('regNo')
-    candidate_data = getcandidatefromvoters(reg_no)
+    id_no = request.args.get('idNo')
+    candidate_data = getcandidate(id_no)
 
     # Convert Row object to dictionary
     candidate_dict = dict(candidate_data)
