@@ -10,6 +10,22 @@
 </head>
 
 <body>
+    <!--
+        Error messages will be displayed here
+    -->
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+    <!--
+        Success messages will be displayed here
+    -->
+    {% if msg %}
+    <div class="alert alert-success" role="alert">
+        {{ msg }}
+    </div>
+    {% endif %}
     <h4>CREATE STUDENT ACCOUNT</h4>
     <section class="container form-fields">
         <form method="POST">
