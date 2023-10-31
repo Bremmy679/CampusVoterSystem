@@ -8,6 +8,7 @@ from cryptography.fernet import Fernet
 from cryptography.fernet import InvalidToken
 import logging
 
+
 import base64
 from flask_mail import Mail, Message
 import binascii
@@ -42,7 +43,7 @@ def sendMail():
     return "Sent"
 
 # The user registration
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/Register Student', methods=['GET', 'POST'])
 def register():
     campuses = getCampuses()
     colleges = getColleges()
@@ -66,26 +67,48 @@ def register():
             error = 'Password must be at least 8 characters long.'
         
         user = get_user(useremail)
+        passwords = get_passwords()
+        idNos = get_idNos()
+        
         if user is not None:
             error = 'User already exists.'
         else:
-            registeruser(useremail, password, userName, userRegNo, college, course, school, campus, academicyear,
-                             userIdNo)
-            msg = "Record successfully added"
-            return redirect(url_for('login'))
+            for passwd in passwords:
+                if check_password_hash(password,passwd):
+                    error = 'Password already exists. Try a different Password.'
+                else:
+                    continue
+            if userIdNo in idNos:
+                error = 'The ID already exists in the database!!!'
+            else:
+                registeruser(useremail, password, userName, userRegNo, college, course, school, campus, academicyear,
+                                userIdNo)
+                msg = "Record successfully added"
+                return redirect(url_for('login'))
 
     return render_template('registration_page.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
 
 #Register user function
 def registeruser(email, password,name,regNo,college,course,school,campus,academicyear,userIdNo):
     conn = get_db_connection()
-    conn.execute('INSERT INTO voters (email, password,name,regNo,college,course,school,campus,academicyear,idNo) VALUES (?,?,?,?,?,?,?,?,?,?)', (email, password,name,regNo,college,course,school,campus,academicyear,userIdNo))
-    conn.commit()
-    conn.close()
-    return True
+    try:
+        conn.execute('INSERT INTO voters (email, password, name, regNo, college, course, school, campus, academicyear, idNo) VALUES (?,?,?,?,?,?,?,?,?,?)', (email, hash_password(password), name, regNo, college, course, school, campus, academicyear, userIdNo))
+        conn.commit()
+        return True
+    except sqlite3.IntegrityError:
+        # Handle the case where the idNo already exists
+        print(f"User with ID {userIdNo} already exists.")
+        error = f"User with ID {userIdNo} already exists."
+        return False
+    finally:
+        conn.close()
+    # conn.execute('INSERT INTO voters (email, password,name,regNo,college,course,school,campus,academicyear,idNo) VALUES (?,?,?,?,?,?,?,?,?,?)', (email, password,name,regNo,college,course,school,campus,academicyear,userIdNo))
+    # conn.commit()
+    # conn.close()
+    # return True
 
 #The login Page handler
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/Student Login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         useremail = request.form['useremail']
@@ -104,7 +127,6 @@ def login():
             return render_template('login.html', error='Password must be at least 8 characters long.')
 
         user = get_user(useremail)
-        passwords  = get_passwords()
 
         # Check if user exists
         if user is None:
@@ -125,7 +147,7 @@ def login():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route("/admin")
+@app.route("/Register Admin")
 def create_admin():
     return render_template('create_admin_account.html')
 
@@ -137,52 +159,18 @@ def get_user(useremail):
     return dict(user) if user else None
 def get_passwords():
     conn = get_db_connection()
-    passw = conn.execute('SELECT password FROM voters').fetchall()
-    decrypted_passw = [passwd['password'] for passwd in passw]
-        # decrypted_passw = [decrypt_data(passwd['password']) for passwd in passw]
-
+    encrypted_passwords = conn.execute('SELECT password FROM voters').fetchall()
+    
     conn.close()
-    return decrypted_passw
-        # decrypted_password = [decrypt_data(password['password']) for password in passw]
+    return encrypted_passwords
 
-#The login Page handler
-# @app.route('/', methods=['GET', 'POST'])
-# def login():
-#     if request.method == 'POST':
-#         useremail = request.form['useremail']
-#         password = request.form['password']
-#         user = get_user(useremail)
-
-#         # Check if user exists
-#         if user is None:
-#             return render_template('login.html', error='User does not exist.')
-#         # Check if useremail and password are provided
-#         if not useremail or not password:
-#             return render_template('login.html', error='Please provide both email and password.')
-
-
-#         # Check email format
-#         if not is_valid_email(useremail):
-#             return render_template('login.html', error='Invalid email format.')
-
-#         # Check password length
-#         if not is_valid_password(password):
-#             return render_template('login.html', error='Password must be at least 8 characters long.')
-
-        
-
-#         # Check password
-#         if not check_password(password, user['password']):
-#             return render_template('login.html', error='Incorrect email or password.')
-
-#         # Set user email in session
-#         session['useremail'] = useremail
-
-#         return redirect(url_for('home'))
-
-#     return render_template('login.html')
-
-
+def get_idNos():
+    conn = get_db_connection()
+    idNos = conn.execute('SELECT idNo FROM voters').fetchall()
+    conn.close()
+    id = [idNo['idNo'] for idNo in idNos]
+    print(id)
+    return id
 
 
 #The password hashing function
@@ -215,7 +203,7 @@ def index(electiondata):
         return render_template('index.html', electiondata="No Data Found")
 
 #The landing Page Handler
-@app.route('/home')
+@app.route('/HomePage')
 def home():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT DISTINCT name, id,email,campus,school,regNo FROM candidates')
@@ -451,6 +439,12 @@ def getcandidatefromvoters(regno):
     conn.close()
     return candidate
 
+def getcandidate(idNo):
+    conn = get_db_connection()
+    candidate = conn.execute('SELECT * FROM voters WHERE idNo = ?', (idNo,)).fetchone()
+    conn.close()
+    return candidate
+
 def getvoter(regno):
     conn = get_db_connection()
     voter = conn.execute('SELECT * FROM voters WHERE regNo = ?', (regno,)).fetchone()
@@ -516,8 +510,8 @@ def get_courses():
 
 @app.route('/get_candidate_data', methods=['GET'])
 def get_candidate_data():
-    reg_no = request.args.get('regNo')
-    candidate_data = getcandidatefromvoters(reg_no)
+    id_no = request.args.get('idNo')
+    candidate_data = getcandidate(id_no)
 
     # Convert Row object to dictionary
     candidate_dict = dict(candidate_data)
@@ -550,11 +544,13 @@ def get_school_initials(school):
     result = cursor.fetchone()
     conn.close()
 
-    # Print the result to debug
-    print("Result:", result)
+   # Extract the value from the row
+    initials = result['initials'] if result else None
 
-    # Check if result is not None before accessing its elements
-    return result[0] if result is not None else None
+    # Print the result to debug
+    print("Initials:", initials)
+
+    return initials
 
 
 def get_last_registration_number(school):
@@ -566,6 +562,7 @@ def get_last_registration_number(school):
     result = cursor.execute(query, (school,)).fetchone()
 
     conn.close()
+    
 
     # Return the last registration number or None if not found
     return result[0] if result else None
@@ -579,8 +576,9 @@ def get_next_registration_number(school):
         match = re.search(r'(\d+/\d+)', last_registration_number)
         if match:
             numeric_part = int(match.group(1).split('/')[0])
+            yr = last_registration_number[-4:]
             new_numeric_part = numeric_part + 1
-            new_registration_number = re.sub(r'\d+/\d+', f'{new_numeric_part:04d}/{school[-4:]}', last_registration_number)
+            new_registration_number = re.sub(r'\d+/\d+', f'{new_numeric_part:04d}/{yr}', last_registration_number)
             return new_registration_number
 
     return f"{schoolinit}000-001/2023"
@@ -595,58 +593,9 @@ def get_registration_number():
 
     return jsonify({'registration_number': next_registration_number})
 
-# Replace this with the actual logic to get the selected school from the form
 def get_selected_school():
-    # Implement the logic to extract the selected school from the form
-    # For example, if the school is selected from a dropdown with id "school"
     return request.args.get('school')
-# @app.route('/get_registration_number')
-# def get_registration_number():
-#     id_no = request.args.get('idNo')
 
-#     # Assuming you have a function to get the selected school from the form
-#     selected_school = get_selected_school()
-
-#     # Get the next registration number based on the last registration number of the selected school
-#     next_registration_number = get_next_registration_number(selected_school)
-
-#     return jsonify({'registration_number': next_registration_number})
-
-# # Replace this with the actual logic to get the selected school from the form
-# def get_selected_school():
-#     # Implement the logic to extract the selected school from the form
-#     # For example, if the school is selected from a dropdown with id "school"
-#     return request.args.get('school')
-
-# Example usage:
-school = "SCT234"
-next_registration_number = get_next_registration_number(school)
-print(next_registration_number)
-# def get_last_registration_number(school):
-#     conn = get_db_connection()
-#     cursor = conn.cursor()
-
-#     # Assuming you have a table named 'registrations' with a column 'registration_number'
-#     query = 'SELECT registration_number FROM registrations WHERE school = ? ORDER BY registration_number DESC LIMIT 1'
-#     result = cursor.execute(query, (school,)).fetchone()
-
-#     conn.close()
-
-#     # Return the last registration number or None if not found
-#     return result[0] if result else None
-
-# def get_next_registration_number(school):
-#     last_registration_number = get_last_registration_number(school)
-
-#     if last_registration_number:
-#         match = re.search(r'(\d+)', last_registration_number)
-#         if match:
-#             numeric_part = int(match.group(1))
-#             new_numeric_part = numeric_part + 1
-#             new_registration_number = re.sub(r'\d+', str(new_numeric_part), last_registration_number)
-#             return new_registration_number
-
-#     return f"{school}-001/2023"
 
 
 

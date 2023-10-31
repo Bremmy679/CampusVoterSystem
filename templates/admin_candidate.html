@@ -14,18 +14,19 @@
         <div class="right">
             <form method="post">
                 <div class="top">
+                    <div class="inputs id-num">
+                        <label for="id-no">ID No:</label>
+                        <input type="text" name="id-no" id="id_no" onblur="fillForm()">
+                    </div>
                     <div class="inputs registration">
                         <label for="Registration-No">Reg. No:</label>
-                        <input type="text" id="reg-no" value="" name="regNo" onblur="fillForm()">
+                        <input type="text" id="reg_no" value="" name="regNo" disabled="true">
                     </div>
                     <div class="inputs first_name">
                         <label for="name">Name:</label>
                         <input type="text" value="" name="name" disabled="true">
                     </div>
-                    <div class="inputs id-num">
-                        <label for="id-no">ID No:</label>
-                        <input type="number" name="id-no" id="id_no" disabled="true">
-                    </div>
+
                     <div class="inputs email">
                         <label for="email">Email:</label>
                         <input type="email" id="email" name="email" value="" disabled="true">
@@ -71,18 +72,23 @@
     </div>
     <script>
         function fillForm() {
-            var regNoInput = document.getElementById('reg-no');
-            var regNo = regNoInput.value.trim();
+            var idNoInput = document.getElementById('id_no');
+            var idNo = idNoInput.value.trim();
 
-            if (regNo !== '') {
+            if (idNo !== '') {
                 // Fetch data using AJAX
-                fetch('/get_candidate_data?regNo=' + regNo)
+                fetch('/get_candidate_data?idNo=' + idNo)
                     .then(response => response.json())
                     .then(data => {
                         // Populate the form fields with the fetched data
+                        console.log(data)
+
                         document.querySelector('.inputs.first_name input').value = data.name;
-                        document.querySelector('.inputs.id-num input').value = data.idNo;
+                        console.log(data.name)
+                        document.querySelector('.inputs.registration input').value = data.regNo;
+                        console.log(data.regNo)
                         document.querySelector('.inputs.email input').value = data.email;
+
                         document.querySelector('.inputs.campus input').value = data.campus;
                         document.querySelector('.inputs.colleges input').value = data.college;
                         document.querySelector('.inputs.schools input').value = data.school;
