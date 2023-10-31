@@ -1,6 +1,6 @@
-{% extends base.html}
+{% extends "base.html" %}
 <h3>{% block title%} Admin Candidate Page {% endblock%} {% block header%}
-    <link rel="stylesheet" href="admin_candidate.css">{%endblock%} {% block content%}
+    <link rel="stylesheet" href="../static/styles/admin_candidate.css">{%endblock%} {% block content%}
 
     <div class="container">
         <div class="left">
@@ -12,61 +12,56 @@
             </div>
         </div>
         <div class="right">
-            <form action="#">
-                name = user.name regNo = user.regNo email = user.email college = user.college school= user.school course= user.course campus= user.campus academicYear= user.academicYear userIdNo= user.userIdNo
+            <form method="post">
                 <div class="top">
+                    <div class="inputs id-num">
+                        <label for="id-no">ID No:</label>
+                        <input type="text" name="id-no" id="id_no" onblur="fillForm()">
+                    </div>
                     <div class="inputs registration">
-                        <label for="Registration-No">Registration No:</label>
-                        <input type="text" id="reg-no" value="" disabled="false">
+                        <label for="Registration-No">Reg. No:</label>
+                        <input type="text" id="reg_no" value="" name="regNo" disabled="true">
                     </div>
                     <div class="inputs first_name">
                         <label for="name">Name:</label>
-                        <input type="text" value="" disabled="true">
+                        <input type="text" value="" name="name" disabled="true">
                     </div>
-                    <div class="inputs id-num">
-                        <label for="id-no">ID No:</label>
-                        <input type="number" name="id-no" id="id_no">
-                    </div>
+
                     <div class="inputs email">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" value="" disabled="true">
+                        <input type="email" id="email" name="email" value="" disabled="true">
                     </div>
                     <div class="inputs campus">
                         <label for="campus">Campus:</label>
-                        <select name="campus" id="campus">
-                        <option value="">-- Select Campus --</option>
-                        <option value="Main">Main</option>
-                        </select>
+                        <input type="text" id="campus" name="campus " disabled="true">
                     </div>
 
                     <div class="inputs colleges">
                         <label for="college">College:</label>
-                        <input type="text" id="college">
+                        <input type="text" id="college" name="college" disabled="true">
                     </div>
                     <div class="inputs schools">
                         <label for="school">School:</label>
-                        <input type="text" id="school">
+                        <input type="text" id="school" name="school" disabled="true">
                     </div>
                     <div class="inputs courses">
                         <label for="course">Course:</label>
-                        <input type="text" id="course">
-                    </div>
-                    <div class="inputs year">
-                        <label for="year-of-study">Year of Study:</label>
-                        <input type="number">
+                        <input type="text" id="course" name="course" disabled="true">
                     </div>
                     <div class="inputs seats">
                         <label for="seat">Seat:</label>
-                        <select name="seat" id="seat">
-            <option value="">-- Select Seat --</option>
-            <option value="Chairperson">Chairperson</option>
-            <option value="Vice-Chairperson">Vice Chairperson</option>
-            <option value="Treasurer">Treasurer</option>
-            <option value="Secretary-General">Secretary General</option>
-            <option value="Halls">Halls of Residence Representative</option>
-            <option value="" id="school-rep"></option>
-          </select>
+                        <select name="position" id="seat">
+                            <option value="">-- Select Seat --</option>
+                            {% for seat in posts %}
+                            <option value="{{seat.name}}" name="position">{{seat.name}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+                    <div class="inputs year">
+                        <label for="year-of-study">Year of Study:</label>
+                        <input type="number" name="academicYear" disabled="true">
+                    </div>
+
                 </div>
                 <div class="bottom">
                     <button>Back to Dashboard</button>
@@ -75,4 +70,33 @@
             </form>
         </div>
     </div>
-    {%endblock%} {%endblock%}
+    <script>
+        function fillForm() {
+            var idNoInput = document.getElementById('id_no');
+            var idNo = idNoInput.value.trim();
+
+            if (idNo !== '') {
+                // Fetch data using AJAX
+                fetch('/get_candidate_data?idNo=' + idNo)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Populate the form fields with the fetched data
+                        console.log(data)
+
+                        document.querySelector('.inputs.first_name input').value = data.name;
+                        console.log(data.name)
+                        document.querySelector('.inputs.registration input').value = data.regNo;
+                        console.log(data.regNo)
+                        document.querySelector('.inputs.email input').value = data.email;
+
+                        document.querySelector('.inputs.campus input').value = data.campus;
+                        document.querySelector('.inputs.colleges input').value = data.college;
+                        document.querySelector('.inputs.schools input').value = data.school;
+                        document.querySelector('.inputs.courses input').value = data.course;
+                        document.querySelector('.inputs.year input').value = data.academicYear; // Assuming 'yearOfStudy' is available in data
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            }
+        }
+    </script>
+    {%endblock%}
