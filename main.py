@@ -250,10 +250,13 @@ def addcandidate():
     if request.method == 'POST':
         conn = get_db_connection()
         try:
-            reg_no = request.form['regNo']
-            position = request.form['position']            
             
-            user = getvoter(reg_no)
+            position = request.form['position']
+            regno = request.form['registrationNo']
+            print(f"Received regNo: {regno}")
+            print(f"Received position: {position}")
+
+            user = getvoter(regno)
             
             if user:
                 positionId = getpostid(position)
@@ -282,7 +285,7 @@ def addcandidate():
 
                 
                 cur = conn.cursor()
-                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost_id,idNo,email) VALUES (?, ?, ?, ?, ?,?,?)", (name, reg_no, college, academicyear, positionId,userIdNo,email))
+                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost,idNo,email,school,course) VALUES (?, ?, ?, ?, ?,?,?,?,?)", (name, regno, college, academicyear, positionId,userIdNo,email,school,course))
                 conn.commit()
                 msg = "Record successfully added"
                 flash(message=msg, category='success')
@@ -300,7 +303,7 @@ def addcandidate():
         finally:
             conn.close()
 
-    return render_template('admin_candidate.html', posts=posts)
+    return render_template('admin_candidate.html', posts=posts, msg=msg, error=error)
 
 
 #Edit a candidate data
@@ -390,13 +393,13 @@ def deletecandidate(regno):
 
     return render_template('deletecandidate.html')
 
-#The electionvotes
-def electionvotes():
-    cursor = get_db_connection().cursor()
-    cursor.execute('SELECT * FROM candidates')
-    rows = cursor.fetchall()
+# #The electionvotes
+# def electionvotes():
+#     cursor = get_db_connection().cursor()
+#     cursor.execute('SELECT * FROM candidates')
+#     rows = cursor.fetchall()
    
-    return  rows
+#     return  rows
 
 @app.route('/')
 def voting():
@@ -420,6 +423,22 @@ def vote_counts():
     cursor.execute('SELECT name, votes FROM candidates')
     rows = cursor.fetchall()
     return jsonify(rows)
+
+def electionvotes():
+    cursor = get_db_connection().cursor()
+    cursor.execute('SELECT * FROM candidates ORDER BY electedPost')
+    rows = cursor.fetchall()
+
+    # Group candidates by position
+    grouped_candidates = {}
+    for row in rows:
+        position = row['electedPost']
+        candidate = dict(row)
+        if position not in grouped_candidates:
+            grouped_candidates[position] = []
+        grouped_candidates[position].append(candidate)
+
+    return grouped_candidates
 
 
 
