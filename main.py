@@ -117,31 +117,38 @@ def login():
         # Check if both email and password are provided
         if not useremail or not password:
             return render_template('login.html', error='Please provide both email and password.')
+            flash('Please provide both email and password.', category='error')
 
         # Check email format
         if not is_valid_email(useremail):
             return render_template('login.html', error='Invalid email format.')
+            flash('Invalid email format.', category='error')
 
         # Check password length
         if not is_valid_password(password):
             return render_template('login.html', error='Password must be at least 8 characters long.')
+            flash('Password must be at least 8 characters long.', category='error')
 
         user = get_user(useremail)
 
         # Check if user exists
         if user is None:
             return render_template('login.html', error='User does not exist.')
+            flash('User does not exist.', category='error')
 
         # Check password
         if not check_password(password, user['password']):
             return render_template('login.html', error='Incorrect email or password.')
+            flash('Incorrect email or password.', category='error')
 
         # Set user email in session
         session['useremail'] = useremail
 
         return redirect(url_for('home'))
+        flash(f"{session['useremail']} successfully logged in.")
 
     return render_template('login.html')
+
 #dashboard page
 @app.route("/")
 def dashboard():
@@ -285,7 +292,7 @@ def addcandidate():
 
                 
                 cur = conn.cursor()
-                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost,idNo,email,school,course) VALUES (?, ?, ?, ?, ?,?,?,?,?)", (name, regno, college, academicyear, positionId,userIdNo,email,school,course))
+                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost,idNo,email,school,course,campus) VALUES (?,?, ?, ?, ?, ?,?,?,?,?)", (name, regno, college, academicyear, positionId,userIdNo,email,school,course,campus))
                 conn.commit()
                 msg = "Record successfully added"
                 flash(message=msg, category='success')
