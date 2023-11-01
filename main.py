@@ -492,7 +492,16 @@ def getcandidates():
     candidates = conn.execute('SELECT * FROM candidates').fetchall()
     conn.close()
     # Convert sqlite3.Row objects to dictionaries
+    #get the candidates position name
+    
     candidates_list = [dict(candidate) for candidate in candidates]
+    positions = get_posts()
+    for candidate in candidates_list:
+        position_id = candidate['electedPost']
+        position_name = next((p['name'] for p in positions if p['id'] == position_id), None)
+        candidate['electedPost'] = position_name
+
+
     print(candidates_list)
     return candidates_list
 def get_posts():
@@ -500,6 +509,12 @@ def get_posts():
     posts = conn.execute('SELECT * FROM posts').fetchall()
     conn.close()
     return posts
+
+def getposition(id):
+    conn = get_db_connection()
+    position = conn.execute('SELECT * FROM posts WHERE id = ?', (id,)).fetchone()
+    conn.close()
+    return position
 
 def getcandidatefromvoters(regno):
     conn = get_db_connection()
@@ -522,6 +537,8 @@ def getvoter(regno):
 def getpostid(name):
     conn = get_db_connection()
     postid = conn.execute('SELECT id FROM posts WHERE name = ?', (name,)).fetchone()
+    conn.close()
+    return postid['id'] if postid else None
 
 def getCampuses():
     conn = get_db_connection()
