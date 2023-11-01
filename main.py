@@ -408,7 +408,7 @@ def voting():
 @app.route('/results')
 def results():
     electedcandidates = getcandidates()
-    if len(electedcandidates) > 1:
+    if electedcandidates:
         return render_template('results.html', electedcandidates=electedcandidates)
 
     else:
@@ -491,8 +491,10 @@ def getcandidates():
     conn = get_db_connection()
     candidates = conn.execute('SELECT * FROM candidates').fetchall()
     conn.close()
-    return jsonify(candidates)
-
+    # Convert sqlite3.Row objects to dictionaries
+    candidates_list = [dict(candidate) for candidate in candidates]
+    print(candidates_list)
+    return candidates_list
 def get_posts():
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM posts').fetchall()

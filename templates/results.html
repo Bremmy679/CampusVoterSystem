@@ -11,15 +11,37 @@
             <a href="#">Back</a>
         </nav>
         {% endblock%} {% if electedcandidates %} {% for candidate in electedcandidates %}
+        <!--
+            {'id': 1, 'name': 'user3', 'regNo': 'SCT000-0002/2023', 'email': 'user3@gmail.com', 'college': 'COPAS', 'school': 'SCHOOL OF COMPUTING AND INFORMATION TECHNOLOGY', 'course': 'Bachelor of Science in Computer Technology', 'campus': None, 'academicYear': 4, 'electedPost': None, 'votes': None, 'idNo': 9090}
+            add all the fields below.
+        -->
         <div class="container">
             <div class="card">
-                <h3>{{candidate.position}}</h3>
+                <h3>{{candidate.electedPost}}</h3>
             </div>
             <div class="card">
                 <h3>{{candidate.name}}</h3>
             </div>
             <div class="card">
+                <h3>{{candidate.regNo}}</h3>
+            </div>
+            <div class="card">
                 <h3>{{candidate.votes}}</h3>
+            </div>
+            <div class="card">
+                <h3>{{candidate.college}}</h3>
+            </div>
+            <div class="card">
+                <h3>{{candidate.school}}</h3>
+            </div>
+            <div class="card">
+                <h3>{{candidate.course}}</h3>
+            </div>
+            <div class="card">
+                <h3>{{candidate.campus}}</h3>
+            </div>
+            <div class="card">
+                <h3>{{candidate.academicYear}}</h3>
             </div>
         </div>
         {% endfor %} {% endif %}
