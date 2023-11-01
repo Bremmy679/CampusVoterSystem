@@ -250,10 +250,13 @@ def addcandidate():
     if request.method == 'POST':
         conn = get_db_connection()
         try:
-            reg_no = request.form['regNo']
-            position = request.form['position']            
             
-            user = getvoter(reg_no)
+            position = request.form['position']
+            regno = request.form['registrationNo']
+            print(f"Received regNo: {regno}")
+            print(f"Received position: {position}")
+
+            user = getvoter(regno)
             
             if user:
                 positionId = getpostid(position)
@@ -282,7 +285,7 @@ def addcandidate():
 
                 
                 cur = conn.cursor()
-                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost_id,idNo,email) VALUES (?, ?, ?, ?, ?,?,?)", (name, reg_no, college, academicyear, positionId,userIdNo,email))
+                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost,idNo,email,school,course) VALUES (?, ?, ?, ?, ?,?,?,?,?)", (name, regno, college, academicyear, positionId,userIdNo,email,school,course))
                 conn.commit()
                 msg = "Record successfully added"
                 flash(message=msg, category='success')
@@ -300,7 +303,7 @@ def addcandidate():
         finally:
             conn.close()
 
-    return render_template('admin_candidate.html', posts=posts)
+    return render_template('admin_candidate.html', posts=posts, msg=msg, error=error)
 
 
 #Edit a candidate data
@@ -390,27 +393,43 @@ def deletecandidate(regno):
 
     return render_template('deletecandidate.html')
 
-#The electionvotes
-def electionvotes():
-    cursor = get_db_connection().cursor()
-    cursor.execute('SELECT * FROM candidates')
-    rows = cursor.fetchall()
+# #The electionvotes
+# def electionvotes():
+#     cursor = get_db_connection().cursor()
+#     cursor.execute('SELECT * FROM candidates')
+#     rows = cursor.fetchall()
    
-    return  rows
+#     return  rows
 
 @app.route('/')
 def voting():
     return render_template('voting_page.html')
 
-#The results Page
 @app.route('/results')
 def results():
-    electedcandidates = electionvotes()
-    if len(electedcandidates) > 1:
+    electedcandidates = getcandidates()
+    if electedcandidates:
         return render_template('results.html', electedcandidates=electedcandidates)
 
     else:
         return render_template('results.html', electedcandidates="No Data Found")
+    # electedcandidates = electionvotes()
+
+    # # Check if there are any positions with elected candidates
+    # if electedcandidates:
+    #     return render_template('results.html', electedcandidates=electedcandidates)
+    # else:
+    #     # Handle the case where no data is found differently
+    #     return render_template('results.html', nodata=True)
+# #The results Page
+# @app.route('/results')
+# def results():
+#     electedcandidates = electionvotes()
+#     if len(electedcandidates) > 1:
+#         return render_template('results.html', electedcandidates=electedcandidates)
+
+#     else:
+#         return render_template('results.html', electedcandidates="No Data Found")
      
 
 
@@ -421,17 +440,81 @@ def vote_counts():
     rows = cursor.fetchall()
     return jsonify(rows)
 
+# def electionvotes():
+#     cursor = get_db_connection().cursor()
+#     cursor.execute('SELECT * FROM candidates ORDER BY electedPost')
+#     rows = cursor.fetchall()
 
+#     # Group candidates by position
+#     grouped_candidates = {}
+#     for row in rows:
+#         position = row['electedPost']
+#         candidate = dict(row)
+#         if position not in grouped_candidates:
+#             grouped_candidates[position] = []
+#         grouped_candidates[position].append(candidate)
+
+#     return grouped_candidates
+
+def electionvotes():
+    cursor = get_db_connection().cursor()
+    cursor.execute('SELECT * FROM candidates ORDER BY electedPost')
+    rows = cursor.fetchall()
+
+    grouped_candidates = {}
+    for row in rows:
+        position = row['electedPost']
+        candidate = dict(row)
+        if position not in grouped_candidates:
+            grouped_candidates[position] = []
+        grouped_candidates[position].append(candidate)
+
+    return grouped_candidates if grouped_candidates else {}
+
+    # Group candidates by position
+    # grouped_candidates = {}
+    # for row in rows:
+    #     position = row['electedPost']
+    #     candidate = dict(row)
+    #     if position not in grouped_candidates:
+    #         grouped_candidates[position] = []
+    #     grouped_candidates[position].append(candidate)
+
+    # return grouped_candidates
 
 
 #Getting data from the databases
 
 #Get the candidate data based on regNo
+
+def getcandidates():
+    conn = get_db_connection()
+    candidates = conn.execute('SELECT * FROM candidates').fetchall()
+    conn.close()
+    # Convert sqlite3.Row objects to dictionaries
+    #get the candidates position name
+    
+    candidates_list = [dict(candidate) for candidate in candidates]
+    positions = get_posts()
+    for candidate in candidates_list:
+        position_id = candidate['electedPost']
+        position_name = next((p['name'] for p in positions if p['id'] == position_id), None)
+        candidate['electedPost'] = position_name
+
+
+    print(candidates_list)
+    return candidates_list
 def get_posts():
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM posts').fetchall()
     conn.close()
     return posts
+
+def getposition(id):
+    conn = get_db_connection()
+    position = conn.execute('SELECT * FROM posts WHERE id = ?', (id,)).fetchone()
+    conn.close()
+    return position
 
 def getcandidatefromvoters(regno):
     conn = get_db_connection()
@@ -454,6 +537,8 @@ def getvoter(regno):
 def getpostid(name):
     conn = get_db_connection()
     postid = conn.execute('SELECT id FROM posts WHERE name = ?', (name,)).fetchone()
+    conn.close()
+    return postid['id'] if postid else None
 
 def getCampuses():
     conn = get_db_connection()
