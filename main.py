@@ -405,15 +405,31 @@ def deletecandidate(regno):
 def voting():
     return render_template('voting_page.html')
 
-#The results Page
 @app.route('/results')
 def results():
-    electedcandidates = electionvotes()
+    electedcandidates = getcandidates()
     if len(electedcandidates) > 1:
         return render_template('results.html', electedcandidates=electedcandidates)
 
     else:
         return render_template('results.html', electedcandidates="No Data Found")
+    # electedcandidates = electionvotes()
+
+    # # Check if there are any positions with elected candidates
+    # if electedcandidates:
+    #     return render_template('results.html', electedcandidates=electedcandidates)
+    # else:
+    #     # Handle the case where no data is found differently
+    #     return render_template('results.html', nodata=True)
+# #The results Page
+# @app.route('/results')
+# def results():
+#     electedcandidates = electionvotes()
+#     if len(electedcandidates) > 1:
+#         return render_template('results.html', electedcandidates=electedcandidates)
+
+#     else:
+#         return render_template('results.html', electedcandidates="No Data Found")
      
 
 
@@ -424,12 +440,27 @@ def vote_counts():
     rows = cursor.fetchall()
     return jsonify(rows)
 
+# def electionvotes():
+#     cursor = get_db_connection().cursor()
+#     cursor.execute('SELECT * FROM candidates ORDER BY electedPost')
+#     rows = cursor.fetchall()
+
+#     # Group candidates by position
+#     grouped_candidates = {}
+#     for row in rows:
+#         position = row['electedPost']
+#         candidate = dict(row)
+#         if position not in grouped_candidates:
+#             grouped_candidates[position] = []
+#         grouped_candidates[position].append(candidate)
+
+#     return grouped_candidates
+
 def electionvotes():
     cursor = get_db_connection().cursor()
     cursor.execute('SELECT * FROM candidates ORDER BY electedPost')
     rows = cursor.fetchall()
 
-    # Group candidates by position
     grouped_candidates = {}
     for row in rows:
         position = row['electedPost']
@@ -438,14 +469,30 @@ def electionvotes():
             grouped_candidates[position] = []
         grouped_candidates[position].append(candidate)
 
-    return grouped_candidates
+    return grouped_candidates if grouped_candidates else {}
 
+    # Group candidates by position
+    # grouped_candidates = {}
+    # for row in rows:
+    #     position = row['electedPost']
+    #     candidate = dict(row)
+    #     if position not in grouped_candidates:
+    #         grouped_candidates[position] = []
+    #     grouped_candidates[position].append(candidate)
 
+    # return grouped_candidates
 
 
 #Getting data from the databases
 
 #Get the candidate data based on regNo
+
+def getcandidates():
+    conn = get_db_connection()
+    candidates = conn.execute('SELECT * FROM candidates').fetchall()
+    conn.close()
+    return jsonify(candidates)
+
 def get_posts():
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM posts').fetchall()

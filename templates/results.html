@@ -10,14 +10,19 @@
             <h1 class="nav-bar">Election Results</h1>
             <a href="#">Back</a>
         </nav>
-        {% endblock%} {% for position, candidates in electedcandidates %}
-        <h2>{{ position }}</h2>
-        <ul>
-            {% for candidate in candidates %}
-            <li>{{ candidate.name }} - {{ candidate.votes }} votes</li>
-            {% endfor %}
-        </ul>
-        {% endfor %}
+        {% endblock%} {% if electedcandidates %} {% for candidate in electedcandidates %}
+        <div class="container">
+            <div class="card">
+                <h3>{{candidate.position}}</h3>
+            </div>
+            <div class="card">
+                <h3>{{candidate.name}}</h3>
+            </div>
+            <div class="card">
+                <h3>{{candidate.votes}}</h3>
+            </div>
+        </div>
+        {% endfor %} {% endif %}
         <div class="container">
             <div class="card">
                 <h3>Chairperson</h3>
