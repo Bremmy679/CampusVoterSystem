@@ -509,7 +509,7 @@ def getcandidates():
         candidate['electedPost'] = position_name
 
 
-    print(candidates_list)
+    # print(candidates_list)
     return candidates_list
 def get_posts():
     conn = get_db_connection()
