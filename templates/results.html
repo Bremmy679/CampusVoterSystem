@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-<h3>{% block title%} Results Page {% endblock%} {% block content %}
+<h3>{% block title%} Results Page {% endblock%}
     <section>
         {% block header%}
         <nav>
@@ -11,42 +11,44 @@
             <h1 class="nav-bar">Election Results</h1>
             <a href="#">Back</a>
         </nav>
-        {% endblock%} {% if electedcandidates %} {% for candidate in electedcandidates %}
+        {% endblock%} {% block content %}{% if electedcandidates %} {% for candidate in electedcandidates %}
         <!--
             {'id': 1, 'name': 'user3', 'regNo': 'SCT000-0002/2023', 'email': 'user3@gmail.com', 'college': 'COPAS', 'school': 'SCHOOL OF COMPUTING AND INFORMATION TECHNOLOGY', 'course': 'Bachelor of Science in Computer Technology', 'campus': None, 'academicYear': 4, 'electedPost': None, 'votes': None, 'idNo': 9090}
             add all the fields below.
         -->
         <div class="container">
             <div class="card">
-                <h3>{{candidate.electedPost}}</h3>
-            </div>
-            <div class="card">
-                <h3>{{candidate.name}}</h3>
-            </div>
-            <div class="card">
-                <h3>{{candidate.regNo}}</h3>
-            </div>
-            <div class="card">
-                <h3>{{candidate.votes}}</h3>
-            </div>
-            <div class="card">
-                <h3>{{candidate.college}}</h3>
-            </div>
-            <div class="card">
-                <h3>{{candidate.school}}</h3>
-            </div>
-            <div class="card">
-                <h3>{{candidate.course}}</h3>
-            </div>
-            <div class="card">
-                <h3>{{candidate.campus}}</h3>
-            </div>
-            <div class="card">
-                <h3>{{candidate.academicYear}}</h3>
+                <div class="card-body">
+                    <h3>Position: {{candidate.electedPost}}</h3>
+                </div>
+                <div class="card-title">
+                    <h3>Name: {{candidate.name}}</h3>
+                </div>
+                <div class="card-subtitle">
+                    <h3>Reg No: {{candidate.regNo}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Votes Count: {{candidate.votes}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>College: {{candidate.college}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>School: {{candidate.school}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Course: {{candidate.course}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Campus: {{candidate.campus}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Academic Year: {{candidate.academicYear}}</h3>
+                </div>
             </div>
         </div>
         {% endfor %} {% endif %}
-        <div class="container">
+        <!-- <div class="container">
             <div class="card">
                 <h3>Chairperson</h3>
             </div>
@@ -65,6 +67,6 @@
             <div class="card">
                 <h3>Delegates</h3>
             </div>
-        </div>
+        </div> -->
     </section>
     {%endblock%}
