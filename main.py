@@ -72,18 +72,22 @@ def register():
         
         if user is not None:
             error = 'User already exists.'
+            flash(error,category = "error")
         else:
             for passwd in passwords:
                 if check_password_hash(password,passwd):
                     error = 'Password already exists. Try a different Password.'
+                    flash(error,category="error")
                 else:
                     continue
             if userIdNo in idNos:
-                error = 'The ID already exists in the database!!!'
+                error = 'The ID already exists!!!'
+                flash(error,category="error")
             else:
                 registeruser(useremail, password, userName, userRegNo, college, course, school, campus, academicyear,
                                 userIdNo)
                 msg = "Record successfully added"
+                flash(message=msg, category="success")
                 return redirect(url_for('login'))
 
     return render_template('registration_page.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
@@ -97,7 +101,6 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
         return True
     except sqlite3.IntegrityError:
         # Handle the case where the idNo already exists
-        print(f"User with ID {userIdNo} already exists.")
         error = f"User with ID {userIdNo} already exists."
         return False
     finally:
@@ -108,8 +111,10 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
     # return True
 
 #The login Page handler
-@app.route('/Student Login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
+    error = None
+    msg = None
     if request.method == 'POST':
         useremail = request.form['useremail']
         password = request.form['password']
@@ -117,40 +122,46 @@ def login():
         # Check if both email and password are provided
         if not useremail or not password:
             return render_template('login.html', error='Please provide both email and password.')
-            flash('Please provide both email and password.', category='error')
+            error = 'Please provide both email and password.'
+            flash(error, category="error")
 
         # Check email format
         if not is_valid_email(useremail):
             return render_template('login.html', error='Invalid email format.')
-            flash('Invalid email format.', category='error')
+            error = 'Invalid email format.'
+            flash(error, category="error")
 
         # Check password length
         if not is_valid_password(password):
             return render_template('login.html', error='Password must be at least 8 characters long.')
-            flash('Password must be at least 8 characters long.', category='error')
+            error = 'Password must be at least 8 characters long.'
+            flash(error, category="error")
 
         user = get_user(useremail)
 
         # Check if user exists
         if user is None:
             return render_template('login.html', error='User does not exist.')
-            flash('User does not exist.', category='error')
+            error = 'User does not exist.'
+            flash(error, category="error")
 
         # Check password
         if not check_password(password, user['password']):
             return render_template('login.html', error='Incorrect email or password.')
-            flash('Incorrect email or password.', category='error')
+            error = 'Incorrect email or password.'
+            flash(error, category="error")
 
         # Set user email in session
         session['useremail'] = useremail
 
-        return redirect(url_for('home'))
-        flash(f"{session['useremail']} successfully logged in.")
+        return redirect(url_for('dashboard'))
+        msg = f"{session['useremail']} successfully logged in."
+        flash(msg,category="success")
 
-    return render_template('login.html')
+    return render_template('login.html',error=error,msg=msg)
 
 #dashboard page
-@app.route("/")
+@app.route("/dashboard")
 def dashboard():
     return render_template('dashboard.html')
 
@@ -176,7 +187,6 @@ def get_idNos():
     idNos = conn.execute('SELECT idNo FROM voters').fetchall()
     conn.close()
     id = [idNo['idNo'] for idNo in idNos]
-    print(id)
     return id
 
 
@@ -260,8 +270,6 @@ def addcandidate():
             
             position = request.form['position']
             regno = request.form['registrationNo']
-            print(f"Received regNo: {regno}")
-            print(f"Received position: {position}")
 
             user = getvoter(regno)
             
@@ -408,7 +416,7 @@ def deletecandidate(regno):
    
 #     return  rows
 
-@app.route('/')
+@app.route('/voting')
 def voting():
     return render_template('voting_page.html')
 
@@ -509,7 +517,6 @@ def getcandidates():
         candidate['electedPost'] = position_name
 
 
-    # print(candidates_list)
     return candidates_list
 def get_posts():
     conn = get_db_connection()
@@ -552,12 +559,7 @@ def getCampuses():
     encrypted_campuses = conn.execute('SELECT name FROM campuses').fetchall()
     conn.close()
     return encrypted_campuses
-    # campuses = [campus['name'] for campus in encrypted_campuses]
-    # decrypted_campuses = [decrypt_data(campus['name']) for campus in encrypted_campuses]
-    
-    # print("Encrypted Campuses:", encrypted_campuses)
-    # print("Decrypted Campuses:", decrypted_campuses)
-    
+
 
 def getColleges():
     conn = get_db_connection()
@@ -622,12 +624,11 @@ def decrypt_data(encrypted_data):
         decrypted_data = cipher_suite.decrypt(decoded_data).decode()
         return decrypted_data
     except binascii.Error as e:
-        print(f"Error decoding base64: {e}")
-    except InvalidToken:
-        print("Invalid Fernet token. Data may have been tampered with.")
+        return None
+    except InvalidToken as inv:
+        return inv
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-    return None
+        return e
 
 def get_school_initials(school):
     conn = get_db_connection()
@@ -638,9 +639,6 @@ def get_school_initials(school):
 
    # Extract the value from the row
     initials = result['initials'] if result else None
-
-    # Print the result to debug
-    print("Initials:", initials)
 
     return initials
 
