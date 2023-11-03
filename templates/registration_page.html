@@ -13,17 +13,17 @@
     <!--
         Error messages will be displayed here
     -->
-    {% if error %}
-    <div class="alert alert-danger" role="alert">
-        {{ error }}
+    {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %} {% endfor %} {% endif %} {% endwith %} {% if error %}
+    <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+        <i class="bi-exclamation-octagon-fill"></i>
+        <strong class="mx-2">Error!</strong> {{error}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
-    {% endif %}
-    <!--
-        Success messages will be displayed here
-    -->
-    {% if msg %}
-    <div class="alert alert-success" role="alert">
-        {{ msg }}
+    {% endif %} {% if msg %}
+    <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+        <i class="bi-check-circle-fill"></i>
+        <strong class="mx-2">Success!</strong> {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     {% endif %}
     <h4>CREATE STUDENT ACCOUNT</h4>

@@ -72,18 +72,22 @@ def register():
         
         if user is not None:
             error = 'User already exists.'
+            flash(error,category = "error")
         else:
             for passwd in passwords:
                 if check_password_hash(password,passwd):
                     error = 'Password already exists. Try a different Password.'
+                    flash(error,category="error")
                 else:
                     continue
             if userIdNo in idNos:
-                error = 'The ID already exists in the database!!!'
+                error = 'The ID already exists!!!'
+                flash(error,category="error")
             else:
                 registeruser(useremail, password, userName, userRegNo, college, course, school, campus, academicyear,
                                 userIdNo)
                 msg = "Record successfully added"
+                flash(message=msg, category="success")
                 return redirect(url_for('login'))
 
     return render_template('registration_page.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
@@ -145,9 +149,9 @@ def login():
         session['useremail'] = useremail
 
         return redirect(url_for('home'))
-        flash(f"{session['useremail']} successfully logged in.")
+        flash(f"{session['useremail']} successfully logged in.",category="success")
 
-    return render_template('login.html')
+    return render_template('login.html',error=error,msg=msg)
 
 #dashboard page
 @app.route("/")

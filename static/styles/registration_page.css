@@ -1,51 +1,62 @@
-body{
-    background-color: #F1FFE7;
+body {
+    background-color: #32A287;
 }
-h4{
+
+h4 {
     color: #32A287;
     text-align: center;
     font-size: large;
     font-weight: 600;
     margin-top: 50px;
 }
-.form-fields{
+
+.form-fields {
     justify-content: center;
     margin-top: 40px;
     margin-left: 100px;
 }
-.form-control, .form-select{
+
+.form-control,
+.form-select {
     border-radius: 10px;
     background-color: #F1FFE7;
     box-shadow: none;
     border: 0.5px solid #32A287;
 }
-.form-control:focus, .form-select:focus{
+
+.form-control:focus,
+.form-select:focus {
     background-color: #F1FFE7;
     color: black;
-    box-shadow:none;
-    border: 1px solid #32A287; 
+    box-shadow: none;
+    border: 1px solid #32A287;
 }
-.col-form-label{
+
+.col-form-label {
     color: #32A287;
     font-weight: 600;
     padding-left: 0px;
 }
-.second-column{
+
+.second-column {
     margin-left: 50px;
 }
-.form-select{
+
+.form-select {
     border-radius: 10px;
     background-color: #F1FFE7;
     box-shadow: none;
     border: 0.5px solid #32A287;
 }
-.form-select:focus{
+
+.form-select:focus {
     background-color: #F1FFE7;
     color: black;
-    box-shadow:none;
-    border: 1px solid #32A287; 
+    box-shadow: none;
+    border: 1px solid #32A287;
 }
-.btn-signup{
+
+.btn-signup {
     position: absolute;
     background-color: #32A287;
     color: white;
@@ -54,10 +65,10 @@ h4{
     border-radius: 10px;
     margin-top: 20px;
     font-size: large;
-    border: 1px solid black 
-
+    border: 1px solid black
 }
-.btn-signup:hover{
+
+.btn-signup:hover {
     background-color: #32A287!important;
     color: white !important;
 }
