@@ -1,6 +1,5 @@
-{% extends 'base.html' %}
-<link rel="stylesheet" type="text/css" href="../static/styles/login.css">
-
+{% extends 'base.html' %} {%block header%}
+<link rel="stylesheet" type="text/css" href="../static/styles/login.css"> {%endblock%}
 <h3>{% block title%} Login Page {% endblock%} {% block content%} {% with messages = get_flashed_messages(with_categories = true)%} {% if messages%} {% for category, message in messages%} {% if category == 'error' %}
     <div class="alert alert-danger" alert-dismissible fade show role="alert">
         {{message}}
