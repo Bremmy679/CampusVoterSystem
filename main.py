@@ -294,7 +294,7 @@ def addcandidate():
                 cur = conn.cursor()
                 cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost,idNo,email,school,course,campus) VALUES (?,?, ?, ?, ?, ?,?,?,?,?)", (name, regno, college, academicyear, positionId,userIdNo,email,school,course,campus))
                 conn.commit()
-                msg = "Record successfully added"
+                msg = "New Candidate successfully added"
                 flash(message=msg, category='success')
 
             else:
@@ -693,3 +693,5 @@ def get_selected_school():
 
 if __name__ == '__main__':
     app.run(debug=True) #debug=True is optional
+
+
