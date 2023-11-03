@@ -114,6 +114,8 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
 #The login Page handler
 @app.route('/Student Login', methods=['GET', 'POST'])
 def login():
+    error = None
+    msg = None
     if request.method == 'POST':
         useremail = request.form['useremail']
         password = request.form['password']
@@ -138,7 +140,8 @@ def login():
         # Check if user exists
         if user is None:
             return render_template('login.html', error='User does not exist.')
-            flash('User does not exist.', category='error')
+            error = 'User does not exist.'
+            flash(error, category='error')
 
         # Check password
         if not check_password(password, user['password']):
