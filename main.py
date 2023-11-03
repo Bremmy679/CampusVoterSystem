@@ -163,7 +163,9 @@ def login():
 #dashboard page
 @app.route("/dashboard")
 def dashboard():
-    return render_template('dashboard.html')
+    positions = get_posts()
+    Positions = [position['name'].upper() for position in positions]
+    return render_template('dashboard.html',Positions=Positions,positions=positions)
 
 @app.route("/Register Admin")
 def create_admin():
@@ -416,9 +418,24 @@ def deletecandidate(regno):
    
 #     return  rows
 
-@app.route('/voting')
-def voting():
-    return render_template('voting_page.html')
+@app.route('/voting/<votePost>')
+def voting(votePost):
+    votePost = votePost.lower()
+    candidates = getCandidates_in_post(votePost)
+    return render_template('voting_page.html',candidates = candidates, votePost=votePost)
+
+def getCandidates_in_post(post_id):
+    conn = get_db_connection()
+    positionName = getposition(post_id)
+    candidates = conn.execute('SELECT * FROM candidates WHERE electedPost = ?', (positionName,)).fetchall()
+    conn.close()
+    return candidates
+
+@app.route('/vote/<position>')
+def vote_for_position(position):
+    positionCandidates = get_candidates_for_position(position)
+
+    return render_template('position_template.html', position=position, candidates=positionCandidates)
 
 @app.route('/results')
 def results():
