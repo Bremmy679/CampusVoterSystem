@@ -72,18 +72,22 @@ def register():
         
         if user is not None:
             error = 'User already exists.'
+            flash(error,category = "error")
         else:
             for passwd in passwords:
                 if check_password_hash(password,passwd):
                     error = 'Password already exists. Try a different Password.'
+                    flash(error,category="error")
                 else:
                     continue
             if userIdNo in idNos:
-                error = 'The ID already exists in the database!!!'
+                error = 'The ID already exists!!!'
+                flash(error,category="error")
             else:
                 registeruser(useremail, password, userName, userRegNo, college, course, school, campus, academicyear,
                                 userIdNo)
                 msg = "Record successfully added"
+                flash(message=msg, category="success")
                 return redirect(url_for('login'))
 
     return render_template('registration_page.html',msg = msg,error=error, campuses=campuses, colleges=colleges)
@@ -97,7 +101,6 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
         return True
     except sqlite3.IntegrityError:
         # Handle the case where the idNo already exists
-        print(f"User with ID {userIdNo} already exists.")
         error = f"User with ID {userIdNo} already exists."
         return False
     finally:
@@ -108,8 +111,10 @@ def registeruser(email, password,name,regNo,college,course,school,campus,academi
     # return True
 
 #The login Page handler
-@app.route('/Student Login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
+    error = None
+    msg = None
     if request.method == 'POST':
         useremail = request.form['useremail']
         password = request.form['password']
@@ -117,33 +122,46 @@ def login():
         # Check if both email and password are provided
         if not useremail or not password:
             return render_template('login.html', error='Please provide both email and password.')
+            error = 'Please provide both email and password.'
+            flash(error, category="error")
 
         # Check email format
         if not is_valid_email(useremail):
             return render_template('login.html', error='Invalid email format.')
+            error = 'Invalid email format.'
+            flash(error, category="error")
 
         # Check password length
         if not is_valid_password(password):
             return render_template('login.html', error='Password must be at least 8 characters long.')
+            error = 'Password must be at least 8 characters long.'
+            flash(error, category="error")
 
         user = get_user(useremail)
 
         # Check if user exists
         if user is None:
             return render_template('login.html', error='User does not exist.')
+            error = 'User does not exist.'
+            flash(error, category="error")
 
         # Check password
         if not check_password(password, user['password']):
             return render_template('login.html', error='Incorrect email or password.')
+            error = 'Incorrect email or password.'
+            flash(error, category="error")
 
         # Set user email in session
         session['useremail'] = useremail
 
-        return redirect(url_for('home'))
+        return redirect(url_for('dashboard'))
+        msg = f"{session['useremail']} successfully logged in."
+        flash(msg,category="success")
 
-    return render_template('login.html')
+    return render_template('login.html',error=error,msg=msg)
+
 #dashboard page
-@app.route("/")
+@app.route("/dashboard")
 def dashboard():
     return render_template('dashboard.html')
 
@@ -169,7 +187,6 @@ def get_idNos():
     idNos = conn.execute('SELECT idNo FROM voters').fetchall()
     conn.close()
     id = [idNo['idNo'] for idNo in idNos]
-    print(id)
     return id
 
 
@@ -250,10 +267,11 @@ def addcandidate():
     if request.method == 'POST':
         conn = get_db_connection()
         try:
-            reg_no = request.form['regNo']
-            position = request.form['position']            
             
-            user = getvoter(reg_no)
+            position = request.form['position']
+            regno = request.form['registrationNo']
+
+            user = getvoter(regno)
             
             if user:
                 positionId = getpostid(position)
@@ -282,9 +300,9 @@ def addcandidate():
 
                 
                 cur = conn.cursor()
-                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost_id,idNo,email) VALUES (?, ?, ?, ?, ?,?,?)", (name, reg_no, college, academicyear, positionId,userIdNo,email))
+                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost,idNo,email,school,course,campus) VALUES (?,?, ?, ?, ?, ?,?,?,?,?)", (name, regno, college, academicyear, positionId,userIdNo,email,school,course,campus))
                 conn.commit()
-                msg = "Record successfully added"
+                msg = "New Candidate successfully added"
                 flash(message=msg, category='success')
 
             else:
@@ -300,7 +318,7 @@ def addcandidate():
         finally:
             conn.close()
 
-    return render_template('admin_candidate.html', posts=posts)
+    return render_template('admin_candidate.html', posts=posts, msg=msg, error=error)
 
 
 #Edit a candidate data
@@ -390,27 +408,43 @@ def deletecandidate(regno):
 
     return render_template('deletecandidate.html')
 
-#The electionvotes
-def electionvotes():
-    cursor = get_db_connection().cursor()
-    cursor.execute('SELECT * FROM candidates')
-    rows = cursor.fetchall()
+# #The electionvotes
+# def electionvotes():
+#     cursor = get_db_connection().cursor()
+#     cursor.execute('SELECT * FROM candidates')
+#     rows = cursor.fetchall()
    
-    return  rows
+#     return  rows
 
-@app.route('/')
+@app.route('/voting')
 def voting():
     return render_template('voting_page.html')
 
-#The results Page
 @app.route('/results')
 def results():
-    electedcandidates = electionvotes()
-    if len(electedcandidates) > 1:
+    electedcandidates = getcandidates()
+    if electedcandidates:
         return render_template('results.html', electedcandidates=electedcandidates)
 
     else:
         return render_template('results.html', electedcandidates="No Data Found")
+    # electedcandidates = electionvotes()
+
+    # # Check if there are any positions with elected candidates
+    # if electedcandidates:
+    #     return render_template('results.html', electedcandidates=electedcandidates)
+    # else:
+    #     # Handle the case where no data is found differently
+    #     return render_template('results.html', nodata=True)
+# #The results Page
+# @app.route('/results')
+# def results():
+#     electedcandidates = electionvotes()
+#     if len(electedcandidates) > 1:
+#         return render_template('results.html', electedcandidates=electedcandidates)
+
+#     else:
+#         return render_template('results.html', electedcandidates="No Data Found")
      
 
 
@@ -421,17 +455,80 @@ def vote_counts():
     rows = cursor.fetchall()
     return jsonify(rows)
 
+# def electionvotes():
+#     cursor = get_db_connection().cursor()
+#     cursor.execute('SELECT * FROM candidates ORDER BY electedPost')
+#     rows = cursor.fetchall()
 
+#     # Group candidates by position
+#     grouped_candidates = {}
+#     for row in rows:
+#         position = row['electedPost']
+#         candidate = dict(row)
+#         if position not in grouped_candidates:
+#             grouped_candidates[position] = []
+#         grouped_candidates[position].append(candidate)
+
+#     return grouped_candidates
+
+def electionvotes():
+    cursor = get_db_connection().cursor()
+    cursor.execute('SELECT * FROM candidates ORDER BY electedPost')
+    rows = cursor.fetchall()
+
+    grouped_candidates = {}
+    for row in rows:
+        position = row['electedPost']
+        candidate = dict(row)
+        if position not in grouped_candidates:
+            grouped_candidates[position] = []
+        grouped_candidates[position].append(candidate)
+
+    return grouped_candidates if grouped_candidates else {}
+
+    # Group candidates by position
+    # grouped_candidates = {}
+    # for row in rows:
+    #     position = row['electedPost']
+    #     candidate = dict(row)
+    #     if position not in grouped_candidates:
+    #         grouped_candidates[position] = []
+    #     grouped_candidates[position].append(candidate)
+
+    # return grouped_candidates
 
 
 #Getting data from the databases
 
 #Get the candidate data based on regNo
+
+def getcandidates():
+    conn = get_db_connection()
+    candidates = conn.execute('SELECT * FROM candidates').fetchall()
+    conn.close()
+    # Convert sqlite3.Row objects to dictionaries
+    #get the candidates position name
+    
+    candidates_list = [dict(candidate) for candidate in candidates]
+    positions = get_posts()
+    for candidate in candidates_list:
+        position_id = candidate['electedPost']
+        position_name = next((p['name'] for p in positions if p['id'] == position_id), None)
+        candidate['electedPost'] = position_name
+
+
+    return candidates_list
 def get_posts():
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM posts').fetchall()
     conn.close()
     return posts
+
+def getposition(id):
+    conn = get_db_connection()
+    position = conn.execute('SELECT * FROM posts WHERE id = ?', (id,)).fetchone()
+    conn.close()
+    return position
 
 def getcandidatefromvoters(regno):
     conn = get_db_connection()
@@ -454,18 +551,15 @@ def getvoter(regno):
 def getpostid(name):
     conn = get_db_connection()
     postid = conn.execute('SELECT id FROM posts WHERE name = ?', (name,)).fetchone()
+    conn.close()
+    return postid['id'] if postid else None
 
 def getCampuses():
     conn = get_db_connection()
     encrypted_campuses = conn.execute('SELECT name FROM campuses').fetchall()
     conn.close()
     return encrypted_campuses
-    # campuses = [campus['name'] for campus in encrypted_campuses]
-    # decrypted_campuses = [decrypt_data(campus['name']) for campus in encrypted_campuses]
-    
-    # print("Encrypted Campuses:", encrypted_campuses)
-    # print("Decrypted Campuses:", decrypted_campuses)
-    
+
 
 def getColleges():
     conn = get_db_connection()
@@ -530,12 +624,11 @@ def decrypt_data(encrypted_data):
         decrypted_data = cipher_suite.decrypt(decoded_data).decode()
         return decrypted_data
     except binascii.Error as e:
-        print(f"Error decoding base64: {e}")
-    except InvalidToken:
-        print("Invalid Fernet token. Data may have been tampered with.")
+        return None
+    except InvalidToken as inv:
+        return inv
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-    return None
+        return e
 
 def get_school_initials(school):
     conn = get_db_connection()
@@ -546,9 +639,6 @@ def get_school_initials(school):
 
    # Extract the value from the row
     initials = result['initials'] if result else None
-
-    # Print the result to debug
-    print("Initials:", initials)
 
     return initials
 
@@ -601,3 +691,5 @@ def get_selected_school():
 
 if __name__ == '__main__':
     app.run(debug=True) #debug=True is optional
+
+

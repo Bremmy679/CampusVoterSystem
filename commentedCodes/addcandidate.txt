@@ -25,3 +25,20 @@
             }
         }
     </script>
+
+
+    Loop through electedcandidates
+        {% for position, candidates in electedcandidates.items() %}
+        <!-- Your code for displaying candidates -->
+        {% endfor %} {% else %}
+        <p>No Data Found</p>
+        {% endif %}{% if nodata %}
+        <p>No Data Found</p>
+        {% else %} {% for position, candidates in electedcandidates.items() %}
+        <h2>{{ position }}</h2>
+        <ul>
+            {% for candidate in candidates %}
+            <li>{{ candidate.name }}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %} {% endif %}
