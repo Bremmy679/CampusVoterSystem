@@ -80,3 +80,43 @@
 
 
 
+
+
+#The login Page handler
+# @app.route('/', methods=['GET', 'POST'])
+# def login():
+#     if request.method == 'POST':
+#         useremail = request.form['useremail']
+#         password = request.form['password']
+#         user = get_user(useremail)
+
+#         # Check if user exists
+#         if user is None:
+#             return render_template('login.html', error='User does not exist.')
+#         # Check if useremail and password are provided
+#         if not useremail or not password:
+#             return render_template('login.html', error='Please provide both email and password.')
+
+
+#         # Check email format
+#         if not is_valid_email(useremail):
+#             return render_template('login.html', error='Invalid email format.')
+
+#         # Check password length
+#         if not is_valid_password(password):
+#             return render_template('login.html', error='Password must be at least 8 characters long.')
+
+        
+
+#         # Check password
+#         if not check_password(password, user['password']):
+#             return render_template('login.html', error='Incorrect email or password.')
+
+#         # Set user email in session
+#         session['useremail'] = useremail
+
+#         return redirect(url_for('home'))
+
+#     return render_template('login.html')
+
+

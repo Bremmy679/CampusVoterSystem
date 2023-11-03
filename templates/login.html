@@ -1,8 +1,24 @@
-{% extends 'base.html' %}
-<h3>{% block title%} Login Page {% endblock%} {% block header%}
+{% extends 'base.html' %} {%block header%}
+<link rel="stylesheet" type="text/css" href="../static/styles/login.css"> {%endblock%}
+<h3>{% block title%} Login Page {% endblock%} {% block content%} {% with messages = get_flashed_messages(with_categories = true)%} {% if messages%} {% for category, message in messages%} {% if category == 'error' %}
+    <div class="alert alert-danger" alert-dismissible fade show role="alert">
+        {{message}}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% else %}
+    <div class="alert alert-success" alert-dismissible fade show role="alert">
+        {{message}}
+        <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {%endif%} {%endfor%} {%endif%} {%endwith%}
+
     <div class="container">
         <div class="left">
-            <form action="/" method="POST">
+            <form method="POST" action="{{ url_for('login') }}">
                 <h2>Sign In</h2>
                 {% if error %}
                 <div class="alert alert-danger ">
@@ -11,11 +27,11 @@
                 {% endif %}
                 <div class="username">
                     <label for="Username">Useremail</label>
-                    <input type="text" name="useremail">
+                    <input type="text" name="useremail" id="useremail">
                 </div>
                 <div class="password">
                     <label for="Password">Password</label>
-                    <input type="password" name="password">
+                    <input type="password" name="password" id="password">
                     <a id="forgot-password" href="#">Forgot password?</a>
                 </div>
                 <button type="submit">Login</button>
