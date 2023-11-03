@@ -122,17 +122,20 @@ def login():
         # Check if both email and password are provided
         if not useremail or not password:
             return render_template('login.html', error='Please provide both email and password.')
-            flash('Please provide both email and password.', category='error')
+            error = 'Please provide both email and password.'
+            flash(error, category="error")
 
         # Check email format
         if not is_valid_email(useremail):
             return render_template('login.html', error='Invalid email format.')
-            flash('Invalid email format.', category='error')
+            error = 'Invalid email format.'
+            flash(error, category="error")
 
         # Check password length
         if not is_valid_password(password):
             return render_template('login.html', error='Password must be at least 8 characters long.')
-            flash('Password must be at least 8 characters long.', category='error')
+            error = 'Password must be at least 8 characters long.'
+            flash(error, category="error")
 
         user = get_user(useremail)
 
@@ -140,18 +143,20 @@ def login():
         if user is None:
             return render_template('login.html', error='User does not exist.')
             error = 'User does not exist.'
-            flash(error, category='error')
+            flash(error, category="error")
 
         # Check password
         if not check_password(password, user['password']):
             return render_template('login.html', error='Incorrect email or password.')
-            flash('Incorrect email or password.', category='error')
+            error = 'Incorrect email or password.'
+            flash(error, category="error")
 
         # Set user email in session
         session['useremail'] = useremail
 
         return redirect(url_for('dashboard'))
-        flash(f"{session['useremail']} successfully logged in.",category="success")
+        msg = f"{session['useremail']} successfully logged in."
+        flash(msg,category="success")
 
     return render_template('login.html',error=error,msg=msg)
 
