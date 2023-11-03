@@ -420,16 +420,24 @@ def deletecandidate(regno):
 
 @app.route('/voting/<votePost>')
 def voting(votePost):
-    votePost = votePost.lower()
-    candidates = getCandidates_in_post(votePost)
+    # votePost = votePost.lower()
+    votePost = ' '.join(word.title() for word in votePost.split())
+    votePostId = get_post_id(votePost)
+    candidates = getCandidates_in_post(votePostId)
     return render_template('voting_page.html',candidates = candidates, votePost=votePost)
 
-def getCandidates_in_post(post_id):
+def getCandidates_in_post(post):
     conn = get_db_connection()
-    positionName = getposition(post_id)
-    candidates = conn.execute('SELECT * FROM candidates WHERE electedPost = ?', (positionName,)).fetchall()
+    # positionName = getposition(post_id)
+    candidates = conn.execute('SELECT * FROM candidates WHERE electedPost = ?', (post,)).fetchall()
     conn.close()
     return candidates
+
+def get_post_id(post):
+    conn = get_db_connection()
+    post_id = conn.execute('SELECT id FROM posts WHERE name = ?', (post,)).fetchone()
+    conn.close()
+    return post_id['id'] if post_id else None
 
 @app.route('/vote/<position>')
 def vote_for_position(position):
