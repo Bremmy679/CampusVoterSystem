@@ -310,7 +310,7 @@ def addcandidate():
         finally:
             conn.close()
 
-    return render_template('admin_candidate.html', posts=posts, msg=msg, error=error)
+    return render_template('add_candidate.html', posts=posts, msg=msg, error=error)
 
 
 #Edit a candidate data
