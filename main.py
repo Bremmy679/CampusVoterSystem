@@ -424,6 +424,11 @@ def voting(votePost):
     votePost = ' '.join(word.title() for word in votePost.split())
     votePostId = get_post_id(votePost)
     candidates = getCandidates_in_post(votePostId)
+    candidates = [dict(candidate) for candidate in candidates]
+    for candidate in candidates:
+        if candidate['votes'] == None:
+            candidate['votes'] = 0
+
     return render_template('voting_page.html',candidates = candidates, votePost=votePost)
 
 def getCandidates_in_post(post):
