@@ -1,22 +1,35 @@
 {% extends "base.html" %}
 <h3>{% block title%} Admin Candidate Page {% endblock%} {% block header%}
-    <link rel="stylesheet" href="../static/styles/admin_candidate.css">{%endblock%} {% block content%}
+    <link rel="stylesheet" href="../static/styles/add_candidate.css">{%endblock%} {% block content%}
 
     <div class="container">
         <div class="left">
-            <img src="images/Layer 1.png" alt="JKUAT Logo">
+            <section>
+                <!--<div class="content-header">
+                    <div class="profile-welcome-btn">
+                        <h5>WELCOME</h5>
+                    </div>
+                    <p>TO THE JKUAT PORTAL</p>        
+                     <div class="profile-content">
+                        <img class="profile-image" src="../images/cat-profile.jpeg">
+                        <p>PROFILE</p>
+                    </div> -->
+                </div>
+            </section>
+    </div>
+            <!-- <img src="../static/images/cat-profile.jpeg" alt="Cat Profile">
             <div class="buttons">
                 <button>ADD</button>
                 <button>DELETE</button>
                 <button>RECORD</button>
-            </div>
+            </div> -->
         </div>
-        <div class="right">
+        <!-- <div class="right"> -->
             <!--
                 Error handling
             -->
-            {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
-            <div class="alert alert-danger" role="alert">
+            <!-- {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %} -->
+            <!--<div class="alert alert-danger" role="alert">
                 {{ message }}
             </div>
             {% endfor %} {% endif %} {% endwith %} {% if error %}
@@ -117,4 +130,4 @@
             }
         }
     </script>
-    {%endblock%}
+    {%endblock%}!-->
