@@ -42,6 +42,8 @@ def sendMail():
     mail.send(msg)
     return "Sent"
 
+# Select Page
+    
 # The user registration
 @app.route('/Register Student', methods=['GET', 'POST'])
 def register():
@@ -165,7 +167,7 @@ def login():
 @app.route("/dashboard")
 def dashboard():
     positions = get_posts()
-    Positions = [position['name'].upper() for position in positions]
+    Positions = [position['name'].upper() for position in positions]            
     return render_template('dashboard.html',Positions=Positions,positions=positions)
 
 @app.route("/Register Admin")
@@ -321,7 +323,7 @@ def addcandidate():
         finally:
             conn.close()
 
-    return render_template('admin_candidate.html', posts=posts, msg=msg, error=error)
+    return render_template('add_candidate.html', posts=posts, msg=msg, error=error)
 
 
 #Edit a candidate data

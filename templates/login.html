@@ -3,7 +3,8 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> {%endblock%}
 <h3>{% block title%} Login Page {% endblock%} {% block content%}
     <section>
-        {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %} {% if error %}
+        {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %} {% if error %} ======= {% with messages=get_flashed_messages() %} {% if messages %} {% for message in messages %} {% if error %}
+
         <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
             <i class="bi-exclamation-octagon-fill"></i>
             <strong class="mx-2">Error!</strong> {{error}}
@@ -15,7 +16,6 @@
             <strong class="mx-2">Success!</strong> {{message}}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
-
         {% endif %} {% endfor %} {% endif %} {% endwith %}
         <div class="container">
             <div class="left">
@@ -47,4 +47,31 @@
     </section>
 
 
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
+    <div class="container">
+
+        <div class="left">
+            <form method="POST" action="{{ url_for('login') }}">
+                <h2>Sign In</h2>
+                <div class="username">
+                    <label for="Username">Useremail</label>
+                    <input type="text" name="useremail" id="useremail">
+                </div>
+                <div class="password">
+                    <label for="Password">Password</label>
+                    <input type="password" name="password" id="password">
+                    <a id="forgot-password" href="#">Forgot password?</a>
+                </div>
+                <button class='login-button' type="submit">Login</button>
+                <p>Don't have an account?</p>
+                <a id="create-account" href="{{url_for('register')}}">Create Account</a>
+            </form>
+        </div>
+        <div class="right">
+            <h2>ELECTION PORTAL</h2>
+            <img src="https://www.jkuat.ac.ke/departments/hr/wp-content/uploads/2015/07/jkuat-logo-2.jpg" alt="JKUAT Logo">
+        </div>
+    </div>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script> -->
     {%endblock%}
