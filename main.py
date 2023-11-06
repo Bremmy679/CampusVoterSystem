@@ -155,6 +155,7 @@ def login():
 
         # Set user email in session
         session['useremail'] = useremail
+        session['userId'] = user['idNo']
 
         return redirect(url_for('dashboard'))
         msg = f"{session['useremail']} successfully logged in."
@@ -454,31 +455,22 @@ def vote_for_position(position):
 
 @app.route('/results')
 def results():
+    total_votes_function = get_position_votes
     electedcandidates = getcandidates()
     if electedcandidates:
-        return render_template('results.html', electedcandidates=electedcandidates)
+        return render_template('results.html', electedcandidates=electedcandidates, total_votes_function=get_position_votes)
 
     else:
         return render_template('results.html', electedcandidates="No Data Found")
-    # electedcandidates = electionvotes()
 
-    # # Check if there are any positions with elected candidates
-    # if electedcandidates:
-    #     return render_template('results.html', electedcandidates=electedcandidates)
-    # else:
-    #     # Handle the case where no data is found differently
-    #     return render_template('results.html', nodata=True)
-# #The results Page
-# @app.route('/results')
-# def results():
-#     electedcandidates = electionvotes()
-#     if len(electedcandidates) > 1:
-#         return render_template('results.html', electedcandidates=electedcandidates)
 
-#     else:
-#         return render_template('results.html', electedcandidates="No Data Found")
-     
-
+def get_position_votes(position):
+    positionId = get_post_id(position)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    totalVotes = cursor.execute('SELECT COUNT(votes) FROM candidates WHERE electedPost = ?',(positionId,)).fetchone()[0]
+    conn.close()
+    return totalVotes
 
 @app.route('/vote_counts')
 def vote_counts():
@@ -487,21 +479,6 @@ def vote_counts():
     rows = cursor.fetchall()
     return jsonify(rows)
 
-# def electionvotes():
-#     cursor = get_db_connection().cursor()
-#     cursor.execute('SELECT * FROM candidates ORDER BY electedPost')
-#     rows = cursor.fetchall()
-
-#     # Group candidates by position
-#     grouped_candidates = {}
-#     for row in rows:
-#         position = row['electedPost']
-#         candidate = dict(row)
-#         if position not in grouped_candidates:
-#             grouped_candidates[position] = []
-#         grouped_candidates[position].append(candidate)
-
-#     return grouped_candidates
 
 def electionvotes():
     cursor = get_db_connection().cursor()
@@ -518,22 +495,6 @@ def electionvotes():
 
     return grouped_candidates if grouped_candidates else {}
 
-    # Group candidates by position
-    # grouped_candidates = {}
-    # for row in rows:
-    #     position = row['electedPost']
-    #     candidate = dict(row)
-    #     if position not in grouped_candidates:
-    #         grouped_candidates[position] = []
-    #     grouped_candidates[position].append(candidate)
-
-    # return grouped_candidates
-
-
-#Getting data from the databases
-
-#Get the candidate data based on regNo
-
 def getcandidates():
     conn = get_db_connection()
     candidates = conn.execute('SELECT * FROM candidates').fetchall()
@@ -547,6 +508,8 @@ def getcandidates():
         position_id = candidate['electedPost']
         position_name = next((p['name'] for p in positions if p['id'] == position_id), None)
         candidate['electedPost'] = position_name
+        if candidate['votes'] == None:
+            candidate['votes'] = 0
 
 
     return candidates_list
@@ -717,6 +680,91 @@ def get_registration_number():
 
 def get_selected_school():
     return request.args.get('school')
+
+
+
+#####################################################
+#Handling the voter data
+#####################################################
+
+def get_percentage_votes(candidate_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT votes FROM candidates WHERE idNo = ?', (candidate_id,))
+    result = cursor.fetchone()
+    conn.close()
+
+    # Extract the value from the row
+    votes = result['votes'] if result else None
+
+    if votes:
+        total_votes = get_total_votes()
+        percentage = (votes / total_votes) * 100
+        return percentage
+
+    return None
+  
+
+@app.route('/get_percentage/<int:candidate_id>')
+def get_percentage(candidate_id):
+    percentage = get_percentage_votes(candidate_id)
+    return jsonify({'percentage': percentage})
+
+
+def cast_vote(user_id, position_id, candidate_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check if the user has already voted for the position
+    query = 'SELECT * FROM userVotes WHERE user_id = ? AND position_id = ?'
+    result = cursor.execute(query, (user_id, position_id)).fetchone()
+
+    if result:
+        # The user has already voted for the position
+        return False
+
+    # The user has not voted for the position
+    # Update the candidate's votes
+    cursor.execute(f'UPDATE candidates SET votes = votes + 1 WHERE idNo = ?',candidate_id)
+    
+
+    # Insert the vote into the votes table
+    query = 'INSERT INTO userVotes (userId, positionId, candidateId) VALUES (?, ?, ?)'
+    cursor.execute(query, (user_id, position_id, candidate_id))
+
+    conn.commit()
+    conn.close()
+
+    return True
+
+def has_user_voted_for_candidate(user_id, candidate_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check if the user has already voted for the candidate
+    query = 'SELECT * FROM userVotes WHERE userId = ? AND candidateId = ?'
+    result = cursor.execute(query, (user_id, candidate_id)).fetchone()
+
+    conn.close()
+
+    return True if result else False
+
+def has_user_voted(user_id, position_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Check if the user has already voted for the position
+    query = 'SELECT * FROM userVotes WHERE userId = ? AND positionId = ?'
+    result = cursor.execute(query, (user_id, position_id)).fetchone()
+
+    conn.close()
+
+    return True if result else False
+
+
+
+
+
 
 
 

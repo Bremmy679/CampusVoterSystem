@@ -13,7 +13,8 @@ body {
 
 .container {
     display: flex;
-    height: 100%;
+    height: 90%;
+    margin-top: 30px;
 }
 
 .left {
