@@ -59,7 +59,7 @@ h4 {
 .btn-signup {
     position: relative;
     text-align: center !important;
-    color: white;
+    background-color: #32A287;
     justify-content: center;
     margin-left: 420px;
     border-radius: 10px;
