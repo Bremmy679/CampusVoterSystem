@@ -46,9 +46,42 @@
                </div>
                
             </div>
+<<<<<<< HEAD
       </div>
       {% endfor %}
    </div>
+=======
+            <button type="button" class="btn-logout btn btn-light btn-sm">LOGOUT</button>
+        </div>
+    </section>
+    <!-- End of header part -->
+    <h5>{{votePost}}</h5>
+
+    <div class="row">
+        {% for candidate in candidates %}
+        <div class="card">
+            <div class="form-check form-check-inline">
+                <label class="form-check-label" for="inlineRadio1">
+                <div class="row-cols-2">
+                    <div class="column-gap-0">
+                        <img src="https://t4.ftcdn.net/jpg/00/97/58/97/240_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg" alt="Person 1" class="candidate-image" height="100px" width="100px" style="border-radius: 50%;">
+                    </div>
+                    <div class="col-md-4 " style="column-span: 2;">
+                    <p class="candidate-name">{{candidate.name}}</p>
+                    <p class="candidate-reg">{{candidate.regNo}}</p>
+                    <p>{{candidate.course}}</p>
+                    <p>{{candidate.school}}</p>
+                    <p>{{candidate.college}}</p>
+                </div>
+            </div>
+                    <input class="form-check-input" type="radio" id="inlineRadio1" name="radioGroup1" value="option1" style="border-color: aqua;">
+                </label>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+>>>>>>> dfd863a59b170abbc6b518e0c45f4bff701dc764
 </body>
 
 </html>

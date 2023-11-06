@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
 
-<h3>{% block title%} Results Page {% endblock%}
+<h3>{% block title%} Results Page {% endblock%} {% block header%}
+    <nav>
+        <div class="nav-bar profile">
+            <a href="#"><img src="images/Vector.png" alt="Profile Icon"></a>
+            <a href="#">Profile</a>
+        </div>
+        <h1 class="nav-bar">Election Results</h1>
+        <a href="#">Back</a>
+    </nav>
+    {% endblock%} {% block content %}
     <section>
-        {% block header%}
-        <nav>
-            <div class="nav-bar profile">
-                <a href="#"><img src="images/Vector.png" alt="Profile Icon"></a>
-                <a href="#">Profile</a>
-            </div>
-            <h1 class="nav-bar">Election Results</h1>
-            <a href="#">Back</a>
-        </nav>
-        {% endblock%} {% block content %}{% if electedcandidates %} {% for candidate in electedcandidates %}
-        <!--
-            {'id': 1, 'name': 'user3', 'regNo': 'SCT000-0002/2023', 'email': 'user3@gmail.com', 'college': 'COPAS', 'school': 'SCHOOL OF COMPUTING AND INFORMATION TECHNOLOGY', 'course': 'Bachelor of Science in Computer Technology', 'campus': None, 'academicYear': 4, 'electedPost': None, 'votes': None, 'idNo': 9090}
-            add all the fields below.
-        -->
+        <!---->
+        {% if electedcandidates %}
+        <!---->
+        {% set totalVotes = total_votes_function(electedcandidates[0].electedPost) %}
+        <!---->
+        {% for candidate in electedcandidates %}
         <div class="container">
             <div class="card">
                 <div class="card-body">
@@ -27,9 +28,7 @@
                 <div class="card-subtitle">
                     <h3>Reg No: {{candidate.regNo}}</h3>
                 </div>
-                <div class="card-body">
-                    <h3>Votes Count: {{candidate.votes}}</h3>
-                </div>
+
                 <div class="card-body">
                     <h3>College: {{candidate.college}}</h3>
                 </div>
@@ -45,28 +44,48 @@
                 <div class="card-body">
                     <h3>Academic Year: {{candidate.academicYear}}</h3>
                 </div>
+                <div class="card-body">
+                    <h3>Votes Count: {{candidate.votes}}</h3>
+                    {% if totalVotes %}
+                    <p>Percentage: {{ (candidate.votes / totalVotes * 100) | round(2) }}%</p>
+                    {% endif %}
+                </div>
+                {% if totalVotes %}
+                <div class="progress">
+                    <!---->
+                    {% set percentage = (candidate.votes / totalVotes * 100) | round(2) %} {{ percentage }}%
+                </div>
+                {% else %}
+                <!-- Handle the case where totalVotes is not available -->
+                <div class="progress-bar bg-danger" style="width: 0%">
+                    N/A
+                </div>
+                {% endif %}
             </div>
         </div>
         {% endfor %} {% endif %}
-        <!-- <div class="container">
-            <div class="card">
-                <h3>Chairperson</h3>
-            </div>
-            <div class="card">
-                <h3>Treasurer</h3>
-            </div>
-            <div class="card">
-                <h3>Secretary General</h3>
-            </div>
-            <div class="card">
-                <h3>Academic Secretary</h3>
-            </div>
-            <div class="card">
-                <h3>Hall Representatives</h3>
-            </div>
-            <div class="card">
-                <h3>Delegates</h3>
-            </div>
-        </div> -->
+
+        <script>
+            var bar = document.querySelector(".progress-bar");
+
+            function updateProgress() {
+                // Fetch the percentage from the server using AJAX (Assuming you are using jQuery)
+                $.get('/get_percentage/' + candidateId, function(data) {
+                    var percentage = data.percentage || 0;
+
+                    // Update the progress bar
+                    bar.style.width = percentage + "%";
+                    bar.innerText = percentage + "%";
+
+                    // If you want to keep updating the progress, you can call the function recursively
+                    if (percentage < 100) {
+                        setTimeout(updateProgress, 100);
+                    }
+                });
+            }
+
+            // Call the function to start updating the progress
+            updateProgress();
+        </script>
     </section>
-    {%endblock%}
+    { % endblock % }
