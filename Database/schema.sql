@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS colleges;
 DROP TABLE IF EXISTS schools;
 DROP TABLE IF EXISTS courses;
 DROP TABLE IF EXISTS courseGrouped;
+DROP TABLE IF EXISTS user_votes
 
 
 
@@ -82,6 +83,15 @@ CREATE TABLE courseGrouped (
     college TEXT NOT NULL,
     school TEXT NOT NULL,
     course TEXT NOT NULL
+);
+
+CREATE TABLE userVotes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    positionId INTEGER NOT NULL,
+    candidateId INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES voters(idNo),
+    FOREIGN KEY (position_id) REFERENCES posts(id)
 );
 
 

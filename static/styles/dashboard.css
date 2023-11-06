@@ -101,3 +101,6 @@ section .content-header p{
     margin-left: 325px;
     margin-bottom: 10px;
 }
+.row{
+    margin-bottom: 30px;
+}
