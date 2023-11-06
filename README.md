@@ -56,7 +56,36 @@ The JKUSA Election Web Application prioritizes the security and privacy of user 
 
 This project was developed by a team of students from Jomo Kenyatta University of Agriculture and Technology (JKUAT) in the Department of Computing and Information Technology (CIT). 
 The team members are:
+1. Ogola Sospeter
+2. Vivian Mosomi
+3. Jeff Gicharu
+4. Opande Remmy
+5. Sandra Lung´ahi
 
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg?size=626&ext=jpg" width="150" height="150" alt="Team Member 1">
+      <br> Ogola Sospeter
+    </td>
+    <td align="center">
+      <img src="https://media.licdn.com/dms/image/D4D03AQEoduGtNO870g/profile-displayphoto-shrink_800_800/0/1676816712349?e=1704326400&v=beta&t=S_XklhhH6WEB2ULXQWGltSM5kblHTzncAocGIQJR7uA" width="150" height="150" alt="Team Member 2">
+      <br> Vivian Mosomi
+    </td>
+    <td align="center">
+      <img src="https://media.licdn.com/dms/image/D5603AQGFiMZOJzdVoA/profile-displayphoto-shrink_800_800/0/1684230612472?e=1704326400&v=beta&t=LuaZ1oV7Nc0I-I5oq49ZnRUAePB1PDK1hMyISlc5j0U" width="150" height="150" alt="Team Member 3">
+      <br> Opande Remmy
+    </td>
+      <td align="center">
+      <img src="https://img.freepik.com/free-vector/decorative-autumnal-background_1048-6408.jpg?size=626&ext=jpg" width="150" height="150" alt="Team Member 4">
+      <br> Jeff Gicharu
+    </td>
+    <td align="center">
+      <img src="https://media.licdn.com/dms/image/D4E03AQGak8FPCUY4Cw/profile-displayphoto-shrink_800_800/0/1684238777363?e=1704326400&v=beta&t=gDQmBirQsQD96B7Lq-SukDCMWHJA_xNoFHORH5rQKPs" width="150" height="150" alt="Team member 5">
+      <br> Sandra Lung´ahi
+  </tr>
+</table>
 
 
 <h3>Project Design</h3>

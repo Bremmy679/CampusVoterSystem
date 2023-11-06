@@ -52,6 +52,13 @@
                         </li>
                     </ul>
                 </div>
+                <!-- <div>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{{url_for('voting')}}">Votingt</a>
+                        </li>
+                    </ul>
+                </div> -->
             </div>
     </nav>
     <!-- Header part -->
@@ -61,104 +68,36 @@
                 <h5>WELCOME</h5>
             </div>
             <p>TO THE JKUAT PORTAL</p>
-            <button type="button" class="btn-logout btn btn-light btn-sm">LOGOUT</button>
 
-            <!-- <div class="profile-content">
-                <img class="profile-image" src="../images/cat-profile.jpeg">
-                <p>PROFILE</p>
-            </div> -->
         </div>
     </section>
     <!-- End of header part -->
 
     <!-- The cards -->
     <div class="container cards-position">
-        <!-- First row of cards -->
         <div class="row">
+            {% for position in Positions %}
             <div class="col-sm-6 col-md-4">
-                <a class="card-clickable" href="link">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">CHAIRPERSON</p>
+                <a class="card-clickable" href="{{ url_for('voting', votePost=position) }}">
+                    <div class="card ">
+                        <div class="card-body ">
+                            <p class="card-text ">{{ position }}</p>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="col-sm-6 col-md-4 mr-100">
-                <a class="card-clickable" href="link">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">ORGANISING SECRETARY</p>
-                        </div>
-                    </div>
-                </a>
+            {% if loop.index % 3 == 0 and not loop.last %}
+            <div class="row ">
+
             </div>
-            <div class="col-sm-6 col-md-4">
-                <a class="card-clickable" href="link">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">TREASURER</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
+
+            {% endif %} {% endfor %}
         </div>
+
     </div>
-    <!-- Second row of cards -->
-    <div class="container cards-position">
-        <div class="row">
-            <div class="col-sm-6 col-md-4">
-                <a class="card-clickable" href="link">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">ACADEMIC SECRETARY</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm-6 col-md-4 mr-100">
-                <a class="card-clickable" href="link">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">DELEGATES</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm-6 col-md-4">
-                <a class="card-clickable" href="link">
-                    <div class="card">
-                        <div class="card-body">
-                            <p class="card-text">HALL REPRESENTATIVES</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <!-- Third row of cards -->
-    <div class="container cards-position">
-        <div class="row">
-            <div class="col-sm-6 col-md-4">
-                <a class="card-clickable" href="link">
-                    <div class="card first-raw-three">
-                        <div class="card-body">
-                            <p class="card-text">ACADEMIC SECRETARY</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-sm-6 col-md-4">
-                <a class="card-clickable" href="link">
-                    <div class="card last-raw-three">
-                        <div class="card-body">
-                            <p class="card-text">VIEW RESULTS</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
+
+
+
 
 </body>
 
