@@ -17,78 +17,40 @@
         <div class="content-header">
             <div class="header-4">
                 <h4>JKUSA</h4>
-                <h4>CANDIDATES</h4>
+                <h4>{{votePost}}</h4>
             </div>
             <button type="button" class="btn-logout btn btn-light btn-sm">LOGOUT</button>
         </div>
     </section>
     <!-- End of header part -->
-    <h5>CHAIRPERSON</h5>
-    <div class="container">
-        <div class="row">
-            <div class="first-column col-lg-4">
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="inlineRadio1">
-            <img src="https://t4.ftcdn.net/jpg/00/97/58/97/240_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg" alt="Person 1" class="candidate-image">
-            <p class="candidate-name">Sam Mwangi</p>
-            <input class="form-check-input" type="radio" id="inlineRadio1" name="radioGroup1" value="option1">
-          </label>
+    <h5>{{votePost}}</h5>
+
+    <div class="row">
+        {% for candidate in candidates %}
+        <div class="card">
+            <div class="form-check form-check-inline">
+                <label class="form-check-label" for="inlineRadio1">
+                <div class="row-cols-2">
+                    <div class="column-gap-0">
+                        <img src="https://t4.ftcdn.net/jpg/00/97/58/97/240_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg" alt="Person 1" class="candidate-image" height="100px" width="100px" style="border-radius: 50%;">
+                    </div>
+                    <div class="col-md-4">
+                    <p class="candidate-name">{{candidate.name}}</p>
+                    <p class="candidate-reg">{{candidate.regNo}}</p>
+                    <p>{{candidate.course}}</p>
+                    <p>{{candidate.school}}</p>
+                    <p>{{candidate.college}}</p>
+                    <p>{{candidate.votes}}</p>
                 </div>
             </div>
-            <!-- Column 2 -->
-            <div class="second-column col-lg-4">
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="inlineRadio2">
-          <img src="../images/cat-profile.jpeg" alt="Person 2" class="candidate-image">
-          <p class="candidate-name">Michael Mwangi</p>
-          <input class="form-check-input" type="radio" id="inlineRadio2" name="radioGroup1" value="option2">
-        </label>
-                </div>
-            </div>
-            <!-- Column 3 -->
-            <div class="third-column col-lg-4">
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="inlineRadio3">
-          <img src="https://t4.ftcdn.net/jpg/00/77/51/81/240_F_77518136_F88I0v3R2mZsKEgxxXMc4iqXlOjK8OLE.jpg" alt="Person 3" class="candidate-image">
-          <p class="candidate-name">Ashley Bryan</p>
-          <input class="form-check-input" type="radio" id="inlineRadio3" name="radioGroup1" value="option3">
-        </label>
-                </div>
+                    <input class="form-check-input" type="radio" id="inlineRadio1" name="radioGroup1" value="option1" style="border-color: aqua;">
+                </label>
             </div>
         </div>
-        <!-- Second Row -->
-        <div class="row">
-            <div class="first-column col-lg-4">
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="inlineRadio1">
-            <img src="../images/cat-profile.jpeg" alt="Person 1" class="candidate-image">
-            <p class="candidate-name">Sam Mwangi</p>
-            <input class="form-check-input" type="radio" id="inlineRadio4" name="radioGroup2" value="option1">
-          </label>
-                </div>
-            </div>
-            <!-- Column 2 -->
-            <div class="second-column col-lg-4">
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="inlineRadio2">
-          <img src="../images/cat-profile.jpeg" alt="Person 2" class="candidate-image">
-          <p class="candidate-name">Michael Mwangi</p>
-          <input class="form-check-input" type="radio" id="inlineRadio5" name="radioGroup2" value="option2">
-        </label>
-                </div>
-            </div>
-            <!-- Column 3 -->
-            <div class="third-column col-lg-4">
-                <div class="form-check form-check-inline">
-                    <label class="form-check-label" for="inlineRadio3">
-          <img src="../images/cat-profile.jpeg" alt="Person 3" class="candidate-image">
-          <p class="candidate-name">Ashley Bryan</p>
-          <input class="form-check-input" type="radio" id="inlineRadio6" name="radioGroup2" value="option3">
-        </label>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
+
+
 
 </body>
 
