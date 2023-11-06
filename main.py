@@ -302,10 +302,11 @@ def addcandidate():
                 campus= user['campus']
                 academicyear= user['academicYear']
                 userIdNo= user['idNo']
+                votes = 5
 
                 
                 cur = conn.cursor()
-                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost,idNo,email,school,course,campus) VALUES (?,?, ?, ?, ?, ?,?,?,?,?)", (name, regno, college, academicyear, positionId,userIdNo,email,school,course,campus))
+                cur.execute("INSERT INTO candidates (name, regNo, college, academicYear, electedPost,idNo,email,school,course,campus,votes) VALUES (?,?, ?, ?, ?, ?,?,?,?,?,?)", (name, regno, college, academicyear, positionId,userIdNo,email,school,course,campus,votes))
                 conn.commit()
                 msg = "New Candidate successfully added"
                 flash(message=msg, category='success')
@@ -314,7 +315,7 @@ def addcandidate():
                 error = "Voter not found with the given registration number."
                 flash(message=error, category='error')
                 current_app.logger.error(error)
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard'))
         except Exception as e:
             conn.rollback()
             error = f"Error in insert operation: {str(e)}"
@@ -429,7 +430,7 @@ def voting(votePost):
     candidates = getCandidates_in_post(votePostId)
     candidates = [dict(candidate) for candidate in candidates]
     for candidate in candidates:
-        if candidate['votes'] == None:
+        if candidate['votes']  < 1:
             candidate['votes'] = 0
 
     return render_template('voting_page.html',candidates = candidates, votePost=votePost)
@@ -463,6 +464,69 @@ def results():
     else:
         return render_template('results.html', electedcandidates="No Data Found")
 
+
+@app.route('/get_results')
+def get_results():
+    # Fetch updated data or recalculate results as needed
+    electedcandidates = getcandidates()
+    total_votes_function = get_position_votes
+
+    if electedcandidates:
+        updated_results_html = render_template_string(
+            '''
+            <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Position: {{candidate.electedPost}}</h3>
+                </div>
+                <div class="card-title">
+                    <h3>Name: {{candidate.name}}</h3>
+                </div>
+                <div class="card-subtitle">
+                    <h3>Reg No: {{candidate.regNo}}</h3>
+                </div>
+
+                <div class="card-body">
+                    <h3>College: {{candidate.college}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>School: {{candidate.school}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Course: {{candidate.course}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Campus: {{candidate.campus}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Academic Year: {{candidate.academicYear}}</h3>
+                </div>
+                <div class="card-body">
+                    <h3>Votes Count: {{candidate.votes}}</h3>
+                    {% if totalVotes %}
+                    <p>Percentage: {{ (candidate.votes / totalVotes * 100) | round(2) }}%</p>
+                    {% endif %}
+                </div>
+                {% if totalVotes %}
+                <div class="progress">
+                    <!---->
+                    {% set percentage = (candidate.votes / totalVotes * 100) | round(2) %} {{ percentage }}%
+                </div>
+                {% else %}
+                <!-- Handle the case where totalVotes is not available -->
+                <div class="progress-bar bg-danger" style="width: 0%">
+                    N/A
+                </div>
+                {% endif %}
+            </div>
+        </div>
+            '''
+        , electedcandidates=electedcandidates, total_votes_function=get_position_votes)
+        return jsonify({'html': updated_results_html})
+
+    else:
+        # Handle the case where there are no results
+        return jsonify({'html': 'No Data Found'})
 
 def get_position_votes(position):
     positionId = get_post_id(position)
@@ -710,22 +774,26 @@ def get_percentage(candidate_id):
     percentage = get_percentage_votes(candidate_id)
     return jsonify({'percentage': percentage})
 
+def is_voted(user_id, position_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    # Check if the user has already voted for the position
+    result = cursor.execute('SELECT * FROM userVotes WHERE userId = ? AND positionId = ?',(user_id, position_id,)).fetchone()
+    
+
 
 def cast_vote(user_id, position_id, candidate_id):
     conn = get_db_connection()
     cursor = conn.cursor()
-
-    # Check if the user has already voted for the position
-    query = 'SELECT * FROM userVotes WHERE user_id = ? AND position_id = ?'
-    result = cursor.execute(query, (user_id, position_id)).fetchone()
-
-    if result:
+    hasvoted = is_voted(user_id, position_id)
+    
+    if hasvoted:
         # The user has already voted for the position
         return False
-
     # The user has not voted for the position
     # Update the candidate's votes
-    cursor.execute(f'UPDATE candidates SET votes = votes + 1 WHERE idNo = ?',candidate_id)
+    else:
+        cursor.execute(f'UPDATE candidates SET votes = votes + 1 WHERE idNo = ?',(candidate_id,))
     
 
     # Insert the vote into the votes table
@@ -763,7 +831,37 @@ def has_user_voted(user_id, position_id):
 
 
 
-
+@app.route('/process_vote/<votePost>', methods=['POST'])
+def process_vote(votePost):
+    error = None
+    msg = None
+    # Assuming user_id is obtained from your session or authentication mechanism
+    # candidate_id = request.form.get('selected_candidate')  # Implement this function
+    votePost = ' '.join(word.title() for word in votePost.split())
+    # votePostId = get_post_id(votePost)
+    user_id = session['userId']
+    
+    if user_id:
+        position_id = get_post_id(votePost)
+        candidate_id = request.form.get('selected_candidate')
+        print('candidate Id: ' + candidate_id)
+        
+        if not has_user_voted(user_id, position_id) and not has_user_voted_for_candidate(user_id, candidate_id):
+            print('User Id: ' + user_id)
+            print(f'Position Id: {position_id}')
+            print(f'Candidate Id: {candidate_id}')
+            cast_vote(user_id, position_id, candidate_id)
+            msg = 'Vote successfully cast.'
+            flash(msg, category="success")
+            return redirect(url_for('voting', votePost=votePost, success=True,msg=msg))
+        else:
+            error = 'You have already voted for this position.'
+            flash(error, category="error")
+            return redirect(url_for('voting', votePost=votePost, error=error))
+    else:
+        error = 'You must be logged in to vote.'
+        flash(error, category="error")
+        return redirect(url_for('login', error=error))
 
 
 

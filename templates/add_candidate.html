@@ -5,110 +5,102 @@
     <div class="container">
         <div class="left">
             <section>
-                <!--<div class="content-header">
+                <div class="content-header">
                     <div class="profile-welcome-btn">
                         <h5>WELCOME</h5>
                     </div>
-                    <p>TO THE JKUAT PORTAL</p>        
-                     <div class="profile-content">
+                    <p>TO THE JKUAT PORTAL</p>
+                    <div class="profile-content">
                         <img class="profile-image" src="../images/cat-profile.jpeg">
                         <p>PROFILE</p>
-                    </div> -->
+                    </div>
                 </div>
             </section>
+        </div>
+        <img src="../static/images/cat-profile.jpeg" alt="Cat Profile">
+        <div class="buttons">
+            <button>ADD</button>
+            <button>DELETE</button>
+            <button>RECORD</button>
+        </div>
     </div>
-            <!-- <img src="../static/images/cat-profile.jpeg" alt="Cat Profile">
-            <div class="buttons">
-                <button>ADD</button>
-                <button>DELETE</button>
-                <button>RECORD</button>
-            </div> -->
-        <!-- </div> -->
-        <!-- <div class="right"> -->
-            <!--
+    <div class="right">
+        <!--
                 Error handling
             -->
 
-            <!-- {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %} -->
-            <!--<div class="alert alert-danger" role="alert">
-                {{ message }}
-            </div>
-            {% endfor %} {% endif %} {% endwith %} {% if error %}
-            <div class="alert alert-danger" role="alert">
-                {{ error }}
-
-            {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %} {% if error %}
-            <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
-                <i class="bi-exclamation-octagon-fill"></i>
-                <strong class="mx-2">Error!</strong> {{error}}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            {% endif %} {% if msg %}
-            <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
-                <i class="bi-check-circle-fill"></i>
-                <strong class="mx-2">Success!</strong> {{message}}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-            {% endif %} {% endfor %} {% endif %} {% endwith %}
+        {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %} {% if error %}
+        <div class="alert alert-danger alert-dismissible d-flex align-items-center fade show">
+            <i class="bi-exclamation-octagon-fill"></i>
+            <strong class="mx-2">Error!</strong> {{error}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %} {% if msg %}
+        <div class="alert alert-success alert-dismissible d-flex align-items-center fade show">
+            <i class="bi-check-circle-fill"></i>
+            <strong class="mx-2">Success!</strong> {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %} {% endfor %} {% endif %} {% endwith %}
 
 
-            <form method="post" action="/addcandidate">
-                <div class="top">
-                    <div class="inputs id-num">
-                        <label for="id-no">ID No:</label>
-                        <input type="text" name="id-no" id="id_no" onblur="fillForm()">
-                    </div>
-                    <div class="inputs registration">
-                        <label for="registrationNo">Reg. No:</label>
-                        <input type="text" id="registrationNo" value="" name="registrationNo" readonly>
-                    </div>
-                    <div class="inputs first_name">
-                        <label for="name">Name:</label>
-                        <input type="text" value="" id="name" name="name" disabled="true">
-                    </div>
+        <form method="post" action="/addcandidate">
+            <div class="top">
+                <div class="inputs id-num">
+                    <label for="id-no">ID No:</label>
+                    <input type="text" name="id-no" id="id_no" onblur="fillForm()">
+                </div>
+                <div class="inputs registration">
+                    <label for="registrationNo">Reg. No:</label>
+                    <input type="text" id="registrationNo" value="" name="registrationNo" readonly>
+                </div>
+                <div class="inputs first_name">
+                    <label for="name">Name:</label>
+                    <input type="text" value="" id="name" name="name" disabled="true">
+                </div>
 
-                    <div class="inputs email">
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" value="" disabled="true">
-                    </div>
-                    <div class="inputs campus">
-                        <label for="campus">Campus:</label>
-                        <input type="text" id="campus" name="campus " disabled="true">
-                    </div>
+                <div class="inputs email">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="" disabled="true">
+                </div>
+                <div class="inputs campus">
+                    <label for="campus">Campus:</label>
+                    <input type="text" id="campus" name="campus " disabled="true">
+                </div>
 
-                    <div class="inputs colleges">
-                        <label for="college">College:</label>
-                        <input type="text" id="college" name="college" disabled="true">
-                    </div>
-                    <div class="inputs schools">
-                        <label for="school">School:</label>
-                        <input type="text" id="school" name="school" disabled="true">
-                    </div>
-                    <div class="inputs courses">
-                        <label for="course">Course:</label>
-                        <input type="text" id="course" name="course" disabled="true">
-                    </div>
-                    <div class="inputs seats">
-                        <label for="seat">Seat:</label>
-                        <select name="position" id="seat">
+                <div class="inputs colleges">
+                    <label for="college">College:</label>
+                    <input type="text" id="college" name="college" disabled="true">
+                </div>
+                <div class="inputs schools">
+                    <label for="school">School:</label>
+                    <input type="text" id="school" name="school" disabled="true">
+                </div>
+                <div class="inputs courses">
+                    <label for="course">Course:</label>
+                    <input type="text" id="course" name="course" disabled="true">
+                </div>
+                <div class="inputs seats">
+                    <label for="seat">Seat:</label>
+                    <select name="position" id="seat">
                             <option value="">-- Select Seat --</option>
                             {% for seat in posts %}
                             <option value="{{seat.name}}" id="position" name="position">{{seat.name}}</option>
                             {% endfor %}
                         </select>
-                    </div>
-                    <div class="inputs year">
-                        <label for="year-of-study">Year of Study:</label>
-                        <input type="number" id="academicYear" name="academicYear" disabled="true">
-                    </div>
+                </div>
+                <div class="inputs year">
+                    <label for="year-of-study">Year of Study:</label>
+                    <input type="number" id="academicYear" name="academicYear" disabled="true">
+                </div>
 
-                </div>
-                <div class="bottom">
-                    <button>Back to Dashboard</button>
-                    <input type="submit" value="Submit" id="submit">
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="bottom">
+                <button>Back to Dashboard</button>
+                <input type="submit" value="Submit" id="submit">
+            </div>
+        </form>
+    </div>
     </div>
     <script>
         setTimeout(
@@ -144,4 +136,4 @@
             }
         }
     </script>
-    {%endblock%}
+    {% endblock %}

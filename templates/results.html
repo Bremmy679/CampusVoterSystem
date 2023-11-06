@@ -66,7 +66,7 @@
         {% endfor %} {% endif %}
 
         <script>
-            var bar = document.querySelector(".progress-bar");
+            var bar = document.querySelector(".[progress-bar");
 
             function updateProgress() {
                 // Fetch the percentage from the server using AJAX (Assuming you are using jQuery)
@@ -84,8 +84,20 @@
                 });
             }
 
-            // Call the function to start updating the progress
-            updateProgress();
+
+            function updateResults() {
+                // Fetch updated data from the server using AJAX
+                $.get('/get_results', function(data) {
+                    // Replace the content of the section with the updated data
+                    $('section').html(data);
+                });
+            }
+
+            // Update results every 5 seconds
+            setInterval(updateResults, 5000);
+
+
+            // Call the function to start updating the progress updateProgress();
         </script>
     </section>
-    { % endblock % }
+    { % endblock % }{%endblock%}
