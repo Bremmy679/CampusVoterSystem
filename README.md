@@ -66,11 +66,15 @@ The team members are:
 <table>
   <tr>
     <td align="center">
-      <img src="https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg?size=626&ext=jpg" width="150" height="150" alt="Team Member 1">
-      <br> Ogola Sospeter
+      <a href="https://github.com/ogolaSospeter">
+      <img src="https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg?size=626&ext=jpg" width="150" height="150" alt="Team Member 1"> 
+      </a>
+        <br> Ogola Sospeter
     </td>
     <td align="center">
+      <a href="https://github.com/VivianMosomi432">
       <img src="https://media.licdn.com/dms/image/D4D03AQEoduGtNO870g/profile-displayphoto-shrink_800_800/0/1676816712349?e=1704326400&v=beta&t=S_XklhhH6WEB2ULXQWGltSM5kblHTzncAocGIQJR7uA" width="150" height="150" alt="Team Member 2">
+      </a>
       <br> Vivian Mosomi
     </td>
     <td align="center">
@@ -78,11 +82,15 @@ The team members are:
       <br> Opande Remmy
     </td>
       <td align="center">
+        <a href="https://github.com/jeffgicharu">
       <img src="https://img.freepik.com/free-vector/decorative-autumnal-background_1048-6408.jpg?size=626&ext=jpg" width="150" height="150" alt="Team Member 4">
+        </a>
       <br> Jeff Gicharu
     </td>
     <td align="center">
+      <a href="https://github.com/sandylaven">
       <img src="https://media.licdn.com/dms/image/D4E03AQGak8FPCUY4Cw/profile-displayphoto-shrink_800_800/0/1684238777363?e=1704326400&v=beta&t=gDQmBirQsQD96B7Lq-SukDCMWHJA_xNoFHORH5rQKPs" width="150" height="150" alt="Team member 5">
+      </a>
       <br> Sandra Lung´ahi
   </tr>
 </table>
