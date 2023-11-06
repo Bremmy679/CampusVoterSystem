@@ -43,10 +43,6 @@ def sendMail():
     return "Sent"
 
 # Select Page
-# @app.route('/Select Page',methods=['GET', 'POST'])
-# def select_page():
-    
-
     
 # The user registration
 @app.route('/Register Student', methods=['GET', 'POST'])
