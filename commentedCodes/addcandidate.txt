@@ -1,0 +1,44 @@
+ <script>
+        function fillForm() {
+            var regNo = document.getElementById('reg-no').value.trim();
+            if (regNo !== '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '/getcandidatefromvoters?regno=' + regNo,
+                    data: {
+                        'regNo': regNo
+                    },
+                    success: function(data) {
+                        // Update form fields with the fetched data
+                        $('#id_no').val(data.idNo);
+                        $('#email').val(data.email);
+                        $('#campus').val(data.campus);
+                        $('#college').val(data.college);
+                        $('#school').val(data.school);
+                        $('#course').val(data.course);
+                        // ... continue updating other fields ...
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+        }
+    </script>
+
+
+    Loop through electedcandidates
+        {% for position, candidates in electedcandidates.items() %}
+        <!-- Your code for displaying candidates -->
+        {% endfor %} {% else %}
+        <p>No Data Found</p>
+        {% endif %}{% if nodata %}
+        <p>No Data Found</p>
+        {% else %} {% for position, candidates in electedcandidates.items() %}
+        <h2>{{ position }}</h2>
+        <ul>
+            {% for candidate in candidates %}
+            <li>{{ candidate.name }}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %} {% endif %}
