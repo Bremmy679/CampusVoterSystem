@@ -36,6 +36,7 @@ form {
     align-items: baseline;
     flex: 0 1 0;
     flex-direction: column;
+    margin-bottom: 2em;
 }
 
 form h2 {
